@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        width: 400px;
+        max-height: 80vh; /* Limit the height of the modal */
+        overflow-y: auto; /* Allow scrolling if the content exceeds the modal height */
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .modal-overlay.active {
+      display: block;
+    }
+
+    .form-field {
+      margin-bottom: 10px;
+    }
+
+    .form-field label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-field input[type="file"] {
+      padding: 5px;
+    }
+
+    #viewModal {
+    max-height: 80vh; /* Limit height */
+    width: 500px; /* Wider modal for viewing posts */
+    overflow-y: auto; /* Scroll if content overflows */
+    }
+
+    /* Comment section */
+    #commentsList {
+    max-height: 200px; /* Limit the height of the comments section */
+    overflow-y: auto; /* Allow scrolling for comments */
+    }
+
+    .comments {
+      margin-top: 20px;
+    }
+
+    .comment {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+
+    .comment-author {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Modal for creating a new post -->
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal" id="modal">
+    <h3>Create a Post</h3>
+    <form id="postForm" enctype="multipart/form-data">
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-field">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required />
+      </div>
+      <div class="form-field">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" required />
+      </div>
+      <button type="submit">Save Post</button>
+    </form>
+  </div>
+
+  <!-- Modal for viewing a post and adding comments -->
+  <div class="modal-overlay" id="viewModal-overlay"></div>
+  <div class="modal" id="viewModal">
+    <div id="postDetails">
+      <!-- Post details will appear here -->
+    </div>
+    <h4>Comments:</h4>
+    <div id="commentsList"></div>
+    <form id="commentForm">
+      <div class="form-field">
+        <label for="commentName">Your Name:</label>
+        <input type="text" id="commentName" name="commentName" required />
+      </div>
+      <div class="form-field">
+        <label for="commentText">Add a Comment:</label>
+        <input type="text" id="commentText" name="commentText" required />
+      </div>
+      <button type="submit">Add Comment</button>
+    </form>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    let selectedLatLng;
+    let map;
+    let currentPostId = null;
+
+    // Initialize map and geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          map = L.map('map').setView([userLat, userLng], 13);
+
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+          }).addTo(map);
+
+          L.marker([userLat, userLng]).addTo(map)
+            .bindPopup('You are here')
+            .openPopup();
+        },
+        (error) => {
+          console.log(error);
+          map = L.map('map').setView([51.505, -0.09], 13);
+        }
+      );
+    }
+
+    // Open modal to create a post
+    function openPostModal(lat, lng) {
+      selectedLatLng = { lat, lng };
+      document.getElementById('modal-overlay').classList.add('active');
+      document.getElementById('modal').classList.add('active');
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.getElementById('modal').classList.remove('active');
+      document.getElementById('viewModal-overlay').classList.remove('active');
+      document.getElementById('viewModal').classList.remove('active');
+    }
+
+    // Fetch posts from backend
+    async function fetchPosts() {
+      const response = await fetch('http://localhost:5000/api/posts');
+      const posts = await response.json();
+      displayPosts(posts);
+    }
+
+    // Display posts on the map
+    function displayPosts(posts) {
+      posts.forEach((post) => {
+        const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
+        const marker = L.marker([latitude, longitude]).addTo(map);
+
+        marker.bindPopup(`
+          <b>${name} ${surname}</b><br>
+          ${description}<br>
+          <img src="${imageUrl}" width="100px" height="100px"><br>
+          <button onclick="openViewPostModal('${_id}')">View Post</button>
+        `);
+      });
+    }
+
+    // Open modal to view post and add comments
+    async function openViewPostModal(postId) {
+    currentPostId = postId;
+    const response = await fetch(`http://localhost:5000/api/posts/${postId}`);
+    const post = await response.json();
+
+    document.getElementById('viewModal-overlay').classList.add('active');
+    document.getElementById('viewModal').classList.add('active');
+
+    document.getElementById('postDetails').innerHTML = `
+        <b>${post.name} ${post.surname}</b><br>
+        ${post.description}<br>
+        <img src="${post.imageUrl}" width="200px" height="200px"><br>
+    `;
+
+    const commentsList = document.getElementById('commentsList');
+    commentsList.innerHTML = '';
+    post.comments.forEach((comment) => {
+        commentsList.innerHTML += `
+        <div class="comment">
+            <div class="comment-author"><b>${comment.author}</b></div>
+            <div>${comment.text}</div>
+        </div>
+        `;
+    });
+    }
+
+
+    // Handle new post creation
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      formData.append('latitude', selectedLatLng.lat);
+      formData.append('longitude', selectedLatLng.lng);
+
+      const response = await fetch('http://localhost:5000/api/posts', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.post) {
+        fetchPosts();
+        closeModal();
+      }
+    });
+
+    // Handle adding comments to a post
+    // Handle adding comments to a post
+document.getElementById('commentForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const commentText = document.getElementById('commentText').value;
+  const commentAuthor = document.getElementById('commentName').value; // Get the name from the input field
+
+  if (!commentAuthor || !commentText) {
+    alert("Please fill in both your name and comment.");
+    return;
+  }
+
+  const response = await fetch(`http://localhost:5000/api/posts/${currentPostId}/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text: commentText, author: commentAuthor }),
+  });
+
+  const updatedPost = await response.json();
+  if (updatedPost) {
+    openViewPostModal(currentPostId); // Refresh the post view with new comments
+  }
+});
+
+
+    // Initialize and fetch posts on page load
+    window.onload = () => {
+      fetchPosts();
+      map.on('click', function(e) {
+        openPostModal(e.latlng.lat, e.latlng.lng);
+      });
+    };
+  </script>
+</body>
+</html>
