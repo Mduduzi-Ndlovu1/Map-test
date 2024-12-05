@@ -315,6 +315,26 @@ if (navigator.geolocation) {
       }
     });
 
+    // Close modal when clicking anywhere outside of it (on the overlay)
+    document.getElementById('modal-overlay').addEventListener('click', function () {
+      closeModal();
+    });
+
+    // Close view modal when clicking anywhere outside of it (on the overlay)
+    document.getElementById('viewModal-overlay').addEventListener('click', function () {
+      closeModal();
+    });
+
+    // Prevent closing modal when clicking inside the modal (on the modal content)
+    document.getElementById('modal').addEventListener('click', function (event) {
+      event.stopPropagation(); // Prevent event from propagating to overlay
+    });
+
+    document.getElementById('viewModal').addEventListener('click', function (event) {
+      event.stopPropagation(); // Prevent event from propagating to overlay
+    });
+
+
     // Initial fetch of posts
     fetchPosts();
   </script>
