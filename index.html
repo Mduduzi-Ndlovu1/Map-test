@@ -348,6 +348,257 @@ window.onload = function() {
     </form>
   </div>
 
+ <!-- Modal Structure -->
+<div id="modal" class="modal">
+  <!-- Include Font Awesome for social and contact icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  .social-media, .contact-info {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.social-icon, .contact-icon {
+  font-size: 24px;
+  color: #333;
+  text-decoration: none;
+}
+
+.social-icon:hover, .contact-icon:hover {
+  color: #007bff; /* Adjust for hover color if desired */
+}
+</style>
+<div class="modal-content2">
+  <span class="close-btn" onclick="closeModal()">&times;</span>
+  
+  <!-- Modal Header -->
+  <h2 id="modal-title"></h2>
+  
+  <!-- Modal Description -->
+  <p id="modal-body"></p>
+
+  <!-- Hero Image Carousel -->
+  <div id="carousel" class="carousel">
+    <div class="carousel-images">
+      <img src="images/SAPS-Driver.webp" alt="Hero Image 1">
+      <img src="images/SAPS-Police-officers.jpeg" alt="Hero Image 2">
+      <img src="images/Saps Drill.jpeg" alt="Hero Image 3">
+    </div>
+  </div>
+
+  <!-- Bloc Style Image with Description -->
+  <div class="bloc-image">
+    <img src="images/Safer Festive Season hero.jpg" alt="Bloc Style Image">
+   </div>
+
+  <!-- Social Media Icons -->
+  <div class="social-media">
+    <a href="https://www.facebook.com/profile.php?id=61561153654022" class="social-icon" target="_blank">
+      <i class="fab fa-facebook-f"></i>
+    </a>
+    <a href="https://x.com/?lang=en" class="social-icon" target="_blank">
+      <i class="fab fa-twitter"></i>
+    </a>
+    <a href="https://www.instagram.com/haibo.community/" class="social-icon" target="_blank">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://za.linkedin.com/" class="social-icon" target="_blank">
+      <i class="fab fa-linkedin-in"></i>
+    </a>
+    <a href="https://www.youtube.com/" class="social-icon" target="_blank">
+      <i class="fab fa-youtube"></i>
+    </a>
+    <a href="https://www.tiktok.com/@1pulse.online" class="social-icon" target="_blank">
+      <i class="fab fa-tiktok"></i>
+    </a>
+  </div>
+
+  <!-- Contact Info -->
+  <div class="contact-info">
+    <a href="tel:+27685090669" class="contact-icon">
+      <i class="fas fa-phone-alt"></i> Call
+    </a>
+    <a href="https://wa.me/+27685090669?text=May%20I%20enquire%20about%20this%20range" class="contact-icon" target="_blank">
+      <i class="fab fa-whatsapp"></i> WhatsApp
+    </a>
+  </div>
+</div>
+
+</div>
+  <!-- Modal Structure -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-body"></p>
+    </div>
+  </div>
+  
+  <!-- Modal Button with Image -->
+  <button id="modal-button" onclick="toggleWidgets()">
+    <img src="images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
+   
+  </button>
+
+  <!-- Widgets -->
+  <div id="widget-container">
+ 
+            <style>
+        /* Basic Reset and Styles */
+        header { text-align: center; padding: 20px; background: #333; color: #fff; border-radius: 22px; }
+        h1, h2 { margin: 0; }
+    
+        /* Round Image Buttons */
+        .button-container { text-align: center; padding: 20px; }
+        .round-button-container {
+          display: inline-block;
+          text-align: center;
+          margin: 10px;
+        }
+        .round-button {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background-size: cover;
+          display: inline-block;
+          cursor: pointer;
+        }
+        .company-name { margin-top: 5px; font-size: 14px; color: #333; }
+    
+        /* Modal Styles */
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+          background-color: #f00000;
+          margin: 10% auto;
+          padding: 20px;
+          width: 80%;
+          max-width: 500px;
+          border-radius: 22px;
+          justify-content: center;
+        }
+        .close-btn {
+          float: right;
+          font-size: 24px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+      .card {
+        width: 300px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+      .card:hover {
+        transform: scale(1.05);
+      }
+      .card-header {
+        padding: 15px;
+        background-color: #0b7fcc;
+        color: #fff;
+      }
+      .card-header .type {
+        font-weight: bold;
+      }
+      .card-header .timestamp, 
+      .card-header .author {
+        display: block;
+        font-size: 0.85rem;
+      }
+      .card-content {
+        padding: 5px;
+      }
+      .card-content .caption {
+        font-size: 1rem;
+        margin-bottom: 3px;
+      }
+      .card-content .media img {
+        width: 100%;
+        border-radius: 5px;
+      }
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background-color: #f9f9f9;
+      }
+      .social-links {
+        display: flex;
+        gap: 10px;
+      }
+      .social-icon {
+        font-size: 1rem;
+        color: #008080;
+        text-decoration: none;
+        padding: 5px;
+      }
+      .social-icon:hover {
+        color: #005555;
+      }
+      .contact {
+        font-size: 0.85rem;
+        color: #555;
+      }
+      .rating {
+        font-size: 0.85rem;
+        color: #ffcc00;
+      }
+      </style>
+    
+
+
+
+
+
+
   <!-- Modal for viewing a post and adding comments -->
   <div class="modal-overlay" id="viewModal-overlay"></div>
   <div class="modal" id="viewModal">
