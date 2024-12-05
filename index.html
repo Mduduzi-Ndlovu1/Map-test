@@ -238,34 +238,68 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    let selectedLatLng;
-    let map;
-    let currentPostId = null;
+  <script>// Initialize the map with a light theme
+let map = L.map('map').setView([0, 0], 2);
 
-    // Initialize map and geolocation
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const userLat = position.coords.latitude;
-      const userLng = position.coords.longitude;
+// Tile layer for light mode
+let lightLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+});
+lightLayer.addTo(map);
 
-      map = L.map('map').setView([userLat, userLng], 13);
+// Tile layer for dark mode
+let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+});
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-      }).addTo(map);
+let darkMode = false;
 
-          L.marker([userLat, userLng]).addTo(map)
-            .bindPopup('Your position')
-            .openPopup();
-        },
-        (error) => {
-          console.log(error);
-          map = L.map('map').setView([51.505, -0.09], 13);
-        }
-      );
+// Function to toggle between light and dark mode
+function toggleDarkMode() {
+    darkMode = !darkMode;
+    if (darkMode) {
+        map.removeLayer(lightLayer);
+        darkLayer.addTo(map);
+        document.body.classList.add('dark-mode');
+        updateMarkers('dark-marker.png');
+    } else {
+        map.removeLayer(darkLayer);
+        lightLayer.addTo(map);
+        document.body.classList.remove('dark-mode');
+        updateMarkers('light-marker.png');
     }
+}
+
+// Floating button modal functionality
+function openModal() {
+    document.getElementById('modal').style.display = 'block';
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+// Custom markers
+let markerIcon = L.icon({
+    iconUrl: 'light-marker.png',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30]
+});
+
+// Add initial marker
+let marker = L.marker([0, 0], { icon: markerIcon }).addTo(map)
+    .bindPopup('Custom Marker Popup').openPopup();
+
+// Function to update marker icon dynamically
+function updateMarkers(iconUrl) {
+    marker.setIcon(L.icon({
+        iconUrl: iconUrl,
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30]
+    }));
+}
 
     // Open modal to create a post
     function openPostModal(lat, lng) {
