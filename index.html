@@ -289,11 +289,16 @@ document.getElementById('commentForm').addEventListener('submit', async (e) => {
 
     // Initialize and fetch posts on page load
     window.onload = () => {
-      fetchPosts();
-      map.on('click', function(e) {
-        openPostModal(e.latlng.lat, e.latlng.lng);
-      });
-    };
+  // Check if the map is initialized before attaching the event listener
+  if (map) {
+    fetchPosts();
+    map.on('click', function(e) {
+      openPostModal(e.latlng.lat, e.latlng.lng);
+    });
+  } else {
+    console.error('Map initialization failed.');
+  }
+};
   </script>
 </body>
 </html>
