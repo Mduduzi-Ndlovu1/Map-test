@@ -155,7 +155,36 @@
 </head>
 <body>
   <div id="map"></div>
+<!-- Modal Button with Image -->
+  <button id="modal-button" onclick="toggleWidgets()">
+    <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
+   
+  </button >
 
+  <div id="logo-nav">
+    <button class="nav-btn" onclick="slideLeft()">&#9664;</button>
+    <div id="logo-container">
+      <div class="logo" onclick="showModal(1)">
+        <img src="https://1pulse.online/images/SAPS_badge.svg.png" alt="Logo 1">
+      </div>
+      <div class="logo" onclick="showModal(2)">
+        <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
+      </div>
+      <div class="logo" onclick="showModal(3)">
+        <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
+      </div>
+      <div class="logo" onclick="showModal(4)">
+        <img src="https://1pulse.online/images/cpf.png" alt="Logo 4">
+      </div>
+      <div class="logo" onclick="showModal(5)">
+        <img src="https://1pulse.online/images/pulse.jpeg" alt="Logo 5">
+      </div>
+      <div class="logo" onclick="showModal(6)">
+        <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
+      </div>
+    </div>
+    <button class="nav-btn" onclick="slideRight()">&#9654;</button>
+  </div>
   <!-- Modal for creating a new post -->
   <div class="modal-overlay" id="modal-overlay"></div>
   <div class="modal" id="modal">
