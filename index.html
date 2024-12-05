@@ -155,7 +155,30 @@
 </head>
 <body>
   <div id="map"></div>
-
+  <div id="logo-nav">
+    <button class="nav-btn" onclick="slideLeft()">&#9664;</button>
+    <div id="logo-container">
+      <div class="logo" onclick="showModal(1)">
+        <img src="images/SAPS_badge.svg.png" alt="Logo 1">
+      </div>
+      <div class="logo" onclick="showModal(2)">
+        <img src="images/bonizluu-fav.png" alt="Logo 2">
+      </div>
+      <div class="logo" onclick="showModal(3)">
+        <img src="images/hillbrow.jpeg" alt="Logo 3">
+      </div>
+      <div class="logo" onclick="showModal(4)">
+        <img src="images/cpf.png" alt="Logo 4">
+      </div>
+      <div class="logo" onclick="showModal(5)">
+        <img src="images/pulse.jpeg" alt="Logo 5">
+      </div>
+      <div class="logo" onclick="showModal(6)">
+        <img src="images/Tae-Trax-Logo.png" alt="Logo 6">
+      </div>
+    </div>
+    <button class="nav-btn" onclick="slideRight()">&#9654;</button>
+  </div>
   <!-- Modal for creating a new post -->
   <div class="modal-overlay" id="modal-overlay"></div>
   <div class="modal" id="modal">
