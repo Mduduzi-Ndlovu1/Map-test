@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Interactive Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1pulse online test Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     #map {
@@ -221,28 +221,16 @@ if (navigator.geolocation) {
         maxZoom: 19,
       }).addTo(map);
 
-      L.marker([userLat, userLng]).addTo(map)
-        .bindPopup('You are here')
-        .openPopup();
-
-      // Add click event listener to map
-      map.on('click', function(e) {
-        // Get the latitude and longitude of the clicked point
-        const lat = e.latlng.lat;
-        const lng = e.latlng.lng;
-
-        // Open the post modal at the clicked location
-        openPostModal(lat, lng);
-      });
-    },
-    (error) => {
-      console.log(error);
-      map = L.map('map').setView([51.505, -0.09], 13);
+          L.marker([userLat, userLng]).addTo(map)
+            .bindPopup('Your position')
+            .openPopup();
+        },
+        (error) => {
+          console.log(error);
+          map = L.map('map').setView([51.505, -0.09], 13);
+        }
+      );
     }
-  );
-}
-
-    
 
     // Open modal to create a post
     function openPostModal(lat, lng) {
