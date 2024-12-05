@@ -15,7 +15,8 @@ app.use(cors()); // Enable CORS for all origins (can be restricted to a specific
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB setup
-mongoose.connect('mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?', { 
+const mongoURI = process.env.MONGO_URI || 'mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?';
+mongoose.connect(mongoURI, { 
   useNewUrlParser: true, 
   useUnifiedTopology: true 
 }).then(() => {
