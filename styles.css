@@ -1,0 +1,356 @@
+
+    /* General styles */
+    body, html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #e7f3d4; /* Light green */
+        color: #333;
+      }
+      
+      /* Map styling */
+      #map {
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+      }
+      /* Logo Navigation styling */
+#logo-nav {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+.logo img {
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    border-radius: 50%;
+    object-fit:contain;
+    padding: 1px;
+    justify-content:center;
+}
+
+/* Add a draggable cursor */
+#logo-container.dragging {
+    cursor: grabbing;
+}
+
+.nav-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+      /* Logo Navigation styling */
+      #logo-nav {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+      }
+      
+     
+      .logo {
+        width: 40px;
+        height: 40px;
+        background-color: #fff;
+        border-radius: 50%;
+        margin: 1px 4px 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        padding: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      
+      .nav-btn {
+        background-color: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+      }
+  
+      /* Widgets */
+      #widget-container {
+        display: none;
+        position: absolute;
+        bottom: 10%;
+        width: 100%;
+        overflow-x: scroll;
+        height: auto;
+        z-index: 2;
+        border-radius: 22px;
+        background-color: rgb(255, 253, 251);
+      }
+      
+      .widget {
+        width: 100px;
+        height: 200px;
+        background-color: #fff;
+        border: 2px solid #ffd700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+       .column {
+        background-color: #e7f3d4;
+        border-radius: 14px;
+       }
+     
+      .widget:nth-child(1) {
+        order: 2; /* Move Item 1 to second position */
+      }
+      
+      .widget:nth-child(2) {
+        order: 1; /* Move Item 2 to first position */
+      }
+      
+      .widget:nth-child(3) {
+        order: 4; /* Move Item 3 to fourth position */
+      }
+      
+      .widget:nth-child(4) {
+        order: 3; /* Move Item 4 to third position */
+      }
+      
+  .popup-content {
+    width: 350px;
+    max-width: 100%;
+    margin: 20px;
+    z-index: 1000001;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  
+  @media (max-width: 768px) { /* Target screens 768px wide or smaller */
+    .popup-content {
+        margin-top:40px;
+      width: 100vw;
+      height: 60vh;
+      padding: 5px;
+      box-sizing: border-box;
+      margin: 0;
+      z-index: 1000001;
+    }
+  }
+      /* Responsive - Mobile styling */
+      @media (max-width: 600px) {
+        #widget-container {
+          align-items: center;
+          bottom: 5%;
+        }
+      
+        .widget {
+          width: 80%;
+          margin: 10px 0;
+        }
+      }
+      
+      
+      /* General styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e7f3d4; /* Light green */
+    color: #333;
+}
+
+/* Map styling */
+#map {
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+}
+
+/* Logo Navigation styling */
+#logo-nav {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+
+    #logo-container {
+      display: flex;
+      overflow-x: auto;
+      overflow-x: scroll;  /* Enables horizontal scrolling */
+      scroll-behavior: smooth;
+      flex-wrap: nowrap;
+      gap: 3px;
+      padding: 5px;
+      border-radius: 50px;
+      white-space: nowrap;
+      background-color: rgba(255, 255, 255, 0.692);
+      cursor: grab;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      border: solid 2px rgb(255, 255, 255);
+      overflow-y: hidden;  /* Hides vertical scrollbar */
+    }
+    #logo-container::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar in webkit browsers (Chrome, Safari) */
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 1px;
+}
+
+/* Add a draggable cursor */
+#logo-container.dragging {
+    cursor: grabbing;
+}
+
+.nav-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Modal Toggle Button Styling */
+#modal-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 50px;
+    height: 50px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.2s ease-in-out, background-color 0.2s;
+}
+
+#modal-button:hover {
+    transform: scale(1.1);
+   }
+
+/* Widgets */
+#widget-container {
+    display: none;
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    z-index: 2;
+    border-radius: 22px;
+    background-color: rgb(255, 253, 251);
+}
+
+.column {
+    background-color: #e7f3d4;
+    border-radius: 14px;
+    padding: 5px;
+}
+
+/* Responsive - Mobile styling */
+@media (max-width: 600px) {
+    #widget-container {
+        flex-direction: column;
+        align-items: center;
+        bottom: 5%;
+    }
+
+    .widget {
+        width: 80%;
+        margin: 10px 0;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px;
+        max-width: 400px;
+        width: 10%;
+        left: 50%;
+        top: 12px;
+        position: relative;
+      }
+      
+}
+
+/* Hero Carousel */
+.hero-carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 60vh; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #222;
+  }
+  
+  .carousel-slide img {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+    display: none;
+  }
+  
+  .carousel-slide img:first-child {
+    display: block; /* Show first image by default */
+  }
+  
+  .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 10;
+  }
+  
+  .carousel-button.prev {
+    left: 10px;
+  }
+  
+  .carousel-button.next {
+    right: 10px;
+  }
+  
+  /* Hero Text Overlay */
+  .hero-text {
+    position: absolute;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+  }
+  
+  .hero-text h2 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .hero-text p {
+    font-size: 3px;
+  }
+  
