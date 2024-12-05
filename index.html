@@ -151,28 +151,40 @@
     let currentPostId = null;
 
     // Initialize map and geolocation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
 
-          map = L.map('map').setView([userLat, userLng], 13);
+      map = L.map('map').setView([userLat, userLng], 13);
 
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-          }).addTo(map);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+      }).addTo(map);
 
-          L.marker([userLat, userLng]).addTo(map)
-            .bindPopup('You are here')
-            .openPopup();
-        },
-        (error) => {
-          console.log(error);
-          map = L.map('map').setView([51.505, -0.09], 13);
-        }
-      );
+      L.marker([userLat, userLng]).addTo(map)
+        .bindPopup('You are here')
+        .openPopup();
+
+      // Add click event listener to map
+      map.on('click', function(e) {
+        // Get the latitude and longitude of the clicked point
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        // Open the post modal at the clicked location
+        openPostModal(lat, lng);
+      });
+    },
+    (error) => {
+      console.log(error);
+      map = L.map('map').setView([51.505, -0.09], 13);
     }
+  );
+}
+
+    
 
     // Open modal to create a post
     function openPostModal(lat, lng) {
