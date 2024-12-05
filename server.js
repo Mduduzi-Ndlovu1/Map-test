@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // Enable CORS for all origins (can be restricted to a specific origin later)
 
 // Set up static folder for images
+// Replace with public URL for production
+const publicUrl = process.env.PUBLIC_URL || 'https://map-test-xid1.onrender.com'; // Set your public URL here
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB setup
@@ -67,7 +69,8 @@ app.get('/api/posts', async (req, res) => {
 app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     const { name, surname, description, latitude, longitude } = req.body;
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : ''; // Save image URL
+    // Use public URL for image
+    const imageUrl = req.file ? `${publicUrl}/uploads/${req.file.filename}` : ''; // Save image URL
     const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
 
     await newPost.save();
@@ -103,6 +106,7 @@ app.post('/api/posts/:id/comments', async (req, res) => {
   });
 
 // Start server
-app.listen(5000, () => {
-  console.log('Server running on http://localhost:5000');
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`Server running on ${publicUrl}:${port}`);
 });
