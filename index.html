@@ -273,29 +273,41 @@
     let map;
     let currentPostId = null;
 
-    // Initialize map and geolocation
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const userLat = position.coords.latitude;
-      const userLng = position.coords.longitude;
+    // Initialize the map with a fallback center
+  const map = L.map('map', {
+    center: [-26.2041, 28.0473], // Fallback coordinates for Johannesburg
+    zoom: 18,
+    maxZoom: 18,
+    minZoom: 1
+  });
 
-      map = L.map('map').setView([userLat, userLng], 13);
+  // Use CartoDB Positron tiles for a light base map
+  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://carto.com">CARTO</a>',
+    maxZoom: 20
+  }).addTo(map);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-      }).addTo(map);
+  // Custom "You Are Here" icon using a PNG
+  const youAreHereIcon = L.icon({
+    iconUrl: 'images/user-here.png', // Replace with your PNG URL
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+  });
 
-          L.marker([userLat, userLng]).addTo(map)
-            .bindPopup('Your position')
-            .openPopup();
-        },
-        (error) => {
-          console.log(error);
-          map = L.map('map').setView([51.505, -0.09], 13);
-        }
-      );
+  let userMarker = null; // Placeholder for the marker
+
+  // Function to fetch address using Nominatim reverse geocoding
+  async function fetchAddress(lat, lng) {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+      const data = await response.json();
+      return data.display_name || 'Address not found';
+    } catch (error) {
+      console.error('Error fetching address:', error);
+      return 'Unable to fetch address';
     }
+  }
 
     // Open modal to create a post
     function openPostModal(lat, lng) {
