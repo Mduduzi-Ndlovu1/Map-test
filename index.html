@@ -213,91 +213,98 @@
 
     // Open modal to view post and add comments
     async function openViewPostModal(postId) {
-    currentPostId = postId;
+      currentPostId = postId;
 
-    const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);  // Updated URL
-    const post = await response.json();
+      const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);  // Updated URL
+      const post = await response.json();
 
-    document.getElementById('viewModal-overlay').classList.add('active');
-    document.getElementById('viewModal').classList.add('active');
+      document.getElementById('viewModal-overlay').classList.add('active');
+      document.getElementById('viewModal').classList.add('active');
 
-    document.getElementById('postDetails').innerHTML = `
-        <b>${post.name} ${post.surname}</b><br>
-        ${post.description}<br>
-        <img src="${post.imageUrl}" width="200px" height="200px"><br>
-    `;
+      document.getElementById('postDetails').innerHTML = `
+          <b>${post.name} ${post.surname}</b><br>
+          ${post.description}<br>
+          <img src="${post.imageUrl}" width="200px" height="200px"><br>
+      `;
 
-    const commentsList = document.getElementById('commentsList');
-    commentsList.innerHTML = '';
-    post.comments.forEach((comment) => {
+      const commentsList = document.getElementById('commentsList');
+      commentsList.innerHTML = '';
+      post.comments.forEach((comment) => {
         commentsList.innerHTML += `
-        <div class="comment">
+          <div class="comment">
             <div class="comment-author"><b>${comment.author}</b></div>
             <div>${comment.text}</div>
-        </div>
+          </div>
         `;
-    });
+      });
     }
 
-
-    // Handle new post creation
-    document.getElementById('postForm').addEventListener('submit', async (e) => {
+    // Add new comment
+    document.getElementById('commentForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const formData = new FormData(e.target);
-      formData.append('latitude', selectedLatLng.lat);
-      formData.append('longitude', selectedLatLng.lng);
-      const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {
+
+      const commentName = document.getElementById('commentName').value;
+      const commentText = document.getElementById('commentText').value;
+
+      if (!commentName || !commentText) {
+        alert('Please fill in both fields!');
+        return;
+      }
+
+      const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}/comments`, {  // Updated URL
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ author: commentName, text: commentText }),
       });
 
-      const data = await response.json();
-      if (data.post) {
+      if (response.ok) {
         fetchPosts();
         closeModal();
+      } else {
+        alert('Error adding comment!');
       }
     });
 
-    // Handle adding comments to a post
-    // Handle adding comments to a post
-document.getElementById('commentForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const commentText = document.getElementById('commentText').value;
-  const commentAuthor = document.getElementById('commentName').value; // Get the name from the input field
+    // Handle form submission for creating a post
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  if (!commentAuthor || !commentText) {
-    alert("Please fill in both your name and comment.");
-    return;
-  }
+      const formData = new FormData(e.target);
+      const name = formData.get('name');
+      const surname = formData.get('surname');
+      const description = formData.get('description');
+      const image = formData.get('image');
 
-    const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}/comments`, {  // Updated URL
-      method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ text: commentText, author: commentAuthor }),
-  });
+      if (!name || !surname || !description || !image) {
+        alert('Please fill in all fields!');
+        return;
+      }
 
-  const updatedPost = await response.json();
-  if (updatedPost) {
-    openViewPostModal(currentPostId); // Refresh the post view with new comments
-  }
-});
+      const postData = new FormData();
+      postData.append('name', name);
+      postData.append('surname', surname);
+      postData.append('description', description);
+      postData.append('image', image);
+      postData.append('latitude', selectedLatLng.lat);
+      postData.append('longitude', selectedLatLng.lng);
 
+      const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
+        method: 'POST',
+        body: postData,
+      });
 
-    // Initialize and fetch posts on page load
-    window.onload = () => {
-  // Check if the map is initialized before attaching the event listener
-  if (map) {
-    fetchPosts();
-    map.on('click', function(e) {
-      openPostModal(e.latlng.lat, e.latlng.lng);
+      if (response.ok) {
+        closeModal();
+        fetchPosts();
+      } else {
+        alert('Error creating post!');
+      }
     });
-  } else {
-    console.error('Map initialization failed.');
-  }
-};
+
+    // Initial fetch of posts
+    fetchPosts();
   </script>
 </body>
 </html>
