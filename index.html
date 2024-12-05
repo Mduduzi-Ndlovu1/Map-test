@@ -93,6 +93,64 @@
     .comment-author {
       font-weight: bold;
     }
+
+    /* Mobile and Tablet adjustments */
+@media (max-width: 768px) {
+  .modal {
+    width: 90%; /* Make modal width responsive */
+    padding: 15px;
+  }
+
+  #viewModal {
+    width: 90%; /* Make the view modal responsive */
+  }
+
+  .form-field input,
+  .form-field textarea {
+    padding: 10px;
+  }
+
+  .comment {
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  #commentsList {
+    max-height: 150px; /* Reduce height for mobile */
+  }
+
+  #map {
+    height: 70vh; /* Adjust map height for mobile */
+  }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 480px) {
+  .modal {
+    width: 80%; /* Full-width modal for small screens */
+    padding: 10px;
+  }
+
+  #viewModal {
+    width: 80%; /* Full-width view modal for small screens */
+  }
+
+  .form-field input,
+  .form-field textarea {
+    padding: 12px;
+  }
+
+  .comment {
+    font-size: 13px; /* Further reduce font size for smaller devices */
+  }
+
+  #commentsList {
+    max-height: 120px; /* Further reduce height for very small screens */
+  }
+
+  #map {
+    height: 100vh; /* Further reduce map height for very small screens */
+  }
+}
   </style>
 </head>
 <body>
