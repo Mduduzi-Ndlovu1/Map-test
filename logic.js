@@ -27,9 +27,20 @@ function setUserLocation() {
                 map.setView([userLat, userLng], 18);
 
                 // Add marker for the user's location
-                L.marker([userLat, userLng]).addTo(map)
-                    .bindPopup('Your position')
-                    .openPopup();
+                let userMarker = L.marker([userLat, userLng]).addTo(map);
+
+                // Reverse geocode the coordinates to get the address
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // If the geocoding request returns a valid address
+                        const address = data.display_name;
+                        userMarker.bindPopup("Your current location is: " + address).openPopup();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching address:', error);
+                        userMarker.bindPopup('Your position').openPopup();
+                    });
             },
             (error) => {
                 console.log(error);
