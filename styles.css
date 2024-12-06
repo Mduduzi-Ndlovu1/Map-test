@@ -12,8 +12,10 @@
       #map {
         width: 100vw;
         height: 100vh;
-        z-index: 1;
+        z-index: 999999;
       }
+
+
       /* Logo Navigation styling */
 #logo-nav {
     position: absolute;
@@ -48,50 +50,87 @@
 }
 
       /* Logo Navigation styling */
-      #logo-nav {
-        position: absolute;
-        top: 10px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2;
-      }
-      
-     
-      .logo {
-        width: 40px;
-        height: 40px;
-        background-color: #fff;
-        border-radius: 50%;
-        margin: 1px 4px 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        padding: 2px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-      
-      .nav-btn {
-        background-color: transparent;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-      }
-  
-      /* Widgets */
-      #widget-container {
-        display: none;
-        position: absolute;
-        bottom: 10%;
-        width: 100%;
-        overflow-x: scroll;
-        height: auto;
-        z-index: 2;
-        border-radius: 22px;
-        background-color: rgb(255, 253, 251);
-      }
+      /* Mobile First - Styles for small screens */
+#logo-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%; /* Full width on mobile */
+  margin: 0 auto;
+}
+
+#logo-container {
+  display: flex;
+  width: 50%;
+  transition: transform 0.3s ease;
+  flex-wrap: nowrap; /* Ensure logos are in a single row */
+}
+
+.logo {
+  flex-shrink: 0;
+  margin: 0 8px; /* Small space between logos */
+}
+
+.nav-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 24px; /* Slightly smaller on mobile */
+  cursor: pointer;
+  z-index: 1;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333;
+  padding: 8px;
+}
+
+#slide-left-btn {
+  left: 2rem;
+}
+
+#slide-right-btn {
+  right: 2rem;
+}
+
+img {
+  max-width: 80px; /* Slightly smaller logos on mobile */
+  height: auto;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 600px) {
+  #logo-nav {
+      width: 90%; /* Give more space on tablets */
+  }
+
+  img {
+      max-width: 100px; /* Larger logos on tablets */
+  }
+
+  .nav-btn {
+      font-size: 30px; /* Increase button size on larger screens */
+      padding: 10px;
+  }
+}
+
+/* Desktop and larger screens */
+@media (min-width: 1024px) {
+  #logo-nav {
+      width: 80%; /* Reduce width on larger screens for more centered layout */
+  }
+
+  img {
+      max-width: 120px; /* Even larger logos on desktop */
+  }
+
+  .nav-btn {
+      font-size: 36px; /* Even larger buttons for desktops */
+      padding: 12px;
+  }
+}
+
       
       .widget {
         width: 100px;
@@ -353,54 +392,225 @@ body, html {
   .hero-text p {
     font-size: 3px;
   }
- 
 
-
-
-
-        /* Round Image Buttons */
-        .button-container { text-align: center; padding: 20px; }
-        .round-button-container {
-          display: inline-block;
-          text-align: center;
-          margin: 10px;
-        }
-        .round-button {
-          width: 70px;
-          height: 70px;
-          border-radius: 50%;
-          background-size: cover;
-          display: inline-block;
-          cursor: pointer;
-        }
-        .company-name { margin-top: 5px; font-size: 14px; color: #333; }
+  /* Round Image Buttons */
+  .button-container { text-align: center; padding: 20px; }
+  .round-button-container {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+    }
+  .round-button {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-size: cover;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .company-name { margin-top: 5px; font-size: 14px; color: #333; }
     
-        /* Modal Styles */
-        .modal {
-          display: none;
-          position: fixed;
-          z-index: 1;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal-content {
-          background-color: #f00000;
-          margin: 10% auto;
-          padding: 20px;
-          width: 80%;
-          max-width: 500px;
-          border-radius: 22px;
-          justify-content: center;
-        }
-        .close-btn {
-          float: right;
-          font-size: 24px;
-          font-weight: bold;
-          cursor: pointer;
-        }
+  /* Modal Styles */
+/* Modal Overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  display: block;
+}
+
+/* Modal Styles */
+/* Modal Overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  display: block;
+}
+
+/* Modal Container */
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  z-index: 1001;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow-y: auto; /* Enable scrolling when content overflows */
+  overflow-x: hidden;
+  
+}
+
+.modal.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Modal Heading */
+.modal h3 {
+  text-align: center;
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Field Styles */
+.form-field {
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  font-size: 1rem;
+  color: #333;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 90%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #fff;
+}
+
+.form-field textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* File Input Styling */
+.form-field input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Submit Button Styling */
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design for Tablets and Larger Devices */
+@media (min-width: 600px) {
+  .modal {
+    width: 70%;
+    padding: 30px;
+  }
+
+  .modal h3 {
+    font-size: 22px;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    padding: 14px;
+    font-size: 1.1rem;
+  }
+
+  button[type="submit"] {
+    padding: 14px 22px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Responsive Design for Larger Screens (Laptops and Desktops) */
+@media (min-width: 1024px) {
+  .modal {
+    width: 50%;
+    padding: 40px;
+  }
+
+  .modal h3 {
+    font-size: 24px;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    padding: 16px;
+    font-size: 1.2rem;
+  }
+
+  button[type="submit"] {
+    padding: 16px 24px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Mobile Specific: Ensure the modal takes up 70% of the screen */
+@media (max-width: 768px) {
+  .modal {
+    width: 70%; /* Modal width on mobile */
+    height: 70%; /* Ensure it fills 70% of the screen height */
+    max-height: 70%; /* Limit the height */
+    padding: 20px; /* Maintain padding */
+    overflow-y: auto; /* Enable scroll if content exceeds */
+    box-sizing: border-box; /* Include padding in height */
+  }
+
+  .modal h3 {
+    font-size: 20px;
+  }
+
+  .form-field input,
+  .form-field textarea {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  button[type="submit"] {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+}
+
+
 
 
 
