@@ -61,12 +61,6 @@
   margin: 0 auto;
 }
 
-#logo-container {
-  display: flex;
-  width: 50%;
-  transition: transform 0.3s ease;
-  flex-wrap: nowrap; /* Ensure logos are in a single row */
-}
 
 .logo {
   flex-shrink: 0;
@@ -198,21 +192,6 @@ img {
       }
       
       
-      /* General styles */
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #e7f3d4; /* Light green */
-    color: #333;
-}
-
-/* Map styling */
-#map {
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
-}
 
 /* Logo Navigation styling */
 #logo-nav {
