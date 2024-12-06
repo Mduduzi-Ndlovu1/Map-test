@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1pulse online test for the Map</title>
+  <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body.dark-mode {
+      background-color: #2b2b2b;
+      color: #fff;
+    }
+
+    .dark-mode .modal {
+      background-color: #444;
+    }
+
+    /* Additional styles for dark mode if needed */
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Dark Mode Toggle Button -->
+  <button id="modal-button" onclick="toggleDarkMode()">
+    <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
+  </button>
+
+  <!-- Logo Navigation -->
+  <div id="logo-nav">
+    <button class="nav-btn" id="slide-left-btn">&#9664;</button>
+    <div id="logo-container">
+        <div class="logo" data-modal-id="1">
+            <img src="https://1pulse.online/images/SAPS_badge.svg.png" alt="Logo 1">
+        </div>
+        <div class="logo" data-modal-id="2">
+            <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
+        </div>
+        <div class="logo" data-modal-id="3">
+            <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
+        </div>
+        <div class="logo" data-modal-id="4">
+            <img src="https://1pulse.online/images/cpf.png" alt="Logo 4">
+        </div>
+        <div class="logo" data-modal-id="5">
+            <img src="https://1pulse.online/images/pulse.jpeg" alt="Logo 5">
+        </div>
+        <div class="logo" data-modal-id="6">
+            <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
+        </div>
+    </div>
+    <button class="nav-btn" id="slide-right-btn">&#9654;</button>
+  </div>
+
+
+
+  <!-- Modal for creating a new post -->
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal" id="modal">
+    <h3>Create a Post</h3>
+    <form id="postForm" enctype="multipart/form-data">
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-field">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required />
+      </div>
+      <div class="form-field">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" required />
+      </div>
+      <button type="submit">Save Post</button>
+    </form>
+  </div>
+
+  <!-- Modal for viewing a post -->
+  <div class="modal-overlay" id="viewModal-overlay"></div>
+  <div class="modal" id="viewModal">
+    <div id="postDetails"></div>
+    <h4>Comments:</h4>
+    <div id="commentsList"></div>
+    <form id="commentForm">
+      <div class="form-field">
+        <label for="commentName">Your Name:</label>
+        <input type="text" id="commentName" name="commentName" required />
+      </div>
+      <div class="form-field">
+        <label for="commentText">Add a Comment:</label>
+        <input type="text" id="commentText" name="commentText" required />
+      </div>
+      <button type="submit">Add Comment</button>
+    </form>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Custom JS -->
+  <script src="logic.js"></script>
+</body>
+</html>
