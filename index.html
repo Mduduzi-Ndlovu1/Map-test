@@ -242,10 +242,10 @@
 let map = L.map('map').setView([0, 0], 2);
 
 // Tile layer for light mode
-let lightLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-});
-lightLayer.addTo(map);
+let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://carto.com">CARTO</a>',
+    maxZoom: 20
+  }).addTo(map);
 
 // Tile layer for dark mode
 let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
