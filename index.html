@@ -327,8 +327,7 @@ function updateMarkers(iconUrl) {
     function displayPosts(posts) {
       posts.forEach((post) => {
         const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
-        const marker = L.marker([latitude, longitude]).addTo(map);
-
+        const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
           ${description}<br>
