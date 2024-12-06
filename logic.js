@@ -1,5 +1,5 @@
 // Initialize the map with a light theme
-let map = L.map('map').setView([-26.2041, 28.0473], 18);
+let map = L.map('map',{zoomControl: false}).setView([-26.2041, 28.0473], 18);
 
 // Tile layer for light mode
 let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {

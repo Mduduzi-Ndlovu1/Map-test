@@ -119,6 +119,7 @@ img {
 @media (min-width: 1024px) {
   #logo-nav {
       width: 80%; /* Reduce width on larger screens for more centered layout */
+      
   }
 
   img {
