@@ -12,6 +12,39 @@ let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/
     attribution: '&copy; OpenStreetMap contributors'
 });
 
+// Add the default light layer
+lightLayer.addTo(map);
+
+// Function to get user's location and set the map view
+function setUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+
+                // Center the map on the user's location
+                map.setView([userLat, userLng], 18);
+
+                // Add marker for the user's location
+                L.marker([userLat, userLng]).addTo(map)
+                    .bindPopup('Your position')
+                    .openPopup();
+            },
+            (error) => {
+                console.log(error);
+                // Fallback to a default location if geolocation fails
+                map.setView([-26.2041, 28.0473], 18);
+            }
+        );
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+
+// Call the function to set the user's location when the page loads
+setUserLocation();
+
 let darkMode = false;
 
 // Side button logic
