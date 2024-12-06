@@ -316,6 +316,22 @@ img {
       
 }
 
+      /* General styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e7f3d4; /* Light green */
+    color: #333;
+}
+
+/* Map styling */
+#map {
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+}
+
 /* Hero Carousel */
 .hero-carousel {
     position: relative;
