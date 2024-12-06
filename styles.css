@@ -15,6 +15,12 @@
         z-index: 999999;
       }
 
+#logo-container {
+      display: flex;
+      width: 50%;
+transition: transform 0.3s ease;
+flex-wrap: nowrap;
+    }
 
       /* Logo Navigation styling */
 #logo-nav {
