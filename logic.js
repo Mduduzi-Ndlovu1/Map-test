@@ -27,7 +27,7 @@ function setUserLocation() {
                 map.setView([userLat, userLng], 18);
 
                 // Add marker for the user's location
-                let userMarker = L.marker([userLat, userLng]).addTo(map);
+                let userMarker = L.marker([userLat, userLng],{ icon: youAreHereIcon }).addTo(map);
 
                 // Reverse geocode the coordinates to get the address
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
