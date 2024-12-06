@@ -121,7 +121,7 @@ let markerIcon = L.icon({
 
 // Add initial marker
 let marker = L.marker([-26.2041, 28.0473], { icon: markerIcon }).addTo(map)
-    .bindPopup('custom Popup').openPopup();
+    .bindPopup('Start Point').openPopup();
 
 // Function to update marker icon dynamically
 function updateMarkers(iconUrl) {
