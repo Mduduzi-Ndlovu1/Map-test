@@ -15,6 +15,14 @@ let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/
 // Add the default light layer
 lightLayer.addTo(map);
 
+// Custom "You Are Here" icon using a PNG
+  const youAreHereIcon = L.icon({
+    iconUrl: 'https://1pulse.online/images/user-here.png', // Replace with your PNG URL
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
+  });
+
 // Function to get user's location and set the map view
 function setUserLocation() {
     if (navigator.geolocation) {
