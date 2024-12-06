@@ -281,14 +281,14 @@ function closeModal() {
 
 // Custom markers
 let markerIcon = L.icon({
-    iconUrl: 'light-marker.png',
+    iconUrl: 'https://1pulse.online/images/good deed icon.png',
     iconSize: [30, 30],
     iconAnchor: [15, 30],
     popupAnchor: [0, -30]
 });
 
 // Add initial marker
-let marker = L.marker([0, 0], { icon: markerIcon }).addTo(map)
+let marker = L.marker([-26.2041,028.0473], { icon: markerIcon }).addTo(map)
     .bindPopup('Custom Marker Popup').openPopup();
 
 // Function to update marker icon dynamically
