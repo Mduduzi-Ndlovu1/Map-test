@@ -26,7 +26,7 @@ flex-wrap: nowrap;
 #logo-nav {
     position: absolute;
     top: 10px;
-    width: 100%;
+    width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,7 +63,7 @@ flex-wrap: nowrap;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  width: 100%; /* Full width on mobile */
+  width: 60%; /* Full width on mobile */
   margin: 0 auto;
 }
 
@@ -197,7 +197,7 @@ img {
 #logo-nav {
     position: absolute;
     top: 10px;
-    width: 100%;
+    width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
