@@ -3,37 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with Compass</title>
+    <title>Leaflet Map with Gyroscope Icon</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.0.1/dist/leaflet-rotate.min.css" />
     <style>
         #map {
             height: 600px;
             width: 100%;
         }
 
-        /* Style for the compass icon */
-        #compass {
+        /* Style for the gyroscope icon */
+        #gyroscope {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            width: 50px;
-            height: 50px;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Compass_Rose.svg/1024px-Compass_Rose.svg.png'); /* Compass image */
+            width: 60px;
+            height: 60px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Modern_gyroscope_illustration.svg/2560px-Modern_gyroscope_illustration.svg.png'); /* Gyroscope image */
             background-size: cover;
             transform-origin: center center;
             transition: transform 0.3s ease-in-out;
+        }
+
+        /* Optional style for displaying the degree text next to the icon */
+        #degree {
+            position: absolute;
+            bottom: 10px;
+            left: 90px;
+            font-size: 16px;
+            color: black;
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Interactive Campus Map with Compass</h1>
+    <h1>Interactive Map with Gyroscope Icon</h1>
     <div id="map"></div>
-    <div id="compass"></div> <!-- Compass icon -->
+    <div id="gyroscope"></div> <!-- Gyroscope icon -->
+    <div id="degree">0°</div>  <!-- Degree display -->
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-rotate@0.0.1/dist/leaflet-rotate.min.js"></script>
     <script>
         // Initialize the map
         const map = L.map('map', {
@@ -49,25 +60,34 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Enable the rotation of the map using touch gestures (with leaflet-rotate plugin)
-        map.rotate = L.Rotate();
-        map.addLayer(map.rotate); // Add the rotate layer to the map
+        // Handle device orientation (compass and gyroscope)
+        let currentHeading = 0;  // To store the compass heading
 
-        // Track the map's rotation and update the compass accordingly
-        map.on('rotate', function() {
-            // Get the current map rotation angle
-            const rotationAngle = map.getBearing();
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                // Check for the heading value (alpha) from the compass
+                const heading = event.alpha;
 
-            // Update the compass icon's rotation based on the map's rotation
-            document.getElementById("compass").style.transform = `rotate(${rotationAngle}deg)`;
-        });
+                if (heading !== null) {
+                    // Update the gyroscope icon's rotation based on the device's heading
+                    currentHeading = heading;
+
+                    // Rotate the gyroscope icon
+                    document.getElementById("gyroscope").style.transform = `rotate(${currentHeading}deg)`;
+
+                    // Update the degree text next to the icon
+                    document.getElementById("degree").textContent = `${Math.round(currentHeading)}°`;
+                }
+            });
+        } else {
+            alert("Device Orientation is not supported on your device.");
+        }
 
         // Optional: Adding a campus marker
         const campusMarker = L.marker([40.730610, -73.935242]).addTo(map);
 
         // Optional: Display some information about the marker
         campusMarker.bindPopup("Campus Center").openPopup();
-
     </script>
 
 </body>
