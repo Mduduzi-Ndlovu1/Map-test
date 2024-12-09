@@ -17,9 +17,10 @@
 
 #logo-container {
       display: flex;
-      width: 100%;
+      width: 85%;
 transition: transform 0.3s ease;
 flex-wrap: nowrap;
+padding: 3px;
     }
 
       /* Logo Navigation styling */
