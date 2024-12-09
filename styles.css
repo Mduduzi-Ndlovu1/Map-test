@@ -17,7 +17,7 @@
 
 #logo-container {
       display: flex;
-      width: 85%;
+      width: 50%;
 transition: transform 0.3s ease;
 flex-wrap: nowrap;
 margin: 3px;
@@ -113,6 +113,11 @@ img {
   .nav-btn {
       font-size: 30px; /* Increase button size on larger screens */
       padding: 10px;
+  }
+
+
+  #logo-container {
+    width: 85%;
   }
 }
 
