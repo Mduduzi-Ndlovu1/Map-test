@@ -20,7 +20,7 @@
       width: 85%;
 transition: transform 0.3s ease;
 flex-wrap: nowrap;
-padding: 3px;
+margin: 3px;
     }
 
       /* Logo Navigation styling */
