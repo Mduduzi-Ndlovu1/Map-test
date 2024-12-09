@@ -26,7 +26,7 @@ flex-wrap: nowrap;
 #logo-nav {
     position: absolute;
     top: 10px;
-    width: 60%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,7 +63,7 @@ flex-wrap: nowrap;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  width: 60%; /* Full width on mobile */
+  width: 100%; /* Full width on mobile */
   margin: 0 auto;
 }
 
@@ -101,7 +101,10 @@ img {
 
 /* Tablet and larger screens */
 @media (min-width: 600px) {
- 
+  #logo-nav {
+      width: 100%; /* Give more space on tablets */
+  }
+
   img {
       max-width: 100px; /* Larger logos on tablets */
   }
@@ -114,7 +117,10 @@ img {
 
 /* Desktop and larger screens */
 @media (min-width: 1024px) {
-
+  #logo-nav {
+      width: 100%; /* Reduce width on larger screens for more centered layout */
+      
+  }
 
   img {
       max-width: 120px; /* Even larger logos on desktop */
@@ -197,7 +203,7 @@ img {
 #logo-nav {
     position: absolute;
     top: 10px;
-    width: 60%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
