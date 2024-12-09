@@ -3,76 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with Compass Gyroscope</title>
+    <title>Leaflet Map with Touch Rotation</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-rotate@0.0.1/dist/leaflet-rotate.min.css" />
     <style>
         #map {
             height: 600px;
             width: 100%;
         }
-        #compass {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 10px;
-            background-color: rgba(255, 255, 255, 0.7);
-            border-radius: 5px;
-        }
     </style>
 </head>
 <body>
 
-    <h1>Campus Map with Compass Gyroscope</h1>
+    <h1>Interactive Campus Map (Touch Rotate)</h1>
     <div id="map"></div>
-    <div id="compass">Heading: 0°</div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-rotate@0.0.1/dist/leaflet-rotate.min.js"></script>
     <script>
-        // Initialize the Leaflet map
-        const map = L.map('map').setView([40.730610, -73.935242], 16); // Coordinates for campus (example)
+        // Initialize the map
+        const map = L.map('map', {
+            center: [40.730610, -73.935242], // Coordinates for campus center (example)
+            zoom: 16,
+            crs: L.CRS.EPSG3857, // Set the CRS
+            dragging: true,
+            zoomControl: true
+        });
 
         // Tile layer from OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Marker for the campus center
+        // Enable the rotation of the map using touch gestures
+        map.rotate = L.Rotate();
+        map.addLayer(map.rotate); // Add the rotate layer to the map
+
+        // Optional: Adding a campus marker
         const campusMarker = L.marker([40.730610, -73.935242]).addTo(map);
-        
-        // Function to update compass and rotate the marker based on the device's heading
-        let currentHeading = 0;
 
-        function updateCompass(event) {
-            // Get the device's heading (in degrees)
-            const heading = event.alpha; // Event.alpha is the heading (0° = North, 90° = East, etc.)
-
-            if (heading !== null) {
-                // Update the compass display
-                document.getElementById("compass").textContent = `Heading: ${Math.round(heading)}°`;
-
-                // Rotate the marker icon based on the heading
-                campusMarker.setRotationAngle(heading); // This will rotate the marker icon to match the device's heading
-            }
-        }
-
-        // Listen for changes in device orientation (compass heading)
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', updateCompass, true);
-        } else {
-            alert("Device orientation is not supported on this device.");
-        }
-
-        // Optionally, listen to gyroscope data for additional rotation (if needed)
-        if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', function(event) {
-                const rotationX = event.rotationRate.beta; // Pitch (tilt)
-                const rotationY = event.rotationRate.gamma; // Roll (side tilt)
-                const rotationZ = event.rotationRate.alpha; // Yaw (turn)
-
-                // You can use these rotation values to adjust the map or markers further if needed
-                console.log('Pitch:', rotationX, 'Roll:', rotationY, 'Yaw:', rotationZ);
-            });
-        }
+        // Optional: Display some information about the marker
+        campusMarker.bindPopup("Campus Center").openPopup();
     </script>
+
 </body>
 </html>
