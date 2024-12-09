@@ -3,91 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with Gyroscope Icon</title>
+    <title>Gyroscope Landing Page</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        #map {
-            height: 600px;
-            width: 100%;
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
 
-        /* Style for the gyroscope icon */
         #gyroscope {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 60px;
-            height: 60px;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Modern_gyroscope_illustration.svg/2560px-Modern_gyroscope_illustration.svg.png'); /* Gyroscope image */
-            background-size: cover;
-            transform-origin: center center;
-            transition: transform 0.3s ease-in-out;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
-        /* Optional style for displaying the degree text next to the icon */
-        #degree {
+        #penIcon {
             position: absolute;
-            bottom: 10px;
-            left: 90px;
-            font-size: 16px;
-            color: black;
-            background-color: white;
-            padding: 5px;
-            border-radius: 5px;
+            top: 50%;
+            left: 50%;
+            transform-origin: center center;
+            width: 100px;
+            height: 100px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Styling for the pen icon */
+        #penIcon img {
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
 <body>
 
-    <h1>Interactive Map with Gyroscope Icon</h1>
-    <div id="map"></div>
-    <div id="gyroscope"></div> <!-- Gyroscope icon -->
-    <div id="degree">0°</div>  <!-- Degree display -->
+    <h1>Interactive Gyroscope and Pen Rotation</h1>
+    <p id="gyroscope">Facing: 0°</p> <!-- Degrees Text -->
+    <div id="penIcon">
+        <!-- Pen Image -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Pen_Icon_2.svg/200px-Pen_Icon_2.svg.png" alt="Pen Icon">
+    </div>
 
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Initialize the map
-        const map = L.map('map', {
-            center: [40.730610, -73.935242], // Coordinates for campus center (example)
-            zoom: 16,
-            crs: L.CRS.EPSG3857, // Set the CRS
-            dragging: true,
-            zoomControl: true
-        });
-
-        // Tile layer from OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
         // Handle device orientation (compass and gyroscope)
         let currentHeading = 0;  // To store the compass heading
 
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', function(event) {
-                // Check for the heading value (alpha) from the compass
+                // Get the heading value (alpha) from the compass
                 const heading = event.alpha;
 
                 if (heading !== null) {
-                    // Update the gyroscope icon's rotation based on the device's heading
-                    currentHeading = heading;
+                    // Update the gyroscope degrees text
+                    document.getElementById("gyroscope").textContent = `Facing: ${Math.round(heading)}°`;
 
-                    // Rotate the gyroscope icon
-                    document.getElementById("gyroscope").style.transform = `rotate(${currentHeading}deg)`;
-
-                    // Update the degree text next to the icon
-                    document.getElementById("degree").textContent = `${Math.round(currentHeading)}°`;
+                    // Update the pen icon's rotation based on the device's heading
+                    const penIcon = document.getElementById("penIcon");
+                    penIcon.style.transform = `rotate(${heading}deg)`; // Rotate the pen image
                 }
             });
         } else {
             alert("Device Orientation is not supported on your device.");
         }
-
-        // Optional: Adding a campus marker
-        const campusMarker = L.marker([40.730610, -73.935242]).addTo(map);
-
-        // Optional: Display some information about the marker
-        campusMarker.bindPopup("Campus Center").openPopup();
     </script>
 
 </body>
