@@ -102,7 +102,7 @@ img {
 /* Tablet and larger screens */
 @media (min-width: 600px) {
   #logo-nav {
-      width: 90%; /* Give more space on tablets */
+      width: 100%; /* Give more space on tablets */
   }
 
   img {
