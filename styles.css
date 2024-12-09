@@ -101,10 +101,7 @@ img {
 
 /* Tablet and larger screens */
 @media (min-width: 600px) {
-  #logo-nav {
-      width: 100%; /* Give more space on tablets */
-  }
-
+ 
   img {
       max-width: 100px; /* Larger logos on tablets */
   }
@@ -117,10 +114,7 @@ img {
 
 /* Desktop and larger screens */
 @media (min-width: 1024px) {
-  #logo-nav {
-      width: 80%; /* Reduce width on larger screens for more centered layout */
-      
-  }
+
 
   img {
       max-width: 120px; /* Even larger logos on desktop */
