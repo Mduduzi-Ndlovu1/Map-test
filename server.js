@@ -25,6 +25,19 @@ cloudinary.config({
 const publicUrl = process.env.PUBLIC_URL || 'https://map-test-xid1.onrender.com'; // Set your public URL here
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const uploadImageToCloudinary = async (file) => {
+  try {
+    const result = await cloudinary.uploader.upload(file.path, {
+      folder: 'posts',
+      resource_type: 'auto',
+    });
+    return result.secure_url;  // Return the image URL from Cloudinary
+  } catch (err) {
+    console.error('Error uploading to Cloudinary:', err);  // Log error
+    throw err;
+  }
+};
+
 // MongoDB setup
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?';
 mongoose.connect(mongoURI, { 
@@ -93,40 +106,27 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
       return res.status(400).json({ message: 'Invalid latitude or longitude' });
     }
 
-    let imageUrl = '';
-    if (req.file) {
-      // Upload the image buffer directly to Cloudinary
-      const uploadResult = await cloudinary.uploader.upload_stream({
-        folder: 'posts_images',
-        use_filename: true,
-        unique_filename: true
-      }, (error, result) => {
-        if (error) {
-          return res.status(500).json({ message: 'Cloudinary upload failed', error });
-        }
-        imageUrl = result.secure_url;
-      });
+    // Use Cloudinary for image URL
+    const imageUrl = req.file ? await uploadImageToCloudinary(req.file) : ''; // Save image URL from Cloudinary
 
-      // Pass the buffer to Cloudinary's upload stream
-      req.file.stream.pipe(uploadResult);
-    }
-
-    const newPost = new Post({ 
-      name, 
-      surname, 
-      description, 
-      latitude, 
-      longitude, 
-      imageUrl, 
-      comments: [] 
+    const newPost = new Post({
+      name,
+      surname,
+      description,
+      latitude,
+      longitude,
+      imageUrl,
+      comments: [],
     });
 
     await newPost.save();
     res.json({ post: newPost });
   } catch (err) {
+    console.error('Error creating post:', err);  // Log error
     res.status(500).json({ message: 'Failed to create post', error: err.message });
   }
 });
+
 
 app.get('/api/posts/:id', async (req, res) => {
   try {
