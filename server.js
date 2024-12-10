@@ -110,7 +110,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 
     // Upload image to Cloudinary
     if (req.file) {
-      cloudinary.uploader.upload(req.file.path, (error, result) => {
+      cloudinary.uploader.upload(req.file.path, async (error, result) => {
         if (error) {
           console.error('Error uploading to Cloudinary:', error);
           return res.status(500).json({ message: 'Error uploading to Cloudinary', error: error.message });
@@ -130,6 +130,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
           comments: [] 
         });
 
+        // Save the post asynchronously
         await newPost.save();
         res.json({ post: newPost });
       });
@@ -145,6 +146,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
         comments: [] 
       });
       
+      // Save the post asynchronously
       await newPost.save();
       res.json({ post: newPost });
     }
@@ -153,6 +155,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     res.status(500).json({ message: 'Failed to create post', error: err.message });
   }
 });
+
 
 
 app.get('/api/posts/:id', async (req, res) => {
