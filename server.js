@@ -63,8 +63,8 @@ const postSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['Type1', 'Type2', 'Type3'], // Adjust the enum to match your needs
-    default: 'Type1',
+    enum: ['Health', 'Property Damage', 'Violent Crime','Looting', 'Xenophobia'], 
+    default: 'Health',
   },
   createdAt: {
     type: Date,
