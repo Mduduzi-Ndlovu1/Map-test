@@ -732,3 +732,14 @@ button[type="submit"]:hover {
         font-size: 0.85rem;
         color: #ffcc00;
       }
+
+      #upload_widget_opener {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #upload_widget_opener:hover {
+        background-color: #218838;
+      }

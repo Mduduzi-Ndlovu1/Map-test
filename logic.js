@@ -1,3 +1,26 @@
+// Initialize the Cloudinary upload widget
+const uploadWidget = cloudinary.createUploadWidget({
+    cloudName: 'dcbd1eavwE',  // Replace with your Cloudinary cloud name
+    uploadPreset: 'imageUpload',  // Replace with your upload preset
+    sources: ['local', 'url', 'camera'],
+    showAdvancedOptions: true,
+    cropping: true,
+    multiple: false,
+    maxFileSize: 5000000,  // Set the max file size (in bytes)
+  }, function(error, result) {
+    if (!error && result && result.event === "success") {
+      console.log('Image uploaded to Cloudinary:', result.info.url);
+      
+      // Store the URL or display it on the page
+      document.getElementById('image-url').value = result.info.url;
+    }
+  });
+  
+  // Trigger Cloudinary widget on button click
+  document.getElementById('upload_widget_opener').addEventListener('click', function() {
+    uploadWidget.open();
+  });
+  
 // Initialize the map with a light theme
 let map = L.map('map',{zoomControl: false}).setView([-26.2041, 28.0473], 18);
 

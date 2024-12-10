@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
   <style>
     body.dark-mode {
       background-color: #2b2b2b;
@@ -75,8 +77,10 @@
       <div class="form-field">
         <label for="image">Image:</label>
         <input type="file" id="image" name="image" required />
+        <!-- Add hidden input for the image URL -->
+      <input type="hidden" id="image-url" name="image-url" />
       </div>
-      <button type="submit">Save Post</button>
+      <button type="submit" id="upload_widget_opener">Save Post</button>
     </form>
   </div>
 
