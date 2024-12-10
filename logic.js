@@ -72,12 +72,10 @@ document.addEventListener('DOMContentLoaded', function() {
             map.removeLayer(lightLayer);
             darkLayer.addTo(map);
             document.body.classList.add('dark-mode');
-            updateMarkers('dark-marker.png');
         } else {
             map.removeLayer(darkLayer);
             lightLayer.addTo(map);
             document.body.classList.remove('dark-mode');
-            updateMarkers('light-marker.png');
         }
     }
 
@@ -92,12 +90,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayPosts(posts) {
         posts.forEach((post) => {
             const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
-            const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
+            const marker = L.marker([latitude, longitude]).addTo(map);
             marker.bindPopup(`
-              <b>${name} ${surname}</b><br>
-              ${description}<br>
-              <img src="${imageUrl}" width="100px" height="100px"><br>
-              <button onclick="openViewPostModal('${_id}')">View Post</button>
+                <b>${name} ${surname}</b><br>
+                ${description}<br>
+                <img src="${imageUrl}" width="100px" height="100px"><br>
+                <button onclick="openViewPostModal('${_id}')">View Post</button>
             `);
         });
     }
