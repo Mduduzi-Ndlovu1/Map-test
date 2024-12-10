@@ -4,20 +4,17 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors'); // Import CORS middleware
-const cloudinary = require('cloudinary').v2; // Import Cloudinary SDK
 const app = express();
-
-// Cloudinary Configuration
-cloudinary.config({ 
-  cloud_name: 'dcbd1eavw', 
-  api_key: '613477935675545', 
-  api_secret: 'eLIUoc8MEntQCo68oWvyNCItc9U' 
-});
 
 // Set up middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // Enable CORS for all origins (can be restricted to a specific origin later)
+
+// Set up static folder for images
+// Replace with public URL for production
+const publicUrl = process.env.PUBLIC_URL || 'https://map-test-xid1.onrender.com'; // Set your public URL here
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB setup
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?';
@@ -43,8 +40,20 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model('Post', postSchema);
 
-// Set up multer to handle image uploads (in-memory storage for Cloudinary)
-const storage = multer.memoryStorage();
+// Set up file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Ensure unique filenames
+  },
+});
+
 const upload = multer({ storage });
 
 // API Routes
@@ -60,26 +69,9 @@ app.get('/api/posts', async (req, res) => {
 app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     const { name, surname, description, latitude, longitude } = req.body;
-    let imageUrl = '';
-
-    if (req.file) {
-      // Upload image to Cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        resource_type: 'auto'
-      });
-
-      imageUrl = result.secure_url;
-    }
-
-    const newPost = new Post({ 
-      name, 
-      surname, 
-      description, 
-      latitude, 
-      longitude, 
-      imageUrl, 
-      comments: [] 
-    });
+    // Use public URL for image
+    const imageUrl = req.file ? `${publicUrl}/uploads/${req.file.filename}` : ''; // Save image URL
+    const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
 
     await newPost.save();
     res.json({ post: newPost });
@@ -101,29 +93,20 @@ app.get('/api/posts/:id', async (req, res) => {
 });
 
 app.post('/api/posts/:id/comments', async (req, res) => {
-  try {
     const { author, text } = req.body;
     
     if (!author || !text) {
       return res.status(400).json({ message: 'Author and text are required' });
     }
-
+  
     const post = await Post.findById(req.params.id);
-    if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
-    }
-
     post.comments.push({ author, text });
     await post.save();
     res.json(post);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to add comment', error: err.message });
-  }
-});
+  });
 
 // Start server
 const port = process.env.PORT || 5000;
-const publicUrl = process.env.PUBLIC_URL || 'https://map-test-1.netlify.app'; // Set your public URL here
 app.listen(port, () => {
   console.log(`Server running on ${publicUrl}:${port}`);
 });
