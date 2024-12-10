@@ -75,21 +75,21 @@ const logos = document.querySelectorAll(".logo"); // Get all the logo divs
 const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
 let currentPosition = 0;
 
-slideLeftBtn.addEventListener("click", () => {
-    // Move logos to the left (if there's space)
-    if (currentPosition < 0) {
-        currentPosition += logoWidth;
-        logoContainer.style.transform = `translateX(${currentPosition}px)`;
-    }
-});
+// slideLeftBtn.addEventListener("click", () => {
+//     // Move logos to the left (if there's space)
+//     if (currentPosition < 0) {
+//         currentPosition += logoWidth;
+//         logoContainer.style.transform = `translateX(${currentPosition}px)`;
+//     }
+// });
 
-slideRightBtn.addEventListener("click", () => {
-    // Move logos to the right (if there's space)
-    if (currentPosition > -(logoContainer.scrollWidth - window.innerWidth)) {
-        currentPosition -= logoWidth;
-        logoContainer.style.transform = `translateX(${currentPosition}px)`;
-    }
-});
+// slideRightBtn.addEventListener("click", () => {
+//     // Move logos to the right (if there's space)
+//     if (currentPosition > -(logoContainer.scrollWidth - window.innerWidth)) {
+//         currentPosition -= logoWidth;
+//         logoContainer.style.transform = `translateX(${currentPosition}px)`;
+//     }
+// });
 
 
 // Function to toggle between light and dark mode
@@ -128,8 +128,8 @@ let markerIcon = L.icon({
 });
 
 // Add initial marker
-let marker = L.marker([-26.2041, 28.0473], { icon: markerIcon }).addTo(map)
-    .bindPopup('Start Point').openPopup();
+// let marker = L.marker([-26.2041, 28.0473], { icon: markerIcon }).addTo(map)
+//     .bindPopup('Start Point').openPopup();
 
 // Function to update marker icon dynamically
 function updateMarkers(iconUrl) {
