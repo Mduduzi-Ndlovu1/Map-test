@@ -67,10 +67,10 @@ setUserLocation();
 let darkMode = false;
 
 // Side button logic
-const slideLeftBtn = document.getElementById("slide-left-btn");
-const slideRightBtn = document.getElementById("slide-right-btn");
-const logoContainer = document.getElementById("logo-container");
-const logos = document.querySelectorAll(".logo"); // Get all the logo divs
+// const slideLeftBtn = document.getElementById("slide-left-btn");
+// const slideRightBtn = document.getElementById("slide-right-btn");
+// const logoContainer = document.getElementById("logo-container");
+// const logos = document.querySelectorAll(".logo"); // Get all the logo divs
 
 const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
 let currentPosition = 0;
@@ -197,12 +197,14 @@ async function fetchPosts() {
     const response = await fetch('https://map-test-xid1.onrender.com/api/posts');  // Updated URL
     const posts = await response.json();
     displayPosts(posts);
+    console.log('Fetched posts:', post);
 }
 
 // Display posts on the map
 function displayPosts(posts) {
     posts.forEach((post) => {
         const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
+        console.log("Here are the coord": latitude, longitude, name, surname, description, imageUrl, _id);
         const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
