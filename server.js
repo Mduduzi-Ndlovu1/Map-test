@@ -15,9 +15,9 @@ app.use(cors());
 
 // Set up Cloudinary configuration
 cloudinary.config({
-  cloud_name: dcbd1eavw,
-  api_key: 613477935675545,
-  api_secret: eLIUoc8MEntQCo68oWvyNCItc9U
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 // Set up static folder for images
