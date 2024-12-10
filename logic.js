@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // All your existing JavaScript code goes here...
-
     // Initialize the map with a light theme
-    let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
+    let map = L.map('map', { zoomControl: true }).setView([-26.2041, 28.0473], 18);
 
     // Tile layer for light mode
     let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
@@ -44,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
                         .then(response => response.json())
                         .then(data => {
-                            // If the geocoding request returns a valid address
                             const address = data.display_name;
                             userMarker.bindPopup("Your current location is: " + address).openPopup();
                         })
@@ -55,8 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 (error) => {
                     console.log(error);
-                    // Fallback to a default location if geolocation fails
-                    map.setView([-26.2041, 28.0473], 18);
+                    map.setView([-26.2041, 28.0473], 18); // Fallback to a default location
                 }
             );
         } else {
@@ -68,35 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setUserLocation();
 
     let darkMode = false;
-
-    // Side button logic
-    const slideLeftBtn = document.getElementById("slide-left-btn");
-    const slideRightBtn = document.getElementById("slide-right-btn");
-    const logoContainer = document.getElementById("logo-container");
-    const logos = document.querySelectorAll(".logo"); // Get all the logo divs
-
-    const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
-    let currentPosition = 0;
-
-    if (slideLeftBtn) {
-        slideLeftBtn.addEventListener("click", () => {
-            // Move logos to the left (if there's space)
-            if (currentPosition < 0) {
-                currentPosition += logoWidth;
-                logoContainer.style.transform = `translateX(${currentPosition}px)`;
-            }
-        });
-    }
-
-    if (slideRightBtn) {
-        slideRightBtn.addEventListener("click", () => {
-            // Move logos to the right (if there's space)
-            if (currentPosition > -(logoContainer.scrollWidth - window.innerWidth)) {
-                currentPosition -= logoWidth;
-                logoContainer.style.transform = `translateX(${currentPosition}px)`;
-            }
-        });
-    }
 
     // Function to toggle between light and dark mode
     function toggleDarkMode() {
@@ -114,90 +81,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Floating button modal functionality
-    function openModal() {
-        document.getElementById('modal').style.display = 'block';
-    }
-
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-    }
-
-    // Custom markers
-    let markerIcon = L.icon({
-        iconUrl: 'https://1pulse.online/images/good deed icon.png',
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -30]
-    });
-
-    // Add initial marker
-    let marker = L.marker([-26.2041, 28.0473], { icon: markerIcon }).addTo(map)
-        .bindPopup('Start Point').openPopup();
-
-    // Function to update marker icon dynamically
-    function updateMarkers(iconUrl) {
-        marker.setIcon(L.icon({
-            iconUrl: iconUrl,
-            iconSize: [30, 30],
-            iconAnchor: [15, 30],
-            popupAnchor: [0, -30]
-        }));
-    }
-
-    // Add event listener for map click to create a new post
-    map.on('click', function (event) {
-        // Get the latitude and longitude of the clicked point
-        const lat = event.latlng.lat;
-        const lng = event.latlng.lng;
-
-        // Call the openPostModal function and pass the coordinates
-        openPostModal(lat, lng);
-    });
-
-    // Open modal to create a post
-    function openPostModal(lat, lng) {
-        selectedLatLng = { lat, lng };
-        console.log('Map clicked at:', lat, lng);  // Check if lat/lng are logged correctly
-
-        document.getElementById('modal-overlay').classList.add('active');
-        document.getElementById('modal').classList.add('active');
-    }
-
-    // Close modal
-    // Close modal and clear the form
-    function closeModal() {
-        document.getElementById('modal-overlay').classList.remove('active');
-        document.getElementById('modal').classList.remove('active');
-        document.getElementById('viewModal-overlay').classList.remove('active');
-        document.getElementById('viewModal').classList.remove('active');
-
-        // Reset the form fields
-        document.getElementById('postForm').reset();
-    }
-
-    // Close modal when clicking anywhere outside of it (on the overlay)
-    document.getElementById('modal-overlay').addEventListener('click', function () {
-        closeModal();
-    });
-
-    // Close view modal when clicking anywhere outside of it (on the overlay)
-    document.getElementById('viewModal-overlay').addEventListener('click', function () {
-        closeModal();
-    });
-
-    // Prevent closing modal when clicking inside the modal (on the modal content)
-    document.getElementById('modal').addEventListener('click', function (event) {
-        event.stopPropagation(); // Prevent event from propagating to overlay
-    });
-
-    document.getElementById('viewModal').addEventListener('click', function (event) {
-        event.stopPropagation(); // Prevent event from propagating to overlay
-    });
-
     // Fetch posts from backend
     async function fetchPosts() {
-        const response = await fetch('https://map-test-xid1.onrender.com/api/posts');  // Updated URL
+        const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
         const posts = await response.json();
         displayPosts(posts);
     }
@@ -220,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function openViewPostModal(postId) {
         currentPostId = postId;
 
-        const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);  // Updated URL
+        const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
         const post = await response.json();
 
         document.getElementById('viewModal-overlay').classList.add('active');
@@ -278,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         postData.append('longitude', selectedLatLng.lng);
         postData.append('image', image);
 
-        const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
+        const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {
             method: 'POST',
             body: postData,
         });
