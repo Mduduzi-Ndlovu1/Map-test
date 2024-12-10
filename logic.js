@@ -148,9 +148,7 @@ map.on('click', function (event) {
     const lng = event.latlng.lng;
 
     // Call the openPostModal function and pass the coordinates
-    if(lat && lng){
-        openPostModal(lat, lng);
-    }
+    openPostModal(lat, lng);
 });
 
 // Open modal to create a post
@@ -198,23 +196,13 @@ document.getElementById('viewModal').addEventListener('click', function (event) 
 async function fetchPosts() {
     const response = await fetch('https://map-test-xid1.onrender.com/api/posts');  // Updated URL
     const posts = await response.json();
-    posts.forEach(post => {
-        if (post.latitude && post.longitude) {
-          // Proceed to display post
-          displayPosts(post.latitude, post.longitude);
-        } else {
-          console.error("Invalid post data:", post);
-        }
-      });
+    displayPosts(posts);
 }
 
 // Display posts on the map
 function displayPosts(posts) {
     posts.forEach((post) => {
         const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
-        if(!latitude || !longitude) {
-            console.log('Latitude or longitude is missing for post:', post);
-        };
         const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
