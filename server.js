@@ -6,10 +6,19 @@ const fs = require('fs');
 const cors = require('cors'); // Import CORS middleware
 const app = express();
 
+const cloudinary = require('cloudinary').v2;
+
 // Set up middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); // Enable CORS for all origins (can be restricted to a specific origin later)
+app.use(cors()); 
+
+// Set up Cloudinary configuration
+cloudinary.config({
+  cloud_name: dcbd1eavw,
+  api_key: 613477935675545,
+  api_secret: eLIUoc8MEntQCo68oWvyNCItc9U
+});
 
 // Set up static folder for images
 // Replace with public URL for production
@@ -55,18 +64,7 @@ const postSchema = new mongoose.Schema({
 const Post = mongoose.model('Post', postSchema);
 
 // Set up file upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, 'uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir);
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname)); // Ensure unique filenames
-  },
-});
+const storage = multer();
 
 const upload = multer({ storage });
 
@@ -95,9 +93,27 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
       return res.status(400).json({ message: 'Invalid latitude or longitude' });
     }
 
-    // Use public URL for image
-    const imageUrl = req.file ? `${publicUrl}/uploads/${req.file.filename}` : ''; // Save image URL
-    const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
+    let imageUrl = '';
+    if (req.file) {
+      // Upload image to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'posts_images',  // Optional: set a folder for the images
+        use_filename: true,       // Use original filename
+        unique_filename: true     // Ensure unique filename
+      });
+
+      imageUrl = uploadResult.secure_url; // Get the secure URL from Cloudinary
+    }
+
+    const newPost = new Post({ 
+      name, 
+      surname, 
+      description, 
+      latitude, 
+      longitude, 
+      imageUrl, 
+      comments: [] 
+    });
 
     await newPost.save();
     res.json({ post: newPost });
