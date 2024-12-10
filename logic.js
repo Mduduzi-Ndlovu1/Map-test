@@ -295,10 +295,6 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
         method: 'POST',
         body: postData,
-    },{
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
     });
 
     if (response.ok) {
@@ -308,16 +304,6 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
         alert('Error creating post!');
     }
 });
-
-// Function to convert image to base64
-// function convertToBase64(file) {
-//     return new Promise((resolve, reject) => {
-//         const reader = new FileReader();
-//         reader.onloadend = () => resolve(reader.result);
-//         reader.onerror = reject;
-//         reader.readAsDataURL(file);
-//     });
-// }
 
 // Close modal when clicking anywhere outside of it (on the overlay)
 document.getElementById('modal-overlay').addEventListener('click', function () {

@@ -67,14 +67,10 @@ app.get('/api/posts', async (req, res) => {
 });
 
 app.post('/api/posts', upload.single('image'), async (req, res) => {
-  console.log(req.file);
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
-  }
-  const { name, surname, description, latitude, longitude } = req.body;
-  // Use public URL for image
-  const imageUrl = `${publicUrl}/uploads/${req.file.filename}`; // Save image URL
   try {
+    const { name, surname, description, latitude, longitude } = req.body;
+    // Use public URL for image
+    const imageUrl = req.file ? `${publicUrl}/uploads/${req.file.filename}` : ''; // Save image URL
     const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
 
     await newPost.save();
