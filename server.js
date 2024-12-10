@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const mongoose = require('mongoose');
@@ -15,28 +16,15 @@ app.use(cors());
 
 // Set up Cloudinary configuration
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || "dcbd1eavw",
+  api_key: process.env.CLOUDINARY_API_KEY || "613477935675545",
+  api_secret: process.env.CLOUDINARY_API_SECRET || "eLIUoc8MEntQCo68oWvyNCItc9U"
 });
 
 // Set up static folder for images
 // Replace with public URL for production
 const publicUrl = process.env.PUBLIC_URL || 'https://map-test-xid1.onrender.com'; // Set your public URL here
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-const uploadImageToCloudinary = async (file) => {
-  try {
-    const result = await cloudinary.uploader.upload(file.path, {
-      folder: 'posts',
-      resource_type: 'auto',
-    });
-    return result.secure_url;  // Return the image URL from Cloudinary
-  } catch (err) {
-    console.error('Error uploading to Cloudinary:', err);  // Log error
-    throw err;
-  }
-};
 
 // MongoDB setup
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?';
@@ -76,8 +64,21 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model('Post', postSchema);
 
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Ensure unique filenames
+  },
+});
+
 // Set up file upload
-const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
@@ -97,6 +98,7 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
+// POST route for creating a post with an image
 app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     const { name, surname, description, latitude, longitude } = req.body;
@@ -106,23 +108,48 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
       return res.status(400).json({ message: 'Invalid latitude or longitude' });
     }
 
-    // Use Cloudinary for image URL
-    const imageUrl = req.file ? await uploadImageToCloudinary(req.file) : ''; // Save image URL from Cloudinary
+    // Upload image to Cloudinary
+    if (req.file) {
+      cloudinary.uploader.upload(req.file.path, (error, result) => {
+        if (error) {
+          console.error('Error uploading to Cloudinary:', error);
+          return res.status(500).json({ message: 'Error uploading to Cloudinary', error: error.message });
+        }
 
-    const newPost = new Post({
-      name,
-      surname,
-      description,
-      latitude,
-      longitude,
-      imageUrl,
-      comments: [],
-    });
+        // Get the URL of the uploaded image from Cloudinary
+        const imageUrl = result.secure_url;
 
-    await newPost.save();
-    res.json({ post: newPost });
+        // Create and save the post
+        const newPost = new Post({ 
+          name, 
+          surname, 
+          description, 
+          latitude, 
+          longitude, 
+          imageUrl, 
+          comments: [] 
+        });
+
+        await newPost.save();
+        res.json({ post: newPost });
+      });
+    } else {
+      // No image uploaded
+      const newPost = new Post({ 
+        name, 
+        surname, 
+        description, 
+        latitude, 
+        longitude, 
+        imageUrl: '', 
+        comments: [] 
+      });
+      
+      await newPost.save();
+      res.json({ post: newPost });
+    }
   } catch (err) {
-    console.error('Error creating post:', err);  // Log error
+    console.error('Error creating post:', err);
     res.status(500).json({ message: 'Failed to create post', error: err.message });
   }
 });
