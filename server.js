@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
@@ -6,11 +7,11 @@ const cors = require('cors'); // Import CORS middleware
 const { v2: cloudinary } = require('cloudinary');
 const app = express();
 
-// Cloudinary Configuration
-cloudinary.config({ 
-  cloud_name: 'dcbd1eavw', 
-  api_key: '613477935675545', 
-  api_secret: 'eLIUoc8MEntQCo68oWvyNCItc9U' // Use your actual Cloudinary API credentials
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: 'dcbd1eavw',
+  api_key: '613477935675545',
+  api_secret: 'eLIUoc8MEntQCo68oWvyNCItc9U',
 });
 
 // Set up middleware
@@ -20,9 +21,9 @@ app.use(cors()); // Enable CORS for all origins (can be restricted to a specific
 
 // MongoDB setup
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?';
-mongoose.connect(mongoURI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 }).then(() => {
   console.log('Connected to MongoDB');
 }).catch((err) => {
@@ -42,6 +43,10 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model('Post', postSchema);
 
+// Set up multer storage (temporary storage before uploading to Cloudinary)
+const storage = multer.memoryStorage(); // Store image in memory temporarily
+const upload = multer({ storage }); // Using memory storage for faster uploads
+
 // API Routes
 app.get('/api/posts', async (req, res) => {
   try {
@@ -52,33 +57,37 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
-// Updated post creation route to use Cloudinary for image storage
-app.post('/api/posts', async (req, res) => {
+app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
-    const { name, surname, description, latitude, longitude, image } = req.body;
+    const { name, surname, description, latitude, longitude } = req.body;
 
-    // If an image is provided, upload it to Cloudinary
-    let imageUrl = '';
-    if (image) {
-      // Upload image to Cloudinary (assumes base64 encoded image)
-      const uploadedImage = await cloudinary.uploader.upload(image, {
-        folder: 'post_images', // Optional: Organize images into a folder in Cloudinary
+    if (req.file) {
+      // Upload the image to Cloudinary from memory
+      const result = await cloudinary.uploader.upload_stream({ 
+        resource_type: 'image',
+        folder: 'uploads', // Optional: set a folder for Cloudinary
+      }, async (error, result) => {
+        if (error) {
+          return res.status(500).json({ message: 'Cloudinary upload failed', error: error.message });
+        }
+        
+        const imageUrl = result.secure_url; // Cloudinary image URL
+        const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
+        
+        await newPost.save();
+        res.json({ post: newPost });
       });
-      imageUrl = uploadedImage.secure_url; // Cloudinary URL
+
+      // Create a readable stream from the buffer and pipe it to Cloudinary
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(req.file.buffer); // Convert the buffer to a stream
+      bufferStream.pipe(result);
+    } else {
+      const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl: '', comments: [] });
+      await newPost.save();
+      res.json({ post: newPost });
     }
 
-    const newPost = new Post({
-      name,
-      surname,
-      description,
-      latitude,
-      longitude,
-      imageUrl, // Store the Cloudinary image URL
-      comments: [],
-    });
-
-    await newPost.save();
-    res.json({ post: newPost });
   } catch (err) {
     res.status(500).json({ message: 'Failed to create post', error: err.message });
   }
@@ -98,7 +107,7 @@ app.get('/api/posts/:id', async (req, res) => {
 
 app.post('/api/posts/:id/comments', async (req, res) => {
   const { author, text } = req.body;
-
+  
   if (!author || !text) {
     return res.status(400).json({ message: 'Author and text are required' });
   }
