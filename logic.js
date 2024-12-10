@@ -70,7 +70,7 @@ let darkMode = false;
 // const slideLeftBtn = document.getElementById("slide-left-btn");
 // const slideRightBtn = document.getElementById("slide-right-btn");
 // const logoContainer = document.getElementById("logo-container");
-// const logos = document.querySelectorAll(".logo"); // Get all the logo divs
+ const logos = document.querySelectorAll(".logo"); // Get all the logo divs
 
 const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
 let currentPosition = 0;
