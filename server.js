@@ -60,6 +60,16 @@ const postSchema = new mongoose.Schema({
       message: 'Longitude must be a valid number'
     }
   },
+  type: {
+    type: String,
+    required: true,
+    enum: ['Type1', 'Type2', 'Type3'], // Adjust the enum to match your needs
+    default: 'Type1',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
   comments: [{ author: String, text: String }],
 });
 
@@ -102,11 +112,15 @@ app.get('/api/posts', async (req, res) => {
 // POST route for creating a post with an image
 app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
-    const { name, surname, description, latitude, longitude } = req.body;
+    const { name, surname, description, latitude, longitude, type } = req.body;
 
-    // Validate latitude and longitude
+    // Validate latitude and longitude and type
     if (isNaN(latitude) || isNaN(longitude)) {
       return res.status(400).json({ message: 'Invalid latitude or longitude' });
+    }
+
+    if (!type) {
+      return res.status(400).json({ message: 'Type is required' });
     }
 
     // Upload image to Cloudinary
@@ -126,7 +140,8 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
           surname, 
           description, 
           latitude, 
-          longitude, 
+          longitude,
+          type, 
           imageUrl, 
           comments: [] 
         });
@@ -143,6 +158,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
         description, 
         latitude, 
         longitude, 
+        type,
         imageUrl: '', 
         comments: [] 
       });

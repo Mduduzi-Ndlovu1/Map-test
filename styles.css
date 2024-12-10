@@ -733,4 +733,63 @@ button[type="submit"]:hover {
         color: #ffcc00;
       }
 
+
+
+      /* General styles for the form */
+.form-field {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+/* Custom dropdown styles */
+.custom-select-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  background: #f8f8f8;
+  appearance: none; /* Hide the default dropdown arrow */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-select:focus {
+  border-color: #5e9ed6;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(94, 158, 214, 0.8);
+}
+
+/* Add a custom dropdown arrow */
+.custom-select-container::after {
+  content: "▼";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Hover effect */
+.custom-select:hover {
+  border-color: #888;
+}
+
+
+
+
       

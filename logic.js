@@ -211,13 +211,14 @@ async function fetchPosts() {
 // Display posts on the map
 function displayPosts(posts) {
     posts.forEach((post) => {
-      const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
+      const { latitude, longitude, name, surname, description, imageUrl, type, _id } = post;
   
       // Check if latitude and longitude are valid numbers before proceeding
       if (typeof latitude === 'number' && typeof longitude === 'number') {
         const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
+          <i> Type: ${type}</i><br>
           ${description}<br>
           <img src="${imageUrl}" width="100px" height="100px"><br>
           <button onclick="openViewPostModal('${_id}')">View Post</button>
@@ -240,6 +241,7 @@ async function openViewPostModal(postId) {
 
     document.getElementById('postDetails').innerHTML = `
         <b>${post.name} ${post.surname}</b><br>
+        <i>Type: ${post.type}</i><br>
         ${post.description}<br>
         <img src="${post.imageUrl}" width="200px" height="200px"><br>
     `;
@@ -293,8 +295,9 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     const surname = formData.get('surname');
     const description = formData.get('description');
     const image = formData.get('image');
+    const type = formData.get('type')
 
-    if (!name || !surname || !description || !image) {
+    if (!name || !surname || !description || !image || !type) {
         alert('Please fill in all fields!');
         return;
     }
@@ -306,6 +309,7 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     postData.append('image', image);
     postData.append('latitude', selectedLatLng.lat);
     postData.append('longitude', selectedLatLng.lng);
+    postData.append('type', type);
 
     const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
         method: 'POST',
