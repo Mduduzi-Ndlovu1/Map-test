@@ -13,7 +13,7 @@ app.use(cors()); // Enable CORS for all origins (can be restricted to a specific
 
 // Set up static folder for images
 // Replace with public URL for production
-const publicUrl = process.env.PUBLIC_URL || 'https://map-test-1.netlify.app'; // Set your public URL here
+const publicUrl = process.env.PUBLIC_URL || 'https://map-test-xid1.onrender.com'; // Set your public URL here
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB setup
