@@ -3,7 +3,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
-const cors = require('cors'); // Import CORS middleware
+const cors = require('cors'); // 
 const app = express();
 
 const cloudinary = require('cloudinary').v2;
@@ -64,7 +64,7 @@ const postSchema = new mongoose.Schema({
 const Post = mongoose.model('Post', postSchema);
 
 // Set up file upload
-const storage = multer();
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
@@ -95,14 +95,20 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 
     let imageUrl = '';
     if (req.file) {
-      // Upload image to Cloudinary
-      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'posts_images',  // Optional: set a folder for the images
-        use_filename: true,       // Use original filename
-        unique_filename: true     // Ensure unique filename
+      // Upload the image buffer directly to Cloudinary
+      const uploadResult = await cloudinary.uploader.upload_stream({
+        folder: 'posts_images',
+        use_filename: true,
+        unique_filename: true
+      }, (error, result) => {
+        if (error) {
+          return res.status(500).json({ message: 'Cloudinary upload failed', error });
+        }
+        imageUrl = result.secure_url;
       });
 
-      imageUrl = uploadResult.secure_url; // Get the secure URL from Cloudinary
+      // Pass the buffer to Cloudinary's upload stream
+      req.file.stream.pipe(uploadResult);
     }
 
     const newPost = new Post({ 
