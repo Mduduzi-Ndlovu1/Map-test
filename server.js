@@ -4,26 +4,23 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors'); // Import CORS middleware
-const { v2: cloudinary } = require('cloudinary');
 const app = express();
-
-// Cloudinary configuration
-cloudinary.config({
-  cloud_name: 'dcbd1eavw',
-  api_key: '613477935675545',
-  api_secret: 'eLIUoc8MEntQCo68oWvyNCItc9U',
-});
 
 // Set up middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors()); // Enable CORS for all origins (can be restricted to a specific origin later)
 
+// Set up static folder for images
+// Replace with public URL for production
+const publicUrl = process.env.PUBLIC_URL || 'https://map-test-xid1.onrender.com'; // Set your public URL here
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // MongoDB setup
 const mongoURI = process.env.MONGO_URI || 'mongodb+srv://mduduzindlovu02:maqGSNqbUEhh6KFJ@notesmanagerv2.1gdnh.mongodb.net/?';
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect(mongoURI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
 }).then(() => {
   console.log('Connected to MongoDB');
 }).catch((err) => {
@@ -43,9 +40,21 @@ const postSchema = new mongoose.Schema({
 
 const Post = mongoose.model('Post', postSchema);
 
-// Set up multer storage (temporary storage before uploading to Cloudinary)
-const storage = multer.memoryStorage(); // Store image in memory temporarily
-const upload = multer({ storage }); // Using memory storage for faster uploads
+// Set up file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Ensure unique filenames
+  },
+});
+
+const upload = multer({ storage });
 
 // API Routes
 app.get('/api/posts', async (req, res) => {
@@ -58,36 +67,18 @@ app.get('/api/posts', async (req, res) => {
 });
 
 app.post('/api/posts', upload.single('image'), async (req, res) => {
+  console.log(req.file);
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+  const { name, surname, description, latitude, longitude } = req.body;
+  // Use public URL for image
+  const imageUrl = `${publicUrl}/uploads/${req.file.filename}`; // Save image URL
   try {
-    const { name, surname, description, latitude, longitude } = req.body;
+    const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
 
-    if (req.file) {
-      // Upload the image to Cloudinary from memory
-      const result = await cloudinary.uploader.upload_stream({ 
-        resource_type: 'image',
-        folder: 'uploads', // Optional: set a folder for Cloudinary
-      }, async (error, result) => {
-        if (error) {
-          return res.status(500).json({ message: 'Cloudinary upload failed', error: error.message });
-        }
-        
-        const imageUrl = result.secure_url; // Cloudinary image URL
-        const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
-        
-        await newPost.save();
-        res.json({ post: newPost });
-      });
-
-      // Create a readable stream from the buffer and pipe it to Cloudinary
-      const bufferStream = new stream.PassThrough();
-      bufferStream.end(req.file.buffer); // Convert the buffer to a stream
-      bufferStream.pipe(result);
-    } else {
-      const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl: '', comments: [] });
-      await newPost.save();
-      res.json({ post: newPost });
-    }
-
+    await newPost.save();
+    res.json({ post: newPost });
   } catch (err) {
     res.status(500).json({ message: 'Failed to create post', error: err.message });
   }
@@ -106,20 +97,20 @@ app.get('/api/posts/:id', async (req, res) => {
 });
 
 app.post('/api/posts/:id/comments', async (req, res) => {
-  const { author, text } = req.body;
+    const { author, text } = req.body;
+    
+    if (!author || !text) {
+      return res.status(400).json({ message: 'Author and text are required' });
+    }
   
-  if (!author || !text) {
-    return res.status(400).json({ message: 'Author and text are required' });
-  }
-
-  const post = await Post.findById(req.params.id);
-  post.comments.push({ author, text });
-  await post.save();
-  res.json(post);
-});
+    const post = await Post.findById(req.params.id);
+    post.comments.push({ author, text });
+    await post.save();
+    res.json(post);
+  });
 
 // Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on ${publicUrl}:${port}`);
 });

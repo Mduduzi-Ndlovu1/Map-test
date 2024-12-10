@@ -295,6 +295,10 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
         method: 'POST',
         body: postData,
+    },{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
     });
 
     if (response.ok) {
