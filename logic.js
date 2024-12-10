@@ -204,7 +204,7 @@ async function fetchPosts() {
 function displayPosts(posts) {
     posts.forEach((post) => {
         const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
-        console.log("Here are the coord": latitude, longitude, name, surname, description, imageUrl, _id);
+        console.log("Here are the coord :" + latitude, longitude, name, surname, description, imageUrl, _id);
         const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
