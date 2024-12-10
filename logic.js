@@ -355,3 +355,14 @@ document.getElementById('viewModal').addEventListener('click', function (event) 
 
 // Initial fetch of posts
 fetchPosts();
+
+
+// Define icons for each incident type
+const icons = {
+  'Good Deeds': L.icon({ iconUrl: 'images/good deed icon.png', iconSize: [30, 30] }),
+  'Health': L.icon({ iconUrl: 'images/Health-location.png', iconSize: [30, 30] }),
+  'Property Damage': L.icon({ iconUrl: 'images/property.png', iconSize: [30, 30] }),
+  'Violent Crime': L.icon({ iconUrl: 'images/violent-crime.png', iconSize: [30, 30] }),
+  'Looting': L.icon({ iconUrl: 'images/looting.png', iconSize: [30, 30] }),
+  'Xenophobia': L.icon({ iconUrl: 'images/xenophobia.png', iconSize: [30, 30] })
+};
