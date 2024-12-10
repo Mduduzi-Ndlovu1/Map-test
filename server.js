@@ -1,18 +1,16 @@
 const express = require('express');
-const multer = require('multer');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors'); // Import CORS middleware
-const cloudinary = require('cloudinary').v2; // Import Cloudinary
+const { v2: cloudinary } = require('cloudinary');
 const app = express();
 
-// Set up Cloudinary configuration
- // Configuration
- cloudinary.config({ 
+// Cloudinary Configuration
+cloudinary.config({ 
   cloud_name: 'dcbd1eavw', 
   api_key: '613477935675545', 
-  api_secret: 'eLIUoc8MEntQCo68oWvyNCItc9U' // Click 'View API Keys' above to copy your API secret
+  api_secret: 'eLIUoc8MEntQCo68oWvyNCItc9U' // Use your actual Cloudinary API credentials
 });
 
 // Set up middleware
@@ -54,47 +52,33 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
+// Updated post creation route to use Cloudinary for image storage
 app.post('/api/posts', async (req, res) => {
   try {
-    const { name, surname, description, latitude, longitude } = req.body;
+    const { name, surname, description, latitude, longitude, image } = req.body;
 
-    // Upload image to Cloudinary
-    if (req.files && req.files.image) {
-      const image = req.files.image;
-      cloudinary.uploader.upload(image.tempFilePath, { folder: 'posts' }, async (err, result) => {
-        if (err) {
-          return res.status(500).json({ message: 'Failed to upload image', error: err.message });
-        }
-        const imageUrl = result.secure_url; // Get the image URL from Cloudinary response
-
-        const newPost = new Post({
-          name,
-          surname,
-          description,
-          latitude,
-          longitude,
-          imageUrl,
-          comments: [],
-        });
-
-        await newPost.save();
-        res.json({ post: newPost });
+    // If an image is provided, upload it to Cloudinary
+    let imageUrl = '';
+    if (image) {
+      // Upload image to Cloudinary (assumes base64 encoded image)
+      const uploadedImage = await cloudinary.uploader.upload(image, {
+        folder: 'post_images', // Optional: Organize images into a folder in Cloudinary
       });
-    } else {
-      // Handle case where no image is provided
-      const newPost = new Post({
-        name,
-        surname,
-        description,
-        latitude,
-        longitude,
-        imageUrl: '',
-        comments: [],
-      });
-
-      await newPost.save();
-      res.json({ post: newPost });
+      imageUrl = uploadedImage.secure_url; // Cloudinary URL
     }
+
+    const newPost = new Post({
+      name,
+      surname,
+      description,
+      latitude,
+      longitude,
+      imageUrl, // Store the Cloudinary image URL
+      comments: [],
+    });
+
+    await newPost.save();
+    res.json({ post: newPost });
   } catch (err) {
     res.status(500).json({ message: 'Failed to create post', error: err.message });
   }
@@ -114,7 +98,7 @@ app.get('/api/posts/:id', async (req, res) => {
 
 app.post('/api/posts/:id/comments', async (req, res) => {
   const { author, text } = req.body;
-  
+
   if (!author || !text) {
     return res.status(400).json({ message: 'Author and text are required' });
   }
@@ -128,5 +112,5 @@ app.post('/api/posts/:id/comments', async (req, res) => {
 // Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-  console.log(`Server running on ${process.env.PUBLIC_URL}:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
