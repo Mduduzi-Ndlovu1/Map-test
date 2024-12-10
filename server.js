@@ -60,20 +60,15 @@ app.get('/api/posts', async (req, res) => {
 app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     const { name, surname, description, latitude, longitude } = req.body;
-
     let imageUrl = '';
+
     if (req.file) {
       // Upload image to Cloudinary
-      const result = await cloudinary.uploader.upload_stream({ 
-        resource_type: 'auto' 
-      }, (error, result) => {
-        if (error) {
-          return res.status(500).json({ message: 'Image upload failed', error: error.message });
-        }
-        imageUrl = result.secure_url;
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: 'auto'
       });
 
-      req.file.stream.pipe(result);
+      imageUrl = result.secure_url;
     }
 
     const newPost = new Post({ 
@@ -106,17 +101,25 @@ app.get('/api/posts/:id', async (req, res) => {
 });
 
 app.post('/api/posts/:id/comments', async (req, res) => {
+  try {
     const { author, text } = req.body;
     
     if (!author || !text) {
       return res.status(400).json({ message: 'Author and text are required' });
     }
-  
+
     const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
     post.comments.push({ author, text });
     await post.save();
     res.json(post);
-  });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to add comment', error: err.message });
+  }
+});
 
 // Start server
 const port = process.env.PORT || 5000;
