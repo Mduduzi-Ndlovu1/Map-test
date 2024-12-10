@@ -194,17 +194,27 @@ document.getElementById('viewModal').addEventListener('click', function (event) 
 
 // Fetch posts from backend
 async function fetchPosts() {
-    const response = await fetch('https://map-test-xid1.onrender.com/api/posts');  // Updated URL
-    const posts = await response.json();
-    displayPosts(posts);
-    console.log('Fetched posts:', post);
-}
+    try {
+      const response = await fetch('https://map-test-xid1.onrender.com/api/posts');  // Updated URL
+      const posts = await response.json();
+      
+      // Filter posts to ensure each has valid latitude and longitude
+      const validPosts = posts.filter(post => typeof post.latitude === 'number' && typeof post.longitude === 'number');
+      
+      displayPosts(validPosts);
+      console.log('Fetched posts:', validPosts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  }
 
 // Display posts on the map
 function displayPosts(posts) {
     posts.forEach((post) => {
-        const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
-        console.log("Here are the coord :" + latitude, longitude, name, surname, description, imageUrl, _id);
+      const { latitude, longitude, name, surname, description, imageUrl, _id } = post;
+  
+      // Check if latitude and longitude are valid numbers before proceeding
+      if (typeof latitude === 'number' && typeof longitude === 'number') {
         const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
@@ -212,8 +222,11 @@ function displayPosts(posts) {
           <img src="${imageUrl}" width="100px" height="100px"><br>
           <button onclick="openViewPostModal('${_id}')">View Post</button>
         `);
+      } else {
+        console.error(`Invalid coordinates for post: ${_id} - (${latitude}, ${longitude})`);
+      }
     });
-}
+  }
 
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {

@@ -33,8 +33,22 @@ const postSchema = new mongoose.Schema({
   surname: String,
   description: String,
   imageUrl: String,
-  latitude: Number,
-  longitude: Number,
+  latitude: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: (value) => !isNaN(value),
+      message: 'Latitude must be a valid number'
+    }
+  },
+  longitude: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: (value) => !isNaN(value),
+      message: 'Longitude must be a valid number'
+    }
+  },
   comments: [{ author: String, text: String }],
 });
 
@@ -60,7 +74,13 @@ const upload = multer({ storage });
 app.get('/api/posts', async (req, res) => {
   try {
     const posts = await Post.find();
-    res.json(posts);
+    
+    // Validate coordinates before sending the response
+    const validPosts = posts.filter(post => 
+      typeof post.latitude === 'number' && typeof post.longitude === 'number'
+    );
+
+    res.json(validPosts);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch posts', error: err.message });
   }
@@ -69,6 +89,12 @@ app.get('/api/posts', async (req, res) => {
 app.post('/api/posts', upload.single('image'), async (req, res) => {
   try {
     const { name, surname, description, latitude, longitude } = req.body;
+
+    // Validate latitude and longitude
+    if (isNaN(latitude) || isNaN(longitude)) {
+      return res.status(400).json({ message: 'Invalid latitude or longitude' });
+    }
+
     // Use public URL for image
     const imageUrl = req.file ? `${publicUrl}/uploads/${req.file.filename}` : ''; // Save image URL
     const newPost = new Post({ name, surname, description, latitude, longitude, imageUrl, comments: [] });
@@ -93,17 +119,17 @@ app.get('/api/posts/:id', async (req, res) => {
 });
 
 app.post('/api/posts/:id/comments', async (req, res) => {
-    const { author, text } = req.body;
-    
-    if (!author || !text) {
-      return res.status(400).json({ message: 'Author and text are required' });
-    }
+  const { author, text } = req.body;
   
-    const post = await Post.findById(req.params.id);
-    post.comments.push({ author, text });
-    await post.save();
-    res.json(post);
-  });
+  if (!author || !text) {
+    return res.status(400).json({ message: 'Author and text are required' });
+  }
+
+  const post = await Post.findById(req.params.id);
+  post.comments.push({ author, text });
+  await post.save();
+  res.json(post);
+});
 
 // Start server
 const port = process.env.PORT || 5000;
