@@ -14,7 +14,6 @@ const cloudinary = require('cloudinary').v2;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use(cors({
   origin: 'https://map-test-1.netlify.app', 
   methods: 'GET,POST,PUT,DELETE',
@@ -97,7 +96,19 @@ const storage = multer.diskStorage({
 
 // Set up file upload
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png|gif/;
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = fileTypes.test(file.mimetype);
+
+    if (extname && mimetype) {
+      return cb(null, true);
+    }
+    cb(new Error('Only images are allowed!'));
+  },
+});
 
 // API Routes
 app.get('/api/posts', async (req, res) => {
@@ -131,32 +142,13 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
 
     // Upload image to Cloudinary
     if (req.file) {
-      cloudinary.uploader.upload(req.file.path, async (error, result) => {
-        if (error) {
-          console.error('Error uploading to Cloudinary:', error);
-          return res.status(500).json({ message: 'Error uploading to Cloudinary', error: error.message });
-        }
-
-        // Get the URL of the uploaded image from Cloudinary
-        const imageUrl = result.secure_url;
-
-        // Create and save the post
-        const newPost = new Post({ 
-          name, 
-          surname, 
-          description, 
-          latitude, 
-          longitude,
-          type, 
-          imageUrl, 
-          comments: [] 
-        });
-
-        // Save the post asynchronously
-        await newPost.save();
-        res.json({ post: newPost });
-      });
-    } else {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const imageUrl = result.secure_url;
+    
+      const newPost = new Post({ name, surname, description, latitude, longitude, type, imageUrl, comments: [] });
+      await newPost.save();
+      return res.json({ post: newPost });
+    }else {
       // No image uploaded
       const newPost = new Post({ 
         name, 
