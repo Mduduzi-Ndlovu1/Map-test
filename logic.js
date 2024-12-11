@@ -215,6 +215,8 @@ function displayPosts(posts) {
               </div>
             </div>
             <span class="author">Posted by: ${name} ${surname}</span>
+
+            <button onclick="openViewPostModal('${_id}')">View Post</button>
           `);
         } else {
           console.error(`No marker icon defined for type: ${type}`);
