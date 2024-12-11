@@ -684,6 +684,10 @@ button[type="submit"]:hover {
         padding: 15px;
         background-color: #0b7fcc;
         color: #fff;
+        margin: 2px;
+        width: 90%;
+        border-radius: 30px;
+        margin-bottom: 10px;
       }
       .card-header .type {
         font-weight: bold;

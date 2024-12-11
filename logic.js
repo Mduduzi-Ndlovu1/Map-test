@@ -25,7 +25,7 @@ lightLayer.addTo(map);
 
   // Define icons for each incident type
 const markerIcon = {
-    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good deed icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
       popupAnchor: [0, -30]}),
     'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
       popupAnchor: [0, -30]}),
@@ -193,24 +193,38 @@ async function fetchPosts() {
 // Display posts on the map
 function displayPosts(posts) {
     posts.forEach((post) => {
-      const { latitude, longitude, name, surname, description, imageUrl, type, _id } = post;
+      const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
   
-//Please check the icon.type error Mr Ndlovu. 
-      // Check if latitude and longitude are valid numbers before proceeding
+      // Verify latitude and longitude are valid numbers
       if (typeof latitude === 'number' && typeof longitude === 'number') {
-        const marker = L.marker([latitude, longitude], { icon: markerIcon[type] }).addTo(map);
-        marker.bindPopup(`
-          <b>${name} ${surname}</b><br>
-          <i> Type: ${type}</i><br>
-          ${description}<br>
-          <img src="${imageUrl}" width="100px" height="100px"><br>
-          <button onclick="openViewPostModal('${_id}')">View Post</button>
-        `);
+        // Ensure markerIcon[type] exists
+        if (markerIcon[type]) {
+          const marker = L.marker([latitude, longitude], { icon: markerIcon[type] }).addTo(map);
+  
+          const updated = new Date(createdAt).toLocaleString(); // Format updated timestamp
+  
+          marker.bindPopup(`
+            <div class="card-header">
+              <span class="type">${type}</span>
+            </div>
+            <span class="timestamp">Updated ${updated}</span>
+            <div class="card-content">
+              <p class="caption">"${description}"</p>
+              <div class="media">
+                <img src="${imageUrl}" alt="${type} Image" style="width: 100%; height: auto;">
+              </div>
+            </div>
+            <span class="author">Posted by: ${name} ${surname}</span>
+          `);
+        } else {
+          console.error(`No marker icon defined for type: ${type}`);
+        }
       } else {
         console.error(`Invalid coordinates for post: ${_id} - (${latitude}, ${longitude})`);
       }
     });
   }
+  
 
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {
