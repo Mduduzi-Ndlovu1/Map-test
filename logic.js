@@ -225,7 +225,7 @@ function displayPosts(posts) {
   
       // Check if latitude and longitude are valid numbers before proceeding
       if (typeof latitude === 'number' && typeof longitude === 'number') {
-        const marker = L.marker([latitude, longitude], { icon: markerIcon }).addTo(map);
+        const marker = L.marker([latitude, longitude], { icon: markerIcon[data.type]}).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
           <i> Type: ${type}</i><br>
