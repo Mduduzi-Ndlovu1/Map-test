@@ -119,13 +119,23 @@ function closeModal() {
     document.getElementById('modal').style.display = 'none';
 }
 
-// Custom markers
-let markerIcon = L.icon({
-    iconUrl: 'https://1pulse.online/images/good deed icon.png',
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],
-    popupAnchor: [0, -30]
-});
+
+// Define icons for each incident type
+const markerIcon = {
+  'Good Deeds': L.icon({ iconUrl: 'images/good deed icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    popupAnchor: [0, -30]}),
+  'Health': L.icon({ iconUrl: 'images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    popupAnchor: [0, -30]}),
+  'Property Damage': L.icon({ iconUrl: 'images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    popupAnchor: [0, -30]}),
+  'Violent Crime': L.icon({ iconUrl: 'images/violent-crime.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    popupAnchor: [0, -30]}),
+  'Looting': L.icon({ iconUrl: 'images/looting.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    popupAnchor: [0, -30]}),
+  'Xenophobia': L.icon({ iconUrl: 'images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
+    popupAnchor: [0, -30] })
+};
+
 
 // Add initial marker
 // let marker = L.marker([-26.2041, 28.0473], { icon: markerIcon }).addTo(map)
@@ -357,12 +367,31 @@ document.getElementById('viewModal').addEventListener('click', function (event) 
 fetchPosts();
 
 
-// Define icons for each incident type
-const icons = {
-  'Good Deeds': L.icon({ iconUrl: 'images/good deed icon.png', iconSize: [30, 30] }),
-  'Health': L.icon({ iconUrl: 'images/Health-location.png', iconSize: [30, 30] }),
-  'Property Damage': L.icon({ iconUrl: 'images/property.png', iconSize: [30, 30] }),
-  'Violent Crime': L.icon({ iconUrl: 'images/violent-crime.png', iconSize: [30, 30] }),
-  'Looting': L.icon({ iconUrl: 'images/looting.png', iconSize: [30, 30] }),
-  'Xenophobia': L.icon({ iconUrl: 'images/xenophobia.png', iconSize: [30, 30] })
-};
+
+
+
+sampleData.forEach(data => {
+  const marker = L.marker(data.location, { icon: icons[data.type] }).addTo(map);
+  marker.bindPopup(`
+          <div class="card-header">
+          <span class="type">${data.type}</span>
+        </div>
+   <span class="timestamp">Updated ${data.updated}</span>(<em>${data.date} ${data.time}</em>)
+    <div class="card-content">
+          <p class="caption">"${data.caption}"</p>
+          <div class="media">
+            <img src="${data.imageUrl}" alt="${data.type} Image">
+          </div>
+        </div>
+         <span class="author">Posted by: ${data.author}</span>
+    <div class="rating">
+            <span>Rating: ${data.rating}</span>
+          </div>
+          
+    <p>Learn More: <a href="https://wa.me/${data.number}?text=May%20I%20enquire%20about%20this%20alert" 
+      class="contact-icon" style="font-size: 11px;" target="_blank">
+      <i class="fab fa-whatsapp"></i> </a></p>
+
+      
+  `);
+});
