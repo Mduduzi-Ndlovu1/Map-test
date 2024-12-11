@@ -195,37 +195,39 @@ function displayPosts(posts) {
     posts.forEach((post) => {
       const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
   
-      // Verify latitude and longitude are valid numbers
+      // Check if latitude and longitude are valid numbers
       if (typeof latitude === 'number' && typeof longitude === 'number') {
-        // Ensure markerIcon[type] exists
-        if (markerIcon[type]) {
-          const marker = L.marker([latitude, longitude], { icon: markerIcon[type] }).addTo(map);
+        // Check if a marker icon exists for the given type, fallback to a default icon if not
+        const icon = markerIcon[type] || defaultMarkerIcon; // Replace `defaultMarkerIcon` with your default icon object
   
-          const updated = new Date(createdAt).toLocaleString(); // Format updated timestamp
+        const marker = L.marker([latitude, longitude], { icon }).addTo(map);
   
-          marker.bindPopup(`
-            <div class="card-header">
-              <span class="type">${type}</span>
+        // Format the creation date for the updated timestamp
+        const updated = createdAt
+          ? new Date(createdAt).toLocaleString()
+          : 'Unknown date';
+  
+        // Bind a popup with post details
+        marker.bindPopup(`
+          <div class="card-header">
+            <span class="type">${type || 'Unknown Type'}</span>
+          </div>
+          <span class="timestamp">Updated: ${updated}</span>
+          <div class="card-content">
+            <p class="caption">${description ? `"${description}"` : 'No description available'}</p>
+            <div class="media">
+              <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 100%; height: auto;">
             </div>
-            <span class="timestamp">Updated ${updated}</span>
-            <div class="card-content">
-              <p class="caption">"${description}"</p>
-              <div class="media">
-                <img src="${imageUrl}" alt="${type} Image" style="width: 100%; height: auto;">
-              </div>
-            </div>
-            <span class="author">Posted by: ${name} ${surname}</span>
-
-            <button onclick="openViewPostModal('${_id}')">View Post</button>
-          `);
-        } else {
-          console.error(`No marker icon defined for type: ${type}`);
-        }
+          </div>
+          <span class="author">Posted by: ${name || 'Unknown'} ${surname || ''}</span>
+          <button onclick="openViewPostModal('${_id}')">View Post</button>
+        `);
       } else {
-        console.error(`Invalid coordinates for post: ${_id} - (${latitude}, ${longitude})`);
+        console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
       }
     });
   }
+  
   
 
 // Open modal to view post and add comments
