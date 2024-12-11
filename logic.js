@@ -296,13 +296,27 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     const surname = formData.get('surname');
     const description = formData.get('description');
     const image = formData.get('image');
-    const type = formData.get('type')
+    const type = formData.get('type');
 
+    // Check if required fields are filled in
     if (!name || !surname || !description || !image || !type) {
         alert('Please fill in all fields!');
         return;
     }
 
+    // Ensure selectedLatLng is defined and contains valid coordinates
+    if (!selectedLatLng || typeof selectedLatLng.lat !== 'number' || typeof selectedLatLng.lng !== 'number') {
+        alert('Please select a valid location on the map.');
+        return;
+    }
+
+    // Ensure the image is a valid file
+    if (!(image instanceof File)) {
+        alert('Please upload a valid image file.');
+        return;
+    }
+
+    // Prepare the post data
     const postData = new FormData();
     postData.append('name', name);
     postData.append('surname', surname);
@@ -312,18 +326,28 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     postData.append('longitude', selectedLatLng.lng);
     postData.append('type', type);
 
-    const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
-        method: 'POST',
-        body: postData,
-    });
+    try {
+        // Make the API request to create a post
+        const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {  // Updated URL
+            method: 'POST',
+            body: postData,
+        });
 
-    if (response.ok) {
-        closeModal();
-        fetchPosts();
-    } else {
-        alert('Error creating post!');
+        if (response.ok) {
+            closeModal();  // Close the modal if successful
+            fetchPosts();  // Fetch and display posts again
+        } else {
+            // Log response error for debugging
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+            alert('Error creating post! Please try again.');
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        alert('There was an error submitting the form. Please try again later.');
     }
 });
+
 
 // Close modal when clicking anywhere outside of it (on the overlay)
 document.getElementById('modal-overlay').addEventListener('click', function () {
