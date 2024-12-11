@@ -13,7 +13,13 @@ const cloudinary = require('cloudinary').v2;
 // Set up middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); 
+
+
+app.use(cors({
+  origin: 'https://map-test-1.netlify.app', // Or '*' for all origins (not recommended in production)
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
+})); 
 
 // Set up Cloudinary configuration
 cloudinary.config({
