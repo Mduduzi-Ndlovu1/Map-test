@@ -223,6 +223,7 @@ function displayPosts(posts) {
     posts.forEach((post) => {
       const { latitude, longitude, name, surname, description, imageUrl, type, _id } = post;
   
+//Please check the icon.type error Mr Ndlovu. 
       // Check if latitude and longitude are valid numbers before proceeding
       if (typeof latitude === 'number' && typeof longitude === 'number') {
         const marker = L.marker([latitude, longitude], { icon: markerIcon[data.type]}).addTo(map);
@@ -369,7 +370,7 @@ fetchPosts();
 
 
 
-
+//Mr Ndlovu, please use this schema to reflect what on our db. 
 sampleData.forEach(data => {
   const marker = L.marker(data.location, { icon: icons[data.type] }).addTo(map);
   marker.bindPopup(`
