@@ -68,7 +68,7 @@ const postSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['Good Deeds,Health', 'Property Damage', 'Violent Crime','Looting', 'Xenophobia'], 
+    enum: ['Good Deeds','Health', 'Property Damage', 'Violent Crime','Looting', 'Xenophobia'], 
     default: 'Good Deeds',
   },
   createdAt: {
