@@ -23,6 +23,33 @@ lightLayer.addTo(map);
     popupAnchor: [0, -40]
   });
 
+  // Define icons for each incident type
+const markerIcon = {
+    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good deed icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Property Damage': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/violent-crime.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Xenophobia': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
+      popupAnchor: [0, -30] })
+  };
+
+// Call the function to set the user's location when the page loads
+setUserLocation();
+
+let darkMode = false;
+
+ const logos = document.querySelectorAll(".logo"); // Get all the logo divs
+
+const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
+let currentPosition = 0;
+
+// All fuctions from here onwards
 // Function to get user's location and set the map view
 function setUserLocation() {
     if (navigator.geolocation) {
@@ -61,37 +88,6 @@ function setUserLocation() {
     }
 }
 
-// Call the function to set the user's location when the page loads
-setUserLocation();
-
-let darkMode = false;
-
-// Side button logic
-// const slideLeftBtn = document.getElementById("slide-left-btn");
-// const slideRightBtn = document.getElementById("slide-right-btn");
-// const logoContainer = document.getElementById("logo-container");
- const logos = document.querySelectorAll(".logo"); // Get all the logo divs
-
-const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
-let currentPosition = 0;
-
-// slideLeftBtn.addEventListener("click", () => {
-//     // Move logos to the left (if there's space)
-//     if (currentPosition < 0) {
-//         currentPosition += logoWidth;
-//         logoContainer.style.transform = `translateX(${currentPosition}px)`;
-//     }
-// });
-
-// slideRightBtn.addEventListener("click", () => {
-//     // Move logos to the right (if there's space)
-//     if (currentPosition > -(logoContainer.scrollWidth - window.innerWidth)) {
-//         currentPosition -= logoWidth;
-//         logoContainer.style.transform = `translateX(${currentPosition}px)`;
-//     }
-// });
-
-
 // Function to toggle between light and dark mode
 function toggleDarkMode() {
     darkMode = !darkMode;
@@ -108,8 +104,6 @@ function toggleDarkMode() {
     }
 }
 
-
-
 // Floating button modal functionality
 function openModal() {
     document.getElementById('modal').style.display = 'block';
@@ -118,28 +112,6 @@ function openModal() {
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
 }
-
-
-// Define icons for each incident type
-const markerIcon = {
-  'Good Deeds': L.icon({ iconUrl: 'images/good deed icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-    popupAnchor: [0, -30]}),
-  'Health': L.icon({ iconUrl: 'images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-    popupAnchor: [0, -30]}),
-  'Property Damage': L.icon({ iconUrl: 'images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-    popupAnchor: [0, -30]}),
-  'Violent Crime': L.icon({ iconUrl: 'images/violent-crime.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-    popupAnchor: [0, -30]}),
-  'Looting': L.icon({ iconUrl: 'images/looting.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-    popupAnchor: [0, -30]}),
-  'Xenophobia': L.icon({ iconUrl: 'images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
-    popupAnchor: [0, -30] })
-};
-
-
-// Add initial marker
-// let marker = L.marker([-26.2041, 28.0473], { icon: markerIcon }).addTo(map)
-//     .bindPopup('Start Point').openPopup();
 
 // Function to update marker icon dynamically
 function updateMarkers(iconUrl) {
@@ -226,7 +198,7 @@ function displayPosts(posts) {
 //Please check the icon.type error Mr Ndlovu. 
       // Check if latitude and longitude are valid numbers before proceeding
       if (typeof latitude === 'number' && typeof longitude === 'number') {
-        const marker = L.marker([latitude, longitude], { icon: markerIcon[data.type]}).addTo(map);
+        const marker = L.marker([latitude, longitude], { icon: markerIcon[type] }).addTo(map);
         marker.bindPopup(`
           <b>${name} ${surname}</b><br>
           <i> Type: ${type}</i><br>
@@ -335,16 +307,6 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     }
 });
 
-// Function to convert image to base64
-// function convertToBase64(file) {
-//     return new Promise((resolve, reject) => {
-//         const reader = new FileReader();
-//         reader.onloadend = () => resolve(reader.result);
-//         reader.onerror = reject;
-//         reader.readAsDataURL(file);
-//     });
-// }
-
 // Close modal when clicking anywhere outside of it (on the overlay)
 document.getElementById('modal-overlay').addEventListener('click', function () {
     closeModal();
@@ -371,28 +333,28 @@ fetchPosts();
 
 
 //Mr Ndlovu, please use this schema to reflect what on our db. 
-sampleData.forEach(data => {
-  const marker = L.marker(data.location, { icon: icons[data.type] }).addTo(map);
-  marker.bindPopup(`
-          <div class="card-header">
-          <span class="type">${data.type}</span>
-        </div>
-   <span class="timestamp">Updated ${data.updated}</span>(<em>${data.date} ${data.time}</em>)
-    <div class="card-content">
-          <p class="caption">"${data.caption}"</p>
-          <div class="media">
-            <img src="${data.imageUrl}" alt="${data.type} Image">
-          </div>
-        </div>
-         <span class="author">Posted by: ${data.author}</span>
-    <div class="rating">
-            <span>Rating: ${data.rating}</span>
-          </div>
+// sampleData.forEach(data => {
+//   const marker = L.marker(data.location, { icon: icons[data.type] }).addTo(map);
+//   marker.bindPopup(`
+//           <div class="card-header">
+//           <span class="type">${data.type}</span>
+//         </div>
+//    <span class="timestamp">Updated ${data.updated}</span>(<em>${data.date} ${data.time}</em>)
+//     <div class="card-content">
+//           <p class="caption">"${data.caption}"</p>
+//           <div class="media">
+//             <img src="${data.imageUrl}" alt="${data.type} Image">
+//           </div>
+//         </div>
+//          <span class="author">Posted by: ${data.author}</span>
+//     <div class="rating">
+//             <span>Rating: ${data.rating}</span>
+//           </div>
           
-    <p>Learn More: <a href="https://wa.me/${data.number}?text=May%20I%20enquire%20about%20this%20alert" 
-      class="contact-icon" style="font-size: 11px;" target="_blank">
-      <i class="fab fa-whatsapp"></i> </a></p>
+//     <p>Learn More: <a href="https://wa.me/${data.number}?text=May%20I%20enquire%20about%20this%20alert" 
+//       class="contact-icon" style="font-size: 11px;" target="_blank">
+//       <i class="fab fa-whatsapp"></i> </a></p>
 
       
-  `);
-});
+//   `);
+// });
