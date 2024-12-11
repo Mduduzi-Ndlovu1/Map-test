@@ -244,7 +244,7 @@ async function openViewPostModal(postId) {
         <b>${post.name} ${post.surname}</b><br>
         <i>Type: ${post.type}</i><br>
         ${post.description}<br>
-        <img src="${post.imageUrl}" width="200px" height="200px"><br>
+        <img src="${post.imageUrl}" width="600px" height="auto"><br>
     `;
 
     const commentsList = document.getElementById('commentsList');
