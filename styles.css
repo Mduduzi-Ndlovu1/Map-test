@@ -815,12 +815,12 @@ label {
   max-width: 500px; /* Limit maximum width */
   border-radius: 20px;
   box-shadow: 0 12px 8px rgba(0, 0, 0, 0.2); /* Add box shadow */
-
+  margin-top: 6rem;
 }
 
 /* Modal Title */
 .modal-title-brah {
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   font-weight: bold;
   margin-bottom: 10px;
 }
@@ -890,6 +890,8 @@ label {
   max-width: 600px;
   border-radius: 15px;
   position: relative;
+  margin-top: 6rem ;
+
 }
 
 .gjno-header {
