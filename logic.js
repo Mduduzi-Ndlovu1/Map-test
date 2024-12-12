@@ -489,24 +489,10 @@ function pulseopenModal() {
   };
   
   // Close the modal when clicking outside of the modal
-  document.addEventListener("DOMContentLoaded", function() {
-    // Get the modal and overlay elements
-    var modal = document.getElementById('gjnoModal');  // The modal container
-    var overlay = document.getElementById('gjnoModalOverlay');  // The overlay background
-  
-    // Function to close the modal
-    function closeModal() {
-      modal.style.display = 'none';
-      overlay.style.display = 'none';
+  window.onclick = function(event) {
+    if (event.target === document.getElementById('gjnoModal')) {
+      document.getElementById('gjnoModal').style.display = 'none';
     }
-  
-    // Close modal when clicking outside of the modal content area (on the overlay)
-    window.onclick = function(event) {
-      if (event.target === overlay) {  // Check if the clicked target is the overlay
-        closeModal();  // Close the modal
-      }
-    };
-  });
-  
+  };
   
   
