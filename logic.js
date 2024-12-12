@@ -371,3 +371,79 @@ fetchPosts();
 
 
 
+document.addEventListener("DOMContentLoaded", function() {
+    // Modal and its content elements
+    var modal = document.getElementById("myModal");
+    var modalTitle = document.querySelector(".modal-title-brah");
+    var modalDescription = document.querySelector(".modal-description-brah");
+    var modalImage = document.querySelector(".modal-image-brah");
+    var closeButton = document.getElementsByClassName("close-brah")[0];
+  
+    // Data for each logo's modal content
+    var modalData = {
+      1: {
+        title: "Errand Camel",
+        description: "Errand Camel helps you with your daily errands and tasks.",
+        image: "https://1pulse.online/images/errand%20camel%20logo.png"
+      },
+      2: {
+        title: "Bonizluu",
+        description: "Bonizluu offers a new way to connect with your peers.",
+        image: "https://1pulse.online/images/bonizluu-fav.png"
+      },
+      3: {
+        title: "Hillbrow",
+        description: "Discover the heartbeat of Hillbrow, its stories and culture.",
+        image: "https://1pulse.online/images/hillbrow.jpeg"
+      },
+      4: {
+        title: "Africa City",
+        description: "Africa City is the hub of innovation and business in Africa.",
+        image: "https://1pulse.online/images/Africa%20City.png"
+      },
+      5: {
+        title: "Pulse",
+        description: "Pulse brings you the latest trends and news from around the world.",
+        image: "https://1pulse.online/images/pulse.jpeg"
+      },
+      6: {
+        title: "Tae Trax",
+        description: "Tae Trax is your go-to platform for music and entertainment.",
+        image: "https://1pulse.online/images/Tae-Trax-Logo.png"
+      }
+    };
+  
+    // Get all logo elements in the navbar
+    var logos = document.querySelectorAll(".logo");
+  
+    // When a logo is clicked, open the modal and update content
+    logos.forEach(function(logo) {
+      logo.onclick = function() {
+        var modalId = logo.getAttribute("data-modal-id");
+        var data = modalData[modalId];
+  
+        // Update modal content dynamically
+        if (modalTitle && modalDescription && modalImage) {
+          modalTitle.textContent = data.title;
+          modalDescription.textContent = data.description;
+          modalImage.src = data.image;
+        }
+  
+        // Display the modal
+        modal.style.display = "block";
+      };
+    });
+  
+    // Close modal functionality
+    closeButton.onclick = function() {
+      modal.style.display = "none";
+    };
+  
+    // Close modal if clicked outside of modal
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+  });
+  

@@ -790,6 +790,65 @@ label {
 }
 
 
+/* Logo Modal styles */
 
+/* Modal styles */
+.modal-brah {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Background color with transparency */
+}
 
-      
+/* Modal content */
+.modal-content-brah {
+  background-color: #fff;
+  margin: 10% auto; /* Centering the modal */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Set the width of the modal */
+  max-width: 500px; /* Limit maximum width */
+}
+
+/* Modal Title */
+.modal-title-brah {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Modal Description */
+.modal-description-brah {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+/* Modal Image */
+.modal-image-brah {
+  width: 100%; /* Make image responsive */
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* Close button */
+.close-brah {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+.close-brah:hover,
+.close-brah:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
