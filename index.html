@@ -25,9 +25,25 @@
   <div id="map"></div>
 
   <!-- Dark Mode Toggle Button -->
-  <button id="modal-button" onclick="">
+  <button id="modal-button" onclick="pulseopenModal()">
     <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
   </button>
+
+  <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
+<div id="gjnoModal" class="gjno-modal">
+  <div class="gjno-modal-content">
+    <span class="gjno-close">&times;</span>
+    <div class="gjno-header">
+      <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse Logo" class="gjno-logo">
+      <h2>Greater Johannesburg Neighborhood Oversight (GJNO)</h2>
+      <p>Building a Safer, Cleaner, and Accountable Johannesburg</p>
+    </div>
+    <div id="modal-images-container" class="gjno-images-container"></div>
+
+      <!-- Images from the logo-nav section will be inserted here dynamically -->
+    </div>
+  </div>
+</div>
 
   <!-- Logo Navigation -->
   <div id="logo-nav">

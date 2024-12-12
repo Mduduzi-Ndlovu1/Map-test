@@ -446,4 +446,48 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     };
   });
+
+
+// Function to open the modal
+function pulseopenModal() {
+    // Show the modal
+    document.getElementById('gjnoModal').style.display = 'block';
+  
+    // Get the container to insert images
+    const modalImagesContainer = document.getElementById('modal-images-container');
+  
+    // Logo data from the navigation section (should be inserted dynamically)
+    const logos = [
+      {src: 'https://1pulse.online/images/errand%20camel%20logo.png', alt: 'Logo 1'},
+      {src: 'https://1pulse.online/images/bonizluu-fav.png', alt: 'Logo 2'},
+      {src: 'https://1pulse.online/images/hillbrow.jpeg', alt: 'Logo 3'},
+      {src: 'https://1pulse.online/images/Africa%20City.png', alt: 'Logo 4'},
+      {src: 'https://1pulse.online/images/pulse.jpeg', alt: 'Logo 5'},
+      {src: 'https://1pulse.online/images/Tae-Trax-Logo.png', alt: 'Logo 6'}
+    ];
+  
+    // Clear any existing images
+    modalImagesContainer.innerHTML = '';
+  
+    // Loop through logos and add them to the modal dynamically
+    logos.forEach(logo => {
+        const imgElement = document.createElement('img');
+        imgElement.src = logo.src;
+        imgElement.alt = logo.alt;
+        modalImagesContainer.appendChild(imgElement);
+      });
+  }
+  
+  // Close the modal when the "x" button is clicked
+  document.querySelector('.gjno-close').onclick = function() {
+    document.getElementById('gjnoModal').style.display = 'none';
+  };
+  
+  // Close the modal when clicking outside of the modal
+  window.onclick = function(event) {
+    if (event.target === document.getElementById('gjnoModal')) {
+      document.getElementById('gjnoModal').style.display = 'none';
+    }
+  };
+  
   
