@@ -884,7 +884,6 @@ label {
 
 .gjno-modal-content {
   background-color: rgb(255, 255, 255);
-
   margin: 15% auto;
   padding: 20px;
   width: 80%;
@@ -908,6 +907,7 @@ label {
   padding: 0 1rem;
   text-align: center;
 }
+
 .gjno-header p {
   font-size: 2rem;
   padding: 0 1rem;
@@ -950,3 +950,103 @@ label {
   gap: 2rem;
 }
 
+/* Responsive adjustments */
+
+/* For tablet devices */
+@media screen and (max-width: 768px) {
+  .gjno-modal-content {
+    width: 90%; /* Adjust width for tablet */
+    max-width: 500px;
+  }
+
+  .gjno-header h2 {
+    font-size: 3rem; /* Adjust font size for header */
+  }
+
+  .gjno-header p {
+    font-size: 1.6rem; /* Adjust font size for paragraph */
+  }
+
+  .gjno-logo {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .gjno-images-container {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Make images smaller for tablet */
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .gjno-modal-content {
+    width: 85%; /* Adjust width for Mobile M */
+    max-width: 400px;
+  }
+
+  .gjno-header h2 {
+    font-size: 2.5rem; /* Adjust font size for Mobile M */
+  }
+
+  .gjno-header p {
+    font-size: 1.5rem; /* Adjust font size for Mobile M */
+  }
+
+  .gjno-logo {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .gjno-images-container {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Adjust image sizes for Mobile M */
+  }
+}
+
+/* For Mobile M devices (e.g., iPhone 8, Galaxy S7) */
+@media screen and (max-width: 375px) {
+  .gjno-modal-content {
+    width: 85%; /* Adjust width for Mobile M */
+    max-width: 400px;
+  }
+
+  .gjno-header h2 {
+    font-size: 2.5rem; /* Adjust font size for Mobile M */
+  }
+
+  .gjno-header p {
+    font-size: 1.5rem; /* Adjust font size for Mobile M */
+  }
+
+  .gjno-logo {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .gjno-images-container {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Adjust image sizes for Mobile M */
+  }
+}
+
+/* For Mobile S devices (e.g., iPhone SE, small screen phones) */
+@media screen and (max-width: 320px) {
+  .gjno-modal-content {
+    width: 80%; /* Adjust width for Mobile S */
+    max-width: 350px;
+  }
+
+  .gjno-header h2 {
+    font-size: 1.8rem; /* Adjust font size for Mobile S */
+  }
+
+  .gjno-header p {
+    font-size: 1.3rem; /* Adjust font size for Mobile S */
+  }
+
+  .gjno-logo {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .gjno-images-container {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Adjust image sizes for Mobile S */
+  }
+}
