@@ -813,18 +813,21 @@ label {
   border: 1px solid #888;
   width: 80%; /* Set the width of the modal */
   max-width: 500px; /* Limit maximum width */
+  border-radius: 20px;
+  box-shadow: 0 12px 8px rgba(0, 0, 0, 0.2); /* Add box shadow */
+
 }
 
 /* Modal Title */
 .modal-title-brah {
-  font-size: 24px;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 /* Modal Description */
 .modal-description-brah {
-  font-size: 16px;
+  font-size: 1rem;
   margin-bottom: 20px;
   color: #555;
 }
@@ -833,7 +836,8 @@ label {
 .modal-image-brah {
   width: 100%; /* Make image responsive */
   height: auto;
-  margin-bottom: 20px;
+  align-items: center;
+  padding: 20px;
 }
 
 /* Close button */
@@ -851,4 +855,16 @@ label {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.image-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  border: 1px solid rgba(19, 19, 19, 0.068);
+  
+
 }

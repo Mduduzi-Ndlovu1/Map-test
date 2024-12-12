@@ -373,7 +373,7 @@ fetchPosts();
 
 document.addEventListener("DOMContentLoaded", function() {
     // Modal and its content elements
-    var modal = document.getElementById("myModal");
+    var modal_brah = document.getElementById("myModal");
     var modalTitle = document.querySelector(".modal-title-brah");
     var modalDescription = document.querySelector(".modal-description-brah");
     var modalImage = document.querySelector(".modal-image-brah");
@@ -382,33 +382,33 @@ document.addEventListener("DOMContentLoaded", function() {
     // Data for each logo's modal content
     var modalData = {
       1: {
-        title: "Errand Camel",
-        description: "Errand Camel helps you with your daily errands and tasks.",
+        title: "SAPS - South African Police Service",
+        description: "SAPS is responsible for maintaining law and order in South Africa, preventing crime, and ensuring the safety of citizens.",
         image: "https://1pulse.online/images/errand%20camel%20logo.png"
       },
       2: {
         title: "Bonizluu",
-        description: "Bonizluu offers a new way to connect with your peers.",
+        description: "BoniZulu is a fashion brand committed to uniting designers for fabric sourcing and promoting the elderly through crocheting programs..",
         image: "https://1pulse.online/images/bonizluu-fav.png"
       },
       3: {
         title: "Hillbrow",
-        description: "Discover the heartbeat of Hillbrow, its stories and culture.",
+        description: "Hillbrow is a diverse and vibrant neighborhood in Johannesburg, known for its rich culture and mix of residential and commercial spaces.",
         image: "https://1pulse.online/images/hillbrow.jpeg"
       },
       4: {
-        title: "Africa City",
-        description: "Africa City is the hub of innovation and business in Africa.",
+        title: "CPF - Community Policing Forum",
+        description: "CPF works closely with SAPS to improve safety and security in communities, promoting cooperation between police and residents.",
         image: "https://1pulse.online/images/Africa%20City.png"
       },
       5: {
         title: "Pulse",
-        description: "Pulse brings you the latest trends and news from around the world.",
+        description: "Pulse is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
         image: "https://1pulse.online/images/pulse.jpeg"
       },
       6: {
         title: "Tae Trax",
-        description: "Tae Trax is your go-to platform for music and entertainment.",
+        description: "Tae-Trax by Siya Percy is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
         image: "https://1pulse.online/images/Tae-Trax-Logo.png"
       }
     };
@@ -430,19 +430,19 @@ document.addEventListener("DOMContentLoaded", function() {
         }
   
         // Display the modal
-        modal.style.display = "block";
+        modal_brah.style.display = "block";
       };
     });
   
     // Close modal functionality
-    closeButton.onclick = function() {
-      modal.style.display = "none";
+    closemodal_brahButton.onclick = function() {
+        modal_brah.style.display = "none";
     };
   
     // Close modal if clicked outside of modal
     window.onclick = function(event) {
       if (event.target == modal) {
-        modal.style.display = "none";
+        modal_brah.style.display = "none";
       }
     };
   });
