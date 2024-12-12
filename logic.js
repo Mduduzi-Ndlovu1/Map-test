@@ -228,8 +228,6 @@ function displayPosts(posts) {
     });
   }
   
-  
-
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {
     currentPostId = postId;
@@ -349,8 +347,6 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     }
 });
 
-
-
 // Close modal when clicking anywhere outside of it (on the overlay)
 document.getElementById('modal-overlay').addEventListener('click', function () {
     closeModal();
@@ -375,30 +371,3 @@ fetchPosts();
 
 
 
-
-//Mr Ndlovu, please use this schema to reflect what on our db. 
-// sampleData.forEach(data => {
-//   const marker = L.marker(data.location, { icon: icons[data.type] }).addTo(map);
-//   marker.bindPopup(`
-//           <div class="card-header">
-//           <span class="type">${data.type}</span>
-//         </div>
-//    <span class="timestamp">Updated ${data.updated}</span>(<em>${data.date} ${data.time}</em>)
-//     <div class="card-content">
-//           <p class="caption">"${data.caption}"</p>
-//           <div class="media">
-//             <img src="${data.imageUrl}" alt="${data.type} Image">
-//           </div>
-//         </div>
-//          <span class="author">Posted by: ${data.author}</span>
-//     <div class="rating">
-//             <span>Rating: ${data.rating}</span>
-//           </div>
-          
-//     <p>Learn More: <a href="https://wa.me/${data.number}?text=May%20I%20enquire%20about%20this%20alert" 
-//       class="contact-icon" style="font-size: 11px;" target="_blank">
-//       <i class="fab fa-whatsapp"></i> </a></p>
-
-      
-//   `);
-// });

@@ -76,23 +76,22 @@
       <label for="type">Type of Post:</label>
       <div class="custom-select-container">
         <select id="type" name="type" required class="custom-select">
-          <span>Select a type...</span>
-          <option value="Good Deeds">Good Deeds</option>
-          <option value="Violent Crime">Crime</option>
+          <option value="" disabled selected>Select a type...</option>
           <option value="Health">Health</option>
           <option value="Property Damage">Property Damage</option>
+          <option value="Violent Crime">Violent Crime</option>
           <option value="Looting">Looting</option>
+          <option value="Xenophobia">Xenophobia</option>
         </select>
       </div>
     </div>
     <div class="form-field">
       <label for="image">Image:</label>
-      <input type="file" id="image" name="image" accept="image/*" required />
+      <input type="file" id="image" name="image" required />
     </div>
     <button type="submit">Save Post</button>
   </form>
 </div>
-
 
 
   <!-- Modal for viewing a post -->
@@ -113,6 +112,8 @@
       <button type="submit">Add Comment</button>
     </form>
   </div>
+
+  
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

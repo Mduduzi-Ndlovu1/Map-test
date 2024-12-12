@@ -671,7 +671,7 @@ button[type="submit"]:hover {
     
       .card {
         width: 300px;
-        border-radius: 20px;
+        border-radius: 10px;
         background-color: #fff;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         overflow: hidden;
@@ -682,12 +682,8 @@ button[type="submit"]:hover {
       }
       .card-header {
         padding: 15px;
-        background-color: #747474;
+        background-color: #0b7fcc;
         color: #fff;
-        margin: 2px;
-        width: 90%;
-        border-radius: 40px;
-        margin-bottom: 10px;
       }
       .card-header .type {
         font-weight: bold;
