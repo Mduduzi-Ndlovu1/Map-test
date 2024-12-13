@@ -780,8 +780,8 @@ button[type="submit"]:hover {
 
 .image {
 border-radius:10px;
-  width: 300px;
-  height: 800px; /* Fixed height */
+  width: 500px !important;
+  height: 300px; /* Fixed height */
   object-fit: cover; /* Zooms in on the image, cropping excess */
 }
 
