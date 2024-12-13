@@ -725,7 +725,7 @@ button[type="submit"]:hover {
 
 .ok-button {
   background-color: #04AA6D; /* Green */
-  border: none;
+  border-radius:22px;
   color: white;
   padding: 15px 32px;
   text-align: center;
