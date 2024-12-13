@@ -208,21 +208,25 @@ function displayPosts(posts) {
           : 'Unknown date';
   
         // Bind a popup with post details
-        marker.bindPopup(`    <div class="card-header">
-        <span class="type">${type || 'Unknown Type'}</span>
-      </div>
-      <div class="header">
-        <div>
-        <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
-        <div class="posted-on">Posted on:${updated}</div>
-        </div>
-    </div>
-      <div class="description">${description ? `"${description}"` : 'No description available'}</div>
-      <img src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image" class="image">    
-      <div class="button-bar">
-        <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>    
-   
- `);
+        marker.bindPopup(`
+          <div class="card-header">
+            <span class="type">${type || 'Unknown Type'}</span>
+          </div>
+          <span class="timestamp">Posted: ${updated}</span>
+          <div class="card-content">
+            <p class="caption">${description ? `"${description}"` : 'No description available'}</p>
+            <div class="media">
+              <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 600px; height: auto;">
+            </div>
+          </div>
+          <span class="author">Posted by: ${name || 'Unknown'} ${surname || ''}</span>
+          <button  style="background-color: #007bff;  color: #fff;  border: none;  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;" onclick="openViewPostModal('${_id}')">View Post</button>
+        `);
       } else {
         console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
       }

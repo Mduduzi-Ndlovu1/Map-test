@@ -128,3 +128,18 @@
 
 </body>
 </html>
+
+
+<div class="card-header">
+    <span class="type">${type || 'Unknown Type'}</span>
+  </div>
+  <div class="header">
+    <div>
+    <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
+    <div class="posted-on">Posted on:${updated}</div>
+    </div>
+</div>
+  <div class="description">${description ? `"${description}"` : 'No description available'}</div>
+  <img src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image" class="image">    
+  <div class="button-bar">
+    <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>    
