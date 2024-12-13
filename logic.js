@@ -214,14 +214,14 @@ function displayPosts(posts) {
           </div>
           <div class="header">
           <div>
-          <div class="username"> ${name || 'Unknown'} ${surname || ''}</div>
+          <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
           <div class="posted-on"> ${updated}</div>
           </div>
           </div>
           <div class="card-content">
             <div class="description">${description ? `"${description}"` : 'No description available'}</div>
             <div class="image">
-              <img src="${imageUrl || '#'}" alt="${type || 'Image'}">
+              <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
             </div>
           </div>
           <button class="ok-button"
