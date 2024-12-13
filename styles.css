@@ -780,8 +780,8 @@ button[type="submit"]:hover {
 
 .image {
 border-radius:10px;
-  width: 300px !important;
-  height: 250px; /* Fixed height */
+  width: 250px !important;
+  height: 200px; /* Fixed height */
   object-fit: cover; /* Zooms in on the image, cropping excess */
 }
 
@@ -795,7 +795,7 @@ border-radius:10px;
 
     
       .card {
-        width: 300px;
+        max-width: 300px;
         border-radius: 10px;
         background-color: #fff;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
