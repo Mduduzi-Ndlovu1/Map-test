@@ -212,11 +212,11 @@ function displayPosts(posts) {
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
-          <span class="timestamp">Updated: ${updated}</span>
+          <span class="timestamp">Posted on: ${updated}</span>
           <div class="card-content">
             <p class="caption">${description ? `"${description}"` : 'No description available'}</p>
             <div class="media">
-              <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 100%; height: auto;">
+              <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 600px; height: auto;">
             </div>
           </div>
           <span class="author">Posted by: ${name || 'Unknown'} ${surname || ''}</span>
