@@ -219,9 +219,9 @@ function displayPosts(posts) {
           </div>
           </div>
           <div class="card-content">
-            <p class="description">${description ? `"${description}"` : 'No description available'}</p>
+            <div class="description">${description ? `"${description}"` : 'No description available'}</div>
             <div class="image">
-              <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 600px; height: auto;">
+              <img src="${imageUrl || '#'}" alt="${type || 'Image'}">
             </div>
           </div>
           <button class="ok-button"
