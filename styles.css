@@ -780,7 +780,7 @@ button[type="submit"]:hover {
 
 .image {
 border-radius:10px;
-  width: 250px !important;
+  width: 300px !important;
   height: 200px; /* Fixed height */
   object-fit: cover; /* Zooms in on the image, cropping excess */
 }
@@ -796,7 +796,7 @@ border-radius:10px;
     
       .card {
         max-width: 300px;
-        border-radius: 10px;
+        border-radius: 15px;
         background-color: #fff;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         overflow: hidden;
@@ -964,6 +964,7 @@ label {
   height: auto;
   align-items: center;
   padding: 20px;
+border-radius: 10px;
 }
 
 /* Close button */
@@ -987,7 +988,7 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 300px;
   height: auto;
   border-radius: 20px;
   border: 1px solid rgba(19, 19, 19, 0.068);
