@@ -212,14 +212,17 @@ function displayPosts(posts) {
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
-          <span class="posted-on">Posted: ${updated}</span>
+          <div>
+          <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
+          <div class="posted-on">Posted: ${updated}</div>
+          </div>
+          
           <div class="card-content">
             <p class="description">${description ? `"${description}"` : 'No description available'}</p>
             <div class="image">
               <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 600px; height: auto;">
             </div>
           </div>
-          <span class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</span>
           <button class="ok-button"
 " onclick="openViewPostModal('${_id}')">View Post</button>
         `);
