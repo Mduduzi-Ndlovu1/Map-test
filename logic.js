@@ -220,17 +220,9 @@ function displayPosts(posts) {
             </div>
           </div>
           <span class="author">Posted by: ${name || 'Unknown'} ${surname || ''}</span>
-          <button style=".button {
-  background-color: #04AA6D; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}" onclick="openViewPostModal('${_id}')">View Post</button>
-        `);
+          <button  style="background-color: #007bff;  color: #fff;  border: none;  padding: 12px 20px;
+  font-size: 1rem;  border-radius: 8px;  cursor: pointer;  width: 100%;  transition: background-color 0.3s ease;" 
+  onclick="openViewPostModal('${_id}')">View Post</button>      `);
       } else {
         console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
       }
