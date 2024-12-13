@@ -224,8 +224,10 @@ function displayPosts(posts) {
               <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
             </div>
           </div>
+           <div class="button-bar">
           <button class="ok-button"
 " onclick="openViewPostModal('${_id}')">View Post</button>
+</div>
         `);
       } else {
         console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
