@@ -208,7 +208,7 @@ function displayPosts(posts) {
           : 'Unknown date';
   
         // Bind a popup with post details
-        marker.bindPopup(`
+        marker.bindPopup(` <div class="header">
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
@@ -216,7 +216,7 @@ function displayPosts(posts) {
           <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
           <div class="posted-on">Posted: ${updated}</div>
           </div>
-          
+          </div>
           <div class="card-content">
             <p class="description">${description ? `"${description}"` : 'No description available'}</p>
             <div class="image">
