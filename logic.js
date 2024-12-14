@@ -208,19 +208,24 @@ function displayPosts(posts) {
           : 'Unknown date';
   
         // Bind a popup with post details
-        marker.bindPopup(`
+        marker.bindPopup(` 
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
-          <span class="timestamp">Updated: ${updated}</span>
+          <div class="header">
+          <div>
+          <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
+          <div class="posted-on"> ${updated}</div>
+          </div>
+          </div>
           <div class="card-content">
-            <p class="caption">${description ? `"${description}"` : 'No description available'}</p>
-            <div class="media">
-              <img src="${imageUrl || '#'}" alt="${type || 'Image'}" style="width: 100%; height: auto;">
+            <div class="description">${description ? `"${description}"` : 'No description available'}</div>
+            <div class="image">
+              <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
             </div>
           </div>
-          <span class="author">Posted by: ${name || 'Unknown'} ${surname || ''}</span>
-          <button onclick="openViewPostModal('${_id}')">View Post</button>
+          <button class="ok-button"
+" onclick="openViewPostModal('${_id}')">View Post</button>
         `);
       } else {
         console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
@@ -242,7 +247,7 @@ async function openViewPostModal(postId) {
         <b>${post.name} ${post.surname}</b><br>
         <i>Type: ${post.type}</i><br>
         ${post.description}<br>
-        <img src="${post.imageUrl}" width="600px" height="auto"><br>
+        <img src="${post.imageUrl}" width="220px" height="auto" border-radius="10px"><br>
     `;
 
     const commentsList = document.getElementById('commentsList');

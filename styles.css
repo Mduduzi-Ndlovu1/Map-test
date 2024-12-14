@@ -35,7 +35,7 @@ margin: 3px;
 }
 
 
-.logo img {
+.logo imgs {
     width: 50px; /* Adjust as needed */
     height: 50px; /* Adjust as needed */
     border-radius: 50%;
@@ -95,7 +95,7 @@ margin: 3px;
   right: 2rem;
 }
 
-img {
+imgs {
   max-width: 80px; /* Slightly smaller logos on mobile */
   height: auto;
 }
@@ -106,7 +106,7 @@ img {
       width: 100%; /* Give more space on tablets */
   }
 
-  img {
+  imgs {
       max-width: 100px; /* Larger logos on tablets */
   }
 
@@ -128,7 +128,7 @@ img {
       
   }
 
-  img {
+  imgs {
       max-width: 120px; /* Even larger logos on desktop */
   }
 
@@ -664,14 +664,139 @@ button[type="submit"]:hover {
 
 
 
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.header .username {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.header .posted-on {
+  font-size: 12px;
+  color: #666;
+}
+
+.description {
+  padding: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.button-bar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 15px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #f8f8f8;
+}
+
+.button-bar button {
+  background-color: #1877f2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.button-bar button:hover {
+  background-color: #165eaf;
+}
+
+.ok-button {
+  background-color: #04AA6D; /* Green */
+  border-radius:22px;
+  color: white;
+  padding: 10px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13px;
+  border: 1px solid white;
+}
 
 
+.ok-button:hover {
+  background-color: #45a049;
+}
 
+.container {
+  width: 500px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.header .username {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.header .posted-on {
+  font-size: 12px;
+  color: #666;
+}
+
+.description {
+  padding: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+.image {
+border-radius:10px;
+  width: 300px !important;
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Zooms in on the image, cropping excess */
+}
+
+.button-bar {
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 15px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #f8f8f8;
+}
 
     
       .card {
-        width: 300px;
-        border-radius: 10px;
+        max-width: 300px;
+        border-radius: 15px;
         background-color: #fff;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         overflow: hidden;
@@ -684,6 +809,7 @@ button[type="submit"]:hover {
         padding: 15px;
         background-color: #0b7fcc;
         color: #fff;
+        border-radius: 50px;
       }
       .card-header .type {
         font-weight: bold;
@@ -838,6 +964,7 @@ label {
   height: auto;
   align-items: center;
   padding: 20px;
+border-radius: 10px;
 }
 
 /* Close button */
@@ -861,7 +988,7 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 300px;
   height: auto;
   border-radius: 20px;
   border: 1px solid rgba(19, 19, 19, 0.068);

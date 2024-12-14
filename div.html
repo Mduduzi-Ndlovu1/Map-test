@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Style Post</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9eff1;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+        }
+
+        .container {
+            width: 500px;
+            background-color: rgb(177, 46, 46);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header .username {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .header .posted-on {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .description {
+            padding: 15px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .button-bar {
+            display: flex;
+            justify-content: flex-start;
+            padding: 10px 15px;
+            border-top: 1px solid #f0f0f0;
+            background-color: #f8f8f8;
+        }
+
+        .button-bar button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .button-bar button:hover {
+            background-color: #165eaf;
+        }
+
+        .ok-button {
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+
+        .ok-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="https://via.placeholder.com/40" alt="User Avatar">
+            <div>
+                <div class="username">John Doe</div>
+                <div class="posted-on">December 13, 2024 at 3:30 PM</div>
+            </div>
+        </div>
+        <div class="description">
+            This is a description of the post. It might include text about a recent event or a personal update, similar to what you’d see on Facebook.
+        </div>
+        <div class="button-bar">
+            <button class="ok-button">Ok</button>
+        </div>
+    </div>
+
+    
+    <div class="card-header">
+        <span class="type">${type || 'Unknown Type'}</span>
+      </div>
+      <div class="header">
+        <div>
+        <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
+        <div class="posted-on">Posted on:${updated}</div>
+        </div>
+    </div>
+      <div class="description">${description ? `"${description}"` : 'No description available'}</div>
+      <img src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image" class="image">    
+      <div class="button-bar">
+        <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>    
+    </div>     
+
+
+
+</body>
+</html>
+
+
+<div class="card-header">
+    <span class="type">${type || 'Unknown Type'}</span>
+  </div>
+  <div class="header">
+    <div>
+    <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
+    <div class="posted-on">Posted on:${updated}</div>
+    </div>
+</div>
+  <div class="description">${description ? `"${description}"` : 'No description available'}</div>
+  <img src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image" class="image">    
+  <div class="button-bar">
+    <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>    
