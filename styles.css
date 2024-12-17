@@ -463,7 +463,7 @@ body, html {
   padding: 20px;
   border-radius: 22px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  width: 90%;
+  width: 98%;
   max-width: 800px;
   z-index: 1001;
   opacity: 0;
@@ -505,7 +505,7 @@ body, html {
   padding: 12px;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #f9f9f9;
   transition: border-color 0.3s ease;
 }
@@ -535,7 +535,7 @@ button[type="submit"] {
   border: none;
   padding: 12px 20px;
   font-size: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   width: 100%;
   transition: background-color 0.3s ease;
@@ -548,8 +548,8 @@ button[type="submit"]:hover {
 /* Responsive Design for Tablets and Larger Devices */
 @media (min-width: 600px) {
   .modal {
-    width: 70%;
-    padding: 30px;
+    width: 95%;
+    padding: 22px;
   }
 
   .modal h3 {
