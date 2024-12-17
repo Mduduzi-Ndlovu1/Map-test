@@ -8,8 +8,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<style>
-/* General Styles */
+<style>/* General Styles */
 * {
   margin: 0;
   padding: 0;
@@ -33,13 +32,13 @@ header {
 
 nav ul {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   list-style: none;
   padding: 10px;
 }
 
 nav ul li {
-  margin: 0 20px;
+  margin: 0 10px;
 }
 
 nav ul li a {
@@ -58,16 +57,16 @@ nav ul li a:hover {
   background: url('car-hero.jpg') no-repeat center center/cover;
   color: white;
   text-align: center;
-  padding: 100px 0;
+  padding: 80px 20px;
 }
 
 .hero h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 10px;
 }
 
 .hero p {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .hero h2 {
@@ -79,18 +78,20 @@ nav ul li a:hover {
   display: flex;
   justify-content: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
-.btn {
+.cta-buttons .btn {
   background-color: #007bff;
   padding: 15px 30px;
-  font-size: 18px;
+  font-size: 1rem;
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 15px;
 }
 
-.btn:hover {
+.cta-buttons .btn:hover {
   background-color: #0056b3;
 }
 
@@ -108,27 +109,30 @@ nav ul li a:hover {
 }
 
 .how-it-works h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 40px;
 }
 
 .steps {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   gap: 50px;
+  flex-wrap: wrap;
 }
 
 .step {
   width: 250px;
+  margin-bottom: 20px;
 }
 
 .step h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   margin-bottom: 20px;
 }
 
 .step ul {
   list-style-type: none;
+  padding-left: 0;
 }
 
 .step ul li {
@@ -145,6 +149,7 @@ nav ul li a:hover {
 .form-container {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 /* Video Section */
@@ -155,8 +160,13 @@ nav ul li a:hover {
 }
 
 .car-video h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 30px;
+}
+
+.car-video iframe {
+  max-width: 100%;
+  height: auto;
 }
 
 /* FAQ Section */
@@ -171,12 +181,12 @@ nav ul li a:hover {
 }
 
 .faq-item h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   margin-bottom: 10px;
 }
 
 .faq-item p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 /* Footer Section */
@@ -187,24 +197,110 @@ footer {
   text-align: center;
 }
 
-.social-links {
+footer ul {
   list-style: none;
   padding: 10px 0;
 }
 
-.social-links li {
+footer ul li {
   display: inline;
   margin: 0 15px;
 }
 
-.social-links li a {
+footer ul li a {
   color: white;
-  font-size: 20px;
+  font-size: 18px;
 }
 
-.social-links li a:hover {
+footer ul li a:hover {
   color: #007bff;
 }
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  /* Navigation Bar */
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Hero Section */
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .hero h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta-buttons .btn {
+    font-size: 0.9rem;
+    padding: 12px 20px;
+  }
+
+  /* How it Works Section */
+  .steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step {
+    width: 100%;
+    text-align: center;
+  }
+
+  .step h3 {
+    font-size: 1.2rem;
+  }
+
+  /* Signup Form Section */
+  .signup-form iframe {
+    width: 100%;
+    height: 400px;
+  }
+
+  /* FAQ Section */
+  .faq-item h3 {
+    font-size: 1.4rem;
+  }
+
+  .faq-item p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Hero Section */
+  .hero {
+    padding: 60px 20px;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .cta-buttons .btn {
+    font-size: 0.8rem;
+    padding: 10px 20px;
+  }
+
+  /* Video Section */
+  .car-video iframe {
+    width: 100%;
+    height: 200px;
+  }
+
+  /* Footer */
+  footer ul li {
+    display: block;
+    margin: 10px 0;
+  }
+}
+
 
 </style>
   <!-- Navigation Bar -->
