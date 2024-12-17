@@ -4,7 +4,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
-const cors = require('cors'); // 
+const cors = require('cors');
 const app = express();
 
 
