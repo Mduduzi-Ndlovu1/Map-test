@@ -397,7 +397,17 @@ footer ul li a:hover {
       <p>Contact us at <a href="mailto:info@easycarhires.com">info@easycarhires.com</a></p>
     </div>
   </footer>
+<script>
+// Sign up form iframe toggler
+const signupBtn = document.getElementById('signupBtn');
+const signupForm = document.getElementById('signup-form');
 
+signupBtn.addEventListener('click', () => {
+  // Show the signup form (iframe)
+  signupForm.scrollIntoView({ behavior: 'smooth' });
+});
+
+</script>
   <script src="script.js"></script>
 </body>
 </html>
