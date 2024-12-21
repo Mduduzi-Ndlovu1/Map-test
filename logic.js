@@ -1,3 +1,43 @@
+// Show the loading screen when the page is loading
+window.addEventListener('load', function() {
+  // Show the loading screen initially
+  const loadingScreen = document.createElement('div');
+  loadingScreen.id = 'loading-screen';
+  loadingScreen.innerHTML = '<div class="spinner"></div>';
+  document.body.appendChild(loadingScreen);
+
+  // Simulate map loading time (you can replace this with actual map loading logic)
+  setTimeout(function() {
+    // Hide the loading screen after 3 seconds or when the map is ready
+    loadingScreen.style.display = 'none';
+  }, 3000); // Adjust time as needed
+});
+
+// Show loading animation on the "Save Post" button
+const postButton = document.querySelector('button[type="submit"]');
+if (postButton) {
+  postButton.addEventListener('click', function(e) {
+    // Add 'loading' class to button to show spinner
+    postButton.classList.add('loading');
+    
+    // Simulate post submission delay (replace with actual event handling logic)
+    setTimeout(function() {
+      // After the submission is processed, remove the loading spinner
+      postButton.classList.remove('loading');
+    }, 2000); // Simulate a 2-second post submission delay
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
 // Initialize the map with a light theme
 let map = L.map('map',{zoomControl: false}).setView([-26.2041, 28.0473], 18);
 
