@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1 Pulse, one heart beat for the people. | Empowering Communities</title>
+    <meta name="description" content="1Pulse - Empowering Communities by Enhancing Safety, Reducing Pollution, and Fostering Inclusivity with GJNW, Errand Camel, and Africa City.">
+    <meta name="keywords" content="Puls by the Greater Johannesburg Neighborhood Oversight, crime prevention, pollution reduction, GJNO, Errand Camel, Africa City, community programs, tech innovation, inclusivity" />
+    <meta name="author" content="Siya Percy" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="icon" href="images/ipulse-logo.png" type="image/x-icon"> <!-- Favicon -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+<style>
+  /* Ensure the background image covers the full screen */
+#background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;  /* Ensures the background stays behind the content */
+    overflow: hidden;
+}
+
+#bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire screen without stretching */
+    background-color: #007BFF;
+}
+
+/* Basic styles for landing div */
+.landing-pop {
+    background-color: #fefefe;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #c4c4c4;
+    width: 80%;
+    max-width: 900px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.171);
+    margin-top: 60px; /* Adjust the top margin for the content */
+    margin-bottom: 60px; /* Adjust the top margin for the content */
+    border-radius: 30px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background-color: white;
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+input {
+    width: 80%;
+    padding: 5px;
+    margin: 5px 0;
+    text-align: center;
+}
+
+/* Button Styling */
+.cta-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.cta-button {
+    background-color: #0e5aff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: solid 1px #f0f0f0;
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.363);
+}
+
+.cta-button:hover {
+    background-color: #1077d8;
+}
+</style>
+
+  <div id="background-image">
+      <img src="images/map-back.jpg" alt="Background Image" id="bg-image">
+  </div>
+
+  <!-- Landing Page Content -->
+  <div id="Landing-pop" class="landing-pop">
+      <div class="content-container">
+          <h3>Welcome to 1pulse Online!</h3>
+          <p><span id="typingText" class="typing-text"><strong>The heart beat of the community.</strong></span></p>
+
+<!-- Back to School Drive -->
+          <div>
+              <h4>Back to School Drive Progress</h4>
+              <table id="schoolDriveTable">
+                  <thead>
+                      <tr>
+                          <th>Item</th>
+                          <th>Target Amount (R)</th>
+                          <th>Donated Amount (R)</th>
+                          <th>Remaining (R)</th>
+                          <th>Status</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Uniforms</td>
+                          <td>1500</td>
+                          <td><input type="number" id="uniformDonation" value="300" oninput="updateProgress('schoolDrive')"></td>
+                          <td id="uniformRemaining">1200</td>
+                          <td id="uniformStatus">Pending</td>
+                      </tr>
+                      <tr>
+                          <td>Stationery</td>
+                          <td>1000</td>
+                          <td><input type="number" id="stationeryDonation" value="100" oninput="updateProgress('schoolDrive')"></td>
+                          <td id="stationeryRemaining">900</td>
+                          <td id="stationeryStatus">Pending</td>
+                      </tr>
+                      <tr>
+                          <td>Books</td>
+                          <td>1000</td>
+                          <td><input type="number" id="booksDonation" value="150" oninput="updateProgress('schoolDrive')"></td>
+                          <td id="booksRemaining">850</td>
+                          <td id="booksStatus">Pending</td>
+                      </tr>
+                      <tr>
+                          <td>Total Target</td>
+                          <td>3500</td>
+                          <td id="totalDonatedSchool">550</td>
+                          <td id="totalRemainingSchool">3500</td>
+                          <td id="totalStatusSchool">Pending</td>
+                      </tr>
+                  </tbody>
+              </table>
+              <div class="cta-container">
+                  <a href="index.html" class="cta-button">Go Back</a>
+              </div>
+          </div>
+
+      </div>
+  </div>
+
+<script>
+  // Function to update the progress for any table
+  function updateProgress(campaign) {
+    let table = document.querySelector(#${campaign}Table);
+    let totalDonated = 0;
+    let totalTarget = 0;
+    
+    // Iterate over all the rows and update donations
+    table.querySelectorAll('tr').forEach(row => {
+      const donationCell = row.querySelector('input');
+      if (donationCell) {
+        const donatedAmount = parseFloat(donationCell.value);
+        const targetAmount = parseFloat(row.querySelector('td:nth-child(2)').textContent);
+        
+        totalDonated += donatedAmount;
+        totalTarget += targetAmount;
+        
+        const remainingAmount = targetAmount - donatedAmount;
+        const remainingCell = row.querySelector('td:nth-child(4)');
+        remainingCell.textContent = remainingAmount;
+
+        const statusCell = row.querySelector('td:nth-child(5)');
+        statusCell.textContent = donatedAmount >= targetAmount ? 'Completed' : 'Pending';
+      }
+    });
+    
+    // Update total donations and remaining
+    const totalDonatedCell = document.querySelector(#totalDonated${campaign === 'helpDesk' ? '' : campaign === 'christmasDrive' ? 'Christmas' : campaign === 'schoolDrive' ? 'School' : 'Community'});
+    const totalRemainingCell = document.querySelector(#totalRemaining${campaign === 'helpDesk' ? '' : campaign === 'christmasDrive' ? 'Christmas' : campaign === 'schoolDrive' ? 'School' : 'Community'});
+    const totalStatusCell = document.querySelector(#totalStatus${campaign === 'helpDesk' ? '' : campaign === 'christmasDrive' ? 'Christmas' : campaign === 'schoolDrive' ? 'School' : 'Community'});
+    
+    totalDonatedCell.textContent = totalDonated;
+    totalRemainingCell.textContent = totalTarget - totalDonated;
+    totalStatusCell.textContent = totalDonated >= totalTarget ? 'Completed' : 'Pending';
+  }
+</script>
+</body>
+</html>
