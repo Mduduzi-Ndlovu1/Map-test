@@ -33,6 +33,93 @@ if (postButton) {
 
 
 
+// Ad images array
+const adImages = [
+  'https://i.ibb.co/M70sncs/IMG-20241220-WA0036.jpg',
+  'https://example.com/ad2.jpg',
+  'https://example.com/ad3.jpg',
+  'https://example.com/ad4.jpg',
+  'https://example.com/ad5.jpg',
+];
+
+// Set up time variables
+let adShownTime = Date.now(); // Timestamp when the ad was last shown
+let adCounter = 0; // Counter to cycle through images
+
+// Elements for the ad modal, countdown, and skip button
+const adModal = document.getElementById('ad-modal');
+const countdownDisplay = document.getElementById('countdown');
+const skipButton = document.getElementById('skip-button');
+const adContent = document.querySelector('.ad-content img');
+
+// Function to show the ad modal
+function showAdModal() {
+  adModal.style.display = 'flex'; // Show the ad modal
+  const currentAdImage = adImages[adCounter % adImages.length]; // Get the current ad image
+  adContent.src = currentAdImage; // Update image source
+  
+  // Start the countdown timer
+  let countdownTime = 10; // Total time for the ad (in seconds)
+  let countdownInterval = setInterval(() => {
+    countdownDisplay.textContent = `${countdownTime}s`; // Update countdown timer display
+    countdownTime--;
+
+    // Show the skip button after 5 seconds
+    if (countdownTime === 5) {
+      skipButton.style.display = 'block'; // Show skip button
+    }
+
+    // Close the ad after 10 seconds
+    if (countdownTime < 0) {
+      clearInterval(countdownInterval);
+      closeAdModal();
+    }
+  }, 1000);
+}
+
+// Function to close the ad modal
+function closeAdModal() {
+  adModal.style.display = 'none'; // Hide the ad modal
+  adCounter++; // Increment the counter to show the next ad image
+  adShownTime = Date.now(); // Update the last shown time
+}
+
+// Function to handle the skip button click
+skipButton.addEventListener('click', closeAdModal);
+
+// Check for page visibility to show the ad if the page was minimized
+document.addEventListener('visibilitychange', function () {
+  if (!document.hidden) {
+    // If the user switches back to the page, check if 5 minutes have passed
+    if (Date.now() - adShownTime >= 5 * 60 * 1000) {
+      showAdModal();
+    }
+  }
+});
+
+// Check if 5 minutes have passed since the page loaded
+setInterval(() => {
+  if (Date.now() - adShownTime >= 5 * 60 * 1000) {
+    showAdModal();
+  }
+}, 1000); // Check every second
+
+// Show the ad on page load if 5 minutes have passed
+window.onload = function () {
+  if (Date.now() - adShownTime >= 5 * 60 * 1000) {
+    showAdModal();
+  }
+};
+
+
+
+
+
+
+
+
+
+
 
 
 
