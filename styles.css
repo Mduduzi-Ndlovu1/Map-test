@@ -68,55 +68,6 @@ button.loading.loading .spinner {
   display: inline-block;
 }
 
-/* Advert Modal Styles */
-#ad-modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it's on top */
-}
-
-.ad-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Dark background */
-}
-
-.ad-content {
-    position: relative;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    z-index: 1001; /* Ensure content is above overlay */
-}
-
-#ad-skip {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #ff4c4c;
-    color: white;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-#ad-timer {
-    margin-top: 10px;
-    font-size: 18px;
-}
-
-/* Add additional styles for responsiveness, etc. */
 
 
 #logo-container {
