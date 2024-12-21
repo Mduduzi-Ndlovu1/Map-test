@@ -68,65 +68,55 @@ button.loading.loading .spinner {
   display: inline-block;
 }
 
-
-/* Full-screen ad modal */
+/* Advert Modal Styles */
 #ad-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Transparent background */
-  display: none; /* Initially hidden */
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top */
 }
 
-/* Container for the advert image */
-#ad-modal .ad-content {
-  position: relative;
-  width: 90%; /* 90% width of the screen */
-  max-width: 1000px; /* Max width for larger screens */
-  max-height: 90%; /* 90% height of the screen */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
+.ad-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark background */
 }
 
-/* Ad image styling */
-#ad-modal .ad-content img {
-  width: 100%; /* Adjusts to the screen size */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 8px;
+.ad-content {
+    position: relative;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    z-index: 1001; /* Ensure content is above overlay */
 }
 
-/* Countdown Timer */
-#ad-modal .countdown {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 18px;
+#ad-skip {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #ff4c4c;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-/* Skip button */
-#ad-modal .skip-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: none; /* Hide it initially */
+#ad-timer {
+    margin-top: 10px;
+    font-size: 18px;
 }
 
+/* Add additional styles for responsiveness, etc. */
 
 
 #logo-container {
