@@ -36,55 +36,7 @@ if (postButton) {
 
 
 
-// Get the Advert Modal and its elements
-const advertModal = document.getElementById('ad-modal');
-const adSkipButton = document.getElementById('ad-skip');
-const adTimeDisplay = document.getElementById('ad-time');
-const adTimer = document.getElementById('ad-timer');
 
-// Set initial state for Advert Modal
-let adCountdown = 10;  // 10 seconds
-let adInterval;
-
-// Function to show the Advert Modal
-function showAdvertModal() {
-    // Hide any other modals
-    const otherModals = document.querySelectorAll('.modal, .viewModal');
-    otherModals.forEach(modal => modal.style.display = 'none');
-
-    // Show the Advert Modal
-    advertModal.style.display = 'flex';
-
-    // Start the countdown timer
-    adInterval = setInterval(function() {
-        adCountdown--;
-        adTimeDisplay.textContent = adCountdown;
-        if (adCountdown <= 0) {
-            clearInterval(adInterval);
-            closeAdvertModal();
-        }
-    }, 1000);
-}
-
-// Function to close the Advert Modal
-function closeAdvertModal() {
-    advertModal.style.display = 'none';
-}
-
-// Skip Button functionality
-adSkipButton.addEventListener('click', function() {
-    clearInterval(adInterval); // Stop the countdown
-    closeAdvertModal();        // Close the Advert Modal
-});
-
-// Add event listener to close Advert Modal when clicking outside
-document.getElementById('ad-modal-overlay').addEventListener('click', function () {
-    closeAdvertModal();
-});
-
-// Function to trigger the Advert Modal (Example usage)
-setTimeout(showAdvertModal, 5000);  // Show after 5 seconds (for demo purposes)
- 
 
 
 
