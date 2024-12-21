@@ -3,30 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Saved Locations</title>
-</head>
-<body>
-  <h1>Saved Locations</h1>
-  <ul id="locationList"></ul>
-
-  <script>
-    async function fetchLocations() {
-      try {
-        const response = await fetch('http://localhost:5000/api/locations');
-        const locations = await response.json();
-
-        const locationList = document.getElementById('locationList');
-        locations.forEach((loc) => {
-          const listItem = document.createElement('li');
-          listItem.textContent = `${loc.name} ${loc.surname} - [${loc.latitude}, ${loc.longitude}] - ${new Date(loc.createdAt).toLocaleString()}`;
-          locationList.appendChild(listItem);
-        });
-      } catch (error) {
-        console.error('Error fetching locations:', error);
-      }
+  <title>1pulse online Map</title>
+  <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body.dark-mode {
+      background-color: #2b2b2b;
+      color: #fff;
     }
 
-    fetchLocations();
-  </script>
+    .dark-mode .modal {
+      background-color: #444;
+    }
+
+    /* Additional styles for dark mode if needed */
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- Dark Mode Toggle Button -->
+  <button id="modal-button" onclick="pulseopenModal()">
+    <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
+  </button>
+
+  <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
+<div id="gjnoModal" class="gjno-modal">
+  <div class="gjno-modal-content">
+    <span class="gjno-close">&times;</span>
+    <div class="gjno-header">
+      <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse Logo" class="gjno-logo">
+      <h2>Greater Johannesburg Neighborhood Oversight (GJNO)</h2>
+      <p>Building a Safer, Cleaner, and Accountable Johannesburg</p>
+    </div>
+    <div id="modal-images-container" class="gjno-images-container"></div>
+
+      <!-- Images from the logo-nav section will be inserted here dynamically -->
+    </div>
+  </div>
+</div>
+
+  <!-- Logo Navigation -->
+  <div id="logo-nav">
+    <div id="logo-container">
+        <div class="logo" data-modal-id="1">
+            <img src="https://1pulse.online/images/errand%20camel%20logo.png" alt="Logo 1">
+        </div>
+        <div class="logo" data-modal-id="2">
+            <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
+        </div>
+        <div class="logo" data-modal-id="3">
+          <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
+      </div>
+        <div class="logo" data-modal-id="4">
+            <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 4">
+        </div>
+        <div class="logo" data-modal-id="5">
+            <img src="https://1pulse.online/images/pulse.jpeg" alt="Logo 5">
+        </div>
+        <div class="logo" data-modal-id="6">
+            <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
+        </div>
+    </div>
+  </div>
+
+  <!-- Modal for logos -->
+<div id="myModal" class="modal-brah">
+  <div class="modal-content-brah">
+    <span class="close-brah">&times;</span>
+    <h2 class="modal-title-brah"></h2>
+    <p class="modal-description-brah"></p>
+    <div class="image-container">
+      <img class="modal-image-brah" src="" alt="Modal Image">
+
+    </div>
+  </div>
+</div>
+
+
+  <!-- Modal for creating a new post -->
+<div class="modal-overlay" id="modal-overlay"></div>
+<div class="modal" id="modal">
+  <h3>Create a Post</h3>
+  <form id="postForm" enctype="multipart/form-data">
+    <div class="form-field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+    </div>
+    <div class="form-field">
+      <label for="surname">Surname:</label>
+      <input type="text" id="surname" name="surname" required />
+    </div>
+    <div class="form-field">
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea>
+    </div>
+    <div class="form-field">
+      <label for="type">Type of Post:</label>
+      <div class="custom-select-container">
+        <select id="type" name="type" required class="custom-select">
+          <option value="" disabled selected>Select a type...</option>
+<option value="Good Deeds">Good Deeds</option>
+          <option value="Health">Health</option>
+          <option value="Property Damage">Property Damage</option>
+          <option value="Violent Crime">Violent Crime</option>
+          <option value="Looting">Looting</option>
+          <option value="Non-compliance">Non-compliance</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-field">
+      <label for="image">Image:</label>
+      <input type="file" id="image" name="image" required />
+    </div>
+    <button type="submit">Save Post</button>
+  </form>
+</div>
+
+
+  <!-- Modal for viewing a post -->
+  <div class="modal-overlay" id="viewModal-overlay"></div>
+  <div class="modal" id="viewModal">
+    <div id="postDetails"></div>
+    <h4>Comments:</h4>
+    <div id="commentsList"></div>
+    <form id="commentForm">
+      <div class="form-field">
+        <label for="commentName">Your Name:</label>
+        <input type="text" id="commentName" name="commentName" required />
+      </div>
+      <div class="form-field">
+        <label for="commentText">Add a Comment:</label>
+        <input type="text" id="commentText" name="commentText" required />
+      </div>
+      <button type="submit">Add Comment</button>
+    </form>
+  </div>
+
+
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Custom JS -->
+  <script src="logic.js"></script>
 </body>
 </html>
