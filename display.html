@@ -30,20 +30,18 @@
   </button>
 
   <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
-<div id="gjnoModal" class="gjno-modal">
-  <div class="gjno-modal-content">
-    <span class="gjno-close">&times;</span>
-    <div class="gjno-header">
-      <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse Logo" class="gjno-logo">
-      <h2>Greater Johannesburg Neighborhood Oversight (GJNO)</h2>
-      <p>Building a Safer, Cleaner, and Accountable Johannesburg</p>
-    </div>
-    <div id="modal-images-container" class="gjno-images-container"></div>
-
-      <!-- Images from the logo-nav section will be inserted here dynamically -->
+  <div id="gjnoModal" class="gjno-modal">
+    <div class="gjno-modal-content">
+      <span class="gjno-close">&times;</span>
+      <div class="gjno-header">
+        <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse Logo" class="gjno-logo">
+        <h2>Greater Johannesburg Neighborhood Oversight (GJNO)</h2>
+        <p>Building a Safer, Cleaner, and Accountable Johannesburg</p>
+      </div>
+      <div id="modal-images-container" class="gjno-images-container"></div>
+      <button id="newMarkerButton" onclick="createNewMarker()">New Marker</button>
     </div>
   </div>
-</div>
 
   <!-- Logo Navigation -->
   <div id="logo-nav">
@@ -70,58 +68,55 @@
   </div>
 
   <!-- Modal for logos -->
-<div id="myModal" class="modal-brah">
-  <div class="modal-content-brah">
-    <span class="close-brah">&times;</span>
-    <h2 class="modal-title-brah"></h2>
-    <p class="modal-description-brah"></p>
-    <div class="image-container">
-      <img class="modal-image-brah" src="" alt="Modal Image">
-
-    </div>
-  </div>
-</div>
-
-
-  <!-- Modal for creating a new post -->
-<div class="modal-overlay" id="modal-overlay"></div>
-<div class="modal" id="modal">
-  <h3>Create a Post</h3>
-  <form id="postForm" enctype="multipart/form-data">
-    <div class="form-field">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
-    </div>
-    <div class="form-field">
-      <label for="surname">Surname:</label>
-      <input type="text" id="surname" name="surname" required />
-    </div>
-    <div class="form-field">
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" required></textarea>
-    </div>
-    <div class="form-field">
-      <label for="type">Type of Post:</label>
-      <div class="custom-select-container">
-        <select id="type" name="type" required class="custom-select">
-          <option value="" disabled selected>Select a type...</option>
-<option value="Good Deeds">Good Deeds</option>
-          <option value="Health">Health</option>
-          <option value="Property Damage">Property Damage</option>
-          <option value="Violent Crime">Violent Crime</option>
-          <option value="Looting">Looting</option>
-          <option value="Non-compliance">Non-compliance</option>
-        </select>
+  <div id="myModal" class="modal-brah">
+    <div class="modal-content-brah">
+      <span class="close-brah">&times;</span>
+      <h2 class="modal-title-brah"></h2>
+      <p class="modal-description-brah"></p>
+      <div class="image-container">
+        <img class="modal-image-brah" src="" alt="Modal Image">
       </div>
     </div>
-    <div class="form-field">
-      <label for="image">Image:</label>
-      <input type="file" id="image" name="image" required />
-    </div>
-    <button type="submit">Save Post</button>
-  </form>
-</div>
+  </div>
 
+  <!-- Modal for creating a new post -->
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal" id="modal">
+    <h3>Create a Post</h3>
+    <form id="postForm" enctype="multipart/form-data">
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-field">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required />
+      </div>
+      <div class="form-field">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="type">Type of Post:</label>
+        <div class="custom-select-container">
+          <select id="type" name="type" required class="custom-select">
+            <option value="" disabled selected>Select a type...</option>
+            <option value="Good Deeds">Good Deeds</option>
+            <option value="Health">Health</option>
+            <option value="Property Damage">Property Damage</option>
+            <option value="Violent Crime">Violent Crime</option>
+            <option value="Looting">Looting</option>
+            <option value="Non-compliance">Non-compliance</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" required />
+      </div>
+      <button type="submit">Save Post</button>
+    </form>
+  </div>
 
   <!-- Modal for viewing a post -->
   <div class="modal-overlay" id="viewModal-overlay"></div>
@@ -142,11 +137,35 @@
     </form>
   </div>
 
-
-
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Custom JS -->
   <script src="logic.js"></script>
+
+  <script>
+    var map = L.map('map').setView([51.505, -0.09], 13);  // Default position (for example)
+    
+    // Set up the map layers (example with OpenStreetMap tiles)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Function to create a new marker at the current location
+    function createNewMarker() {
+      map.locate({ setView: true, maxZoom: 16 });
+
+      map.on('locationfound', function(e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+        L.marker([lat, lng]).addTo(map)
+          .bindPopup("New Marker at: " + lat + ", " + lng)
+          .openPopup();
+      });
+
+      map.on('locationerror', function() {
+        alert("Location access denied.");
+      });
+    }
+  </script>
 </body>
 </html>
