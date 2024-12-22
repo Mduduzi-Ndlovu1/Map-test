@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,24 +9,29 @@
   <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     body.dark-mode {
       background-color: #2b2b2b;
       color: #fff;
     }
+
     .dark-mode .modal {
       background-color: #444;
     }
+
+    /* Additional styles for dark mode if needed */
   </style>
 </head>
 <body>
   <div id="map"></div>
 
+  <!-- Dark Mode Toggle Button -->
   <button id="modal-button" onclick="pulseopenModal()">
     <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
   </button>
 
-  <!-- Modal for Location Marker -->
+  <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
   <div id="gjnoModal" class="gjno-modal">
     <div class="gjno-modal-content">
       <span class="gjno-close">&times;</span>
@@ -33,13 +40,110 @@
         <h2>Greater Johannesburg Neighborhood Oversight (GJNO)</h2>
         <p>Building a Safer, Cleaner, and Accountable Johannesburg</p>
       </div>
+      <div id="modal-images-container" class="gjno-images-container"></div>
       <button id="newMarkerButton" onclick="createNewMarker()">New Marker</button>
     </div>
+  </div>
+
+  <!-- Logo Navigation -->
+  <div id="logo-nav">
+    <div id="logo-container">
+        <div class="logo" data-modal-id="1">
+            <img src="https://1pulse.online/images/errand%20camel%20logo.png" alt="Logo 1">
+        </div>
+        <div class="logo" data-modal-id="2">
+            <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
+        </div>
+        <div class="logo" data-modal-id="3">
+          <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
+      </div>
+        <div class="logo" data-modal-id="4">
+            <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 4">
+        </div>
+        <div class="logo" data-modal-id="5">
+            <img src="https://1pulse.online/images/pulse.jpeg" alt="Logo 5">
+        </div>
+        <div class="logo" data-modal-id="6">
+            <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
+        </div>
+    </div>
+  </div>
+
+  <!-- Modal for logos -->
+  <div id="myModal" class="modal-brah">
+    <div class="modal-content-brah">
+      <span class="close-brah">&times;</span>
+      <h2 class="modal-title-brah"></h2>
+      <p class="modal-description-brah"></p>
+      <div class="image-container">
+        <img class="modal-image-brah" src="" alt="Modal Image">
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for creating a new post -->
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal" id="modal">
+    <h3>Create a Post</h3>
+    <form id="postForm" enctype="multipart/form-data">
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-field">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required />
+      </div>
+      <div class="form-field">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="type">Type of Post:</label>
+        <div class="custom-select-container">
+          <select id="type" name="type" required class="custom-select">
+            <option value="" disabled selected>Select a type...</option>
+            <option value="Good Deeds">Good Deeds</option>
+            <option value="Health">Health</option>
+            <option value="Property Damage">Property Damage</option>
+            <option value="Violent Crime">Violent Crime</option>
+            <option value="Looting">Looting</option>
+            <option value="Non-compliance">Non-compliance</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" required />
+      </div>
+      <button type="submit">Save Post</button>
+    </form>
+  </div>
+
+  <!-- Modal for viewing a post -->
+  <div class="modal-overlay" id="viewModal-overlay"></div>
+  <div class="modal" id="viewModal">
+    <div id="postDetails"></div>
+    <h4>Comments:</h4>
+    <div id="commentsList"></div>
+    <form id="commentForm">
+      <div class="form-field">
+        <label for="commentName">Your Name:</label>
+        <input type="text" id="commentName" name="commentName" required />
+      </div>
+      <div class="form-field">
+        <label for="commentText">Add a Comment:</label>
+        <input type="text" id="commentText" name="commentText" required />
+      </div>
+      <button type="submit">Add Comment</button>
+    </form>
   </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Custom JS -->
+  <script src="logic.js"></script>
+
   <script>
     var map = L.map('map').setView([51.505, -0.09], 13);  // Default position (for example)
 
@@ -48,60 +152,21 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var currentMarker; // To store the currently placed marker
-
     // Function to create a new marker at the current location
     function createNewMarker() {
-      map.locate({ setView: true, maxZoom: 16 }); // Locate the user and center the map
+      map.locate({ setView: true, maxZoom: 16 });
 
       map.on('locationfound', function(e) {
         var lat = e.latlng.lat;
         var lng = e.latlng.lng;
-
-        // Remove any existing marker before adding the new one
-        if (currentMarker) {
-          map.removeLayer(currentMarker);
-        }
-
-        // Add a new marker at the found location
-        currentMarker = L.marker([lat, lng]).addTo(map)
-          .bindPopup("New Marker at: " + lat.toFixed(5) + ", " + lng.toFixed(5))
-          .openPopup();
-        
-        // Optionally, you can prompt the user to create a post or save the marker location
-        alert("New marker placed at latitude: " + lat.toFixed(5) + " and longitude: " + lng.toFixed(5));
-        
-        // You could call a function here to save the location to your backend, such as:
-        // saveLocationToBackend(lat, lng);
+        L.marker([lat, lng]).addTo(map)
+          .bindPopup("New Marker at: " + lat + ", " + lng)
+           .openPopup();
       });
 
       map.on('locationerror', function() {
         alert("Location access denied.");
       });
-    }
-
-    // Function to save the new marker location to the backend (example)
-    function saveLocationToBackend(lat, lng) {
-      fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'User', // User data, you can collect these from form inputs
-          surname: 'Example',
-          description: 'Location description',
-          latitude: lat,
-          longitude: lng,
-          type: 'Good Deeds', // Example type, adjust as needed
-        })
-      })
-      .then(response => response.json())
-      .then(data => console.log('Post created:', data))
-      .catch(error => console.error('Error:', error));
-    }
-
-    // Function to open the modal when needed
-    function pulseopenModal() {
-      document.getElementById('gjnoModal').style.display = 'block';
     }
   </script>
 </body>
