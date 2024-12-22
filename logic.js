@@ -125,7 +125,9 @@ function setUserLocation() {
                     .then(data => {
                         // If the geocoding request returns a valid address
                         const address = data.display_name;
-                        userMarker.bindPopup("Your current location is: " + address).openPopup();
+                        userMarker.bindPopup("Your current location is: " + address + "<!-- New button to create location marker -->" +
+"<button id='create-location-marker'>Create Location Marker</button>").openPopup();
+
                     })
                     .catch(error => {
                         console.error('Error fetching address:', error);
