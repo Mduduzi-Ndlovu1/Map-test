@@ -32,12 +32,250 @@
   <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
 <div id="gjnoModal" class="gjno-modal">
   <div class="gjno-modal-content">
-    <span class="gjno-close">&times;</span>
-    <div class="gjno-header">
-      <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse Logo" class="gjno-logo">
-      <h2>Greater Johannesburg Neighborhood Oversight (GJNO)</h2>
-      <p>Building a Safer, Cleaner, and Accountable Johannesburg</p>
+    <span class="gjno-close" style="color: #2b2b2b;">&times;</span>
+    <div class="cotainer">
+      <style>
+          /* General Container */
+  .container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  /* Section 1 */
+  .section-1 header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .section-1 h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .hero-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .image-description p {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 10px;
+    color: #555;
+  }
+  
+  /* Section 2: Resources */
+  .section-2 {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .section-2 h2 {
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .section-2 p {
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+  }
+  
+  /* Section 3: Markers and Sponsors */
+  .section-3 {
+    margin-top: 40px;
+  }
+  
+  .markers h3, .sponsors h3 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .marker-item, .sponsor-item {
+    display: flex;
+    align-items: center;
+    border-radius: 22px;
+    background-color: #f7f7f7;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .marker-item img, .sponsor-item img {
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+  }
+  
+  .marker-info h4, .sponsor-info h4 {
+    font-size: 18px;
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .marker-info p, .sponsor-info p {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  .sponsor-item {
+    border-radius: 30px;
+    background-color: #e9f7fb;
+  }
+  
+  .marker-item:last-child, .sponsor-item:last-child {
+    margin-bottom: 0;
+  }
+  
+      </style>
+      <!-- Section 1: Header, Search Bar, Hero Image -->
+      <div class="section-1">
+        <header>
+          <h1>Community Resources Map</h1>
+        </header>
+        <!---<div class="search-bar">
+          <input type="text" placeholder="Search for resources or issues..." />
+        </div>-->
+        <div class="hero-image">
+          <img src="https://1pulse.online/images/1pulse-map.png" alt="Community map image" />
+        </div>
+        <div class="image-description">
+          <p>This map highlights key community issues and available resources. Explore the markers to find out more.</p>
+        </div>
+      </div>
+    
+      <!-- Section 2: Resources Description -->
+      <div class="section-2">
+        <h2>Resources</h2>
+        <p>Explore the various resources available within the community, designed to assist you in solving problems and improving quality of life.</p>
+      </div>
+    
+      <!-- Section 3: Markers and Sponsors -->
+      <div class="section-3">
+        <!-- Marker Divs -->
+        <div class="markers">
+          <h3>Marker Resources</h3>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/user-here.png" alt="Marker Icon 1" />
+            <div class="marker-info">
+              <h4>You Are Here</h4>
+              <p>Click the clossest next to this icon and a window will show so you can make a post.</p>
+            </div>
+          </div>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/good deed icon.png" alt="Marker Icon 2" />
+            <div class="marker-info">
+              <h4>Good Deeds</h4>
+              <p>Sosts about anything good in the community that needs attention.</p>
+            </div>
+          </div>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/crime.png" alt="Marker Icon 3" />
+            <div class="marker-info">
+              <h4>Crime</h4>
+              <p>Posts relating to all types of crimes, mostly violant.</p>
+            </div>
+          </div>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/property.png" alt="Marker Icon 4" />
+            <div class="marker-info">
+              <h4>Service Delivery</h4>
+              <p>Posts relating to municipal service delivry to forster countabilty .</p>
+            </div>
+          </div>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/Looting.png" alt="Marker Icon 5" />
+            <div class="marker-info">
+              <h4>Looting/Vandalism</h4>
+              <p>This is whhre the crime is unclear but yet affects the publiuc.</p>
+            </div>
+          </div>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/xenophobia.png" alt="Marker Icon 5" />
+            <div class="marker-info">
+              <h4>Non-compliance</h4>
+              <p>Description of the marker and its meaning.</p>
+            </div>
+          </div>
+          <div class="marker-item">
+            <img src="https://1pulse.online/images/Health-location.png" alt="Marker Icon 6" />
+            <div class="marker-info">
+              <h4>Health</h4>
+              <p>Issues of health that affect the general publicu.</p>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Sponsors Divs --
+        <div class="sponsors">
+          <h3>Sponsors</h3>
+          <div class="sponsor-item">
+            <img src="sponsor1-logo.jpg" alt="Sponsor 1" />
+            <div class="sponsor-info">
+              <h4>Sponsor 1</h4>
+              <p>Details about Sponsor 1's contribution.</p>
+            </div>
+          </div>
+          <div class="sponsor-item">
+            <img src="sponsor2-logo.jpg" alt="Sponsor 2" />
+            <div class="sponsor-info">
+              <h4>Sponsor 2</h4>
+              <p>Details about Sponsor 2's contribution.</p>
+            </div>
+          </div>
+          <div class="sponsor-item">
+            <img src="sponsor3-logo.jpg" alt="Sponsor 3" />
+            <div class="sponsor-info">
+              <h4>Sponsor 3</h4>
+              <p>Details about Sponsor 3's contribution.</p>
+            </div>
+          </div>
+          <div class="sponsor-item">
+            <img src="sponsor4-logo.jpg" alt="Sponsor 4" />
+            <div class="sponsor-info">
+              <h4>Sponsor 4</h4>
+              <p>Details about Sponsor 4's contribution.</p>
+            </div>
+          </div>
+          <div class="sponsor-item">
+            <img src="sponsor5-logo.jpg" alt="Sponsor 5" />
+            <div class="sponsor-info">
+              <h4>Sponsor 5</h4>
+              <p>Details about Sponsor 5's contribution.</p>
+            </div>
+          </div>
+          <div class="sponsor-item">
+            <img src="sponsor6-logo.jpg" alt="Sponsor 6" />
+            <div class="sponsor-info">
+              <h4>Sponsor 6</h4>
+              <p>Details about Sponsor 6's contribution.</p>
+            </div>
+          </div>
+          <div class="sponsor-item">
+            <img src="sponsor7-logo.jpg" alt="Sponsor 7" />
+            <div class="sponsor-info">
+              <h4>Sponsor 7</h4>
+              <p>Details about Sponsor 7's contribution.</p>
+            </div>
+          </div>
+        </div>-->
+      </div>
     </div>
+    
     <div id="modal-images-container" class="gjno-images-container"></div>
 
       <!-- Images from the logo-nav section will be inserted here dynamically -->
