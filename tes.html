@@ -13,143 +13,65 @@
       background-color: #2b2b2b;
       color: #fff;
     }
-
     .dark-mode .modal {
       background-color: #444;
     }
-
     .button {
-  background-color: #0439e7; /* Green */
-  border: 1px solid #fff;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 13px;
-}
-    /* Additional styles for dark mode if needed */
+      background-color: #0439e7;
+      border: 1px solid #fff;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 13px;
+    }
   </style>
 </head>
 <body>
-  <div id="map"></div>
+  <div id="map" style="width: 100%; height: 100vh;"></div>
 
-  <!-- Dark Mode Toggle Button -->
   <button id="modal-button" onclick="toggleDarkMode()">
     <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
   </button>
 
-  <!-- Logo Navigation -->
-  <div id="logo-nav">
-    <div id="logo-container">
-        <div class="logo" data-modal-id="1">
-            <img src="https://1pulse.online/images/errand%20camel%20logo.png" alt="Logo 1">
-        </div>
-        <div class="logo" data-modal-id="2">
-            <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
-        </div>
-        <div class="logo" data-modal-id="3">
-          <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
-      </div>
-      <div class="logo" data-modal-id="3">
-        <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 3">
-    </div>
-        <div class="logo" data-modal-id="4">
-            <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 4">
-        </div>
-        <div class="logo" data-modal-id="5">
-            <img src="https://1pulse.online/images/pulse.jpeg" alt="Logo 5">
-        </div>
-        <div class="logo" data-modal-id="6">
-            <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
-        </div>
-    </div>
-  </div>
-
-
-
-  <!-- Modal for creating a new post -->
-  <div class="modal-overlay" id="modal-overlay"></div>
-  <div class="modal" id="modal">
-    <h3>Create a Post</h3>
-    <form id="postForm" enctype="multipart/form-data">
-      <div class="form-field">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
-      </div>
-      <div class="form-field">
-        <label for="surname">Surname:</label>
-        <input type="text" id="surname" name="surname" required />
-      </div>
-      <div class="form-field">
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
-      </div>
-      <div class="form-field">
-        <label for="image">Image:</label>
-        <input type="file" id="image" name="image" required />
-      </div>
-      <button type="submit">Save Post</button>
-    </form>
-  </div>
-
-  <!-- Modal for viewing a post -->
-  <div class="modal-overlay" id="viewModal-overlay"></div>
-  <div class="modal" id="viewModal">
-    <div id="postDetails"></div>
-    <h4>Comments:</h4>
-    <div id="commentsList"></div>
-    <form id="commentForm">
-      <div class="form-field">
-        <label for="commentName">Your Name:</label>
-        <input type="text" id="commentName" name="commentName" required />
-      </div>
-      <div class="form-field">
-        <label for="commentText">Add a Comment:</label>
-        <input type="text" id="commentText" name="commentText" required />
-      </div>
-      <button type="submit">Add Comment</button>
-    </form>
-  </div>
-
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Custom JS -->
-  <script src="logic.js"></script>
-</body>
-</html>
+  <script src="https://unpkg.com/leaflet-rotatedmarker/dist/leaflet.rotatedMarker.js"></script> <!-- Import the Leaflet rotation plugin -->
+  <script>
+    // Initialize the Leaflet map
+    const map = L.map('map').setView([51.505, -0.09], 13); // Set to any location for initialization
 
-</head>
-<body>
+    // Add a tile layer to the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-    <p id="gyroscope"></p> <!-- Degrees Text -->
-    <div id="penIcon">
-        <!-- Pen Image -->
-        <img src="compass.png" alt="Pen Icon">
-    </div>
+    // Handle device orientation (compass and gyroscope)
+    let currentHeading = 0;  // To store the compass heading
 
-    <script>
-        // Handle device orientation (compass and gyroscope)
-        let currentHeading = 0;  // To store the compass heading
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', function(event) {
+        const heading = event.alpha;
 
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', function(event) {
-                // Get the heading value (alpha) from the compass
-                const heading = event.alpha;
+        if (heading !== null) {
+          // Update the compass heading
+          currentHeading = heading;
 
-                if (heading !== null) {
-                    // Update the gyroscope degrees text
-                    document.getElementById("gyroscope").textContent = `Facing: ${Math.round(heading)}°`;
+          // Rotate the map based on the compass heading
+          map.setBearing(currentHeading); // Apply the heading as the map rotation
 
-                    // Update the pen icon's rotation based on the device's heading
-                    const penIcon = document.getElementById("penIcon");
-                    penIcon.style.transform = `rotate(${heading}deg)`; // Rotate the pen image
-                }
-            });
-        } else {
-            alert("Device Orientation is not supported on your device.");
+          // Optional: Update any other elements (e.g., compass icon)
+          document.getElementById("gyroscope").textContent = `Facing: ${Math.round(heading)}°`;
+
+          // Update the pen icon's rotation based on the device's heading (optional)
+          const penIcon = document.getElementById("penIcon");
+          penIcon.style.transform = `rotate(${heading}deg)`; // Rotate the pen image
         }
-    </script>
-
+      });
+    } else {
+      alert("Device Orientation is not supported on your device.");
+    }
+  </script>
 </body>
 </html>
