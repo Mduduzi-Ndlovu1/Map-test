@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Rotate with Device Compass</title>
+
+    <!-- Leaflet JS / CSS -->
+    <script src="https://unpkg.com/leaflet@1.9/dist/leaflet-src.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9/dist/leaflet.css">
+
+    <!-- Leaflet-Rotate -->
+    <script src="https://unpkg.com/leaflet-rotate@0.2.8/dist/leaflet-rotate-src.js"></script>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+
+        .control-btns {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 999;
+        }
+
+        .control-btns label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .control-btns input[type="range"] {
+            width: 200px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <div class="control-btns">
+        <p><strong>Rotate Map: </strong></p>
+        <label for="rotation-slider">Adjust Map Rotation:</label>
+        <input type="range" id="rotation-slider" min="0" max="360" step="1" value="0">
+    </div>
+
+    <script>
+        // Initialize the map with the OpenStreetMap street view layer
+        var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
+
+        var map = L.map('map', {
+            center: [51.505, -0.09], // Set the initial center position (London)
+            zoom: 13, // Set the zoom level
+            layers: [osm], // Only the OpenStreetMap layer
+            rotate: true, // Enable rotation functionality
+            bearing: 0, // Initial bearing
+            touchRotate: true, // Enable touch gestures for rotation
+            zoomControl: false, // Disable zoom control
+            attributionControl: false, // Disable attribution control
+            rotateControl: {
+                closeOnZeroBearing: false
+            }
+        });
+
+        // Function to update the map's rotation based on the slider value
+        document.getElementById('rotation-slider').addEventListener('input', function (e) {
+            var newBearing = e.target.value;  // Get the slider value
+            map.setBearing(newBearing);  // Set the map bearing (rotation)
+        });
+
+        // Event listener for device orientation (compass)
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function (event) {
+                var compassHeading = event.alpha; // The compass heading (in degrees)
+
+                // Check if the compassHeading is a valid number
+                if (compassHeading !== null && compassHeading !== undefined) {
+                    // Update map bearing based on compass heading
+                    map.setBearing(compassHeading);
+                    
+                    // Optional: You can sync the slider with the device's compass
+                    document.getElementById('rotation-slider').value = compassHeading;
+                }
+            }, false);
+        } else {
+            console.warn("Device Orientation is not supported on this device.");
+        }
+
+    </script>
+
+</body>
+
+</html>
