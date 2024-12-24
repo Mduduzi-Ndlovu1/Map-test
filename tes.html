@@ -43,8 +43,8 @@
           currentHeading = heading;
           
           // Set the map's rotation (bearing) based on the device's heading
-          map.setBearing(currentHeading); // For newer versions of Leaflet
-          // map.setRotation(currentHeading); // For older versions of Leaflet
+         // map.setBearing(currentHeading); // For newer versions of Leaflet
+           map.setRotation(currentHeading); // For older versions of Leaflet
 
           console.log(`Device Heading: ${Math.round(currentHeading)}°`);
         }
