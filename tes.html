@@ -5,68 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>1pulse online Map</title>
   <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
-    body.dark-mode {
-      background-color: #2b2b2b;
-      color: #fff;
+    body {
+      margin: 0;
+      height: 100%;
     }
-    .dark-mode .modal {
-      background-color: #444;
-    }
-    .button {
-      background-color: #0439e7;
-      border: 1px solid #fff;
-      color: white;
-      padding: 15px 32px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 13px;
+
+    #map {
+      width: 100%;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
-  <div id="map" style="width: 100%; height: 100vh;"></div>
-
-  <button id="modal-button" onclick="toggleDarkMode()">
-    <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
-  </button>
-
-  <!-- Leaflet JS -->
+  <div id="map"></div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-rotatedmarker/dist/leaflet.rotatedMarker.js"></script> <!-- Import the Leaflet rotation plugin -->
+
   <script>
     // Initialize the Leaflet map
-    const map = L.map('map').setView([51.505, -0.09], 13); // Set to any location for initialization
-
-    // Add a tile layer to the map
+    const map = L.map('map').setView([51.505, -0.09], 13); // Default center (can be customized)
+    
+    // Add a tile layer (using OpenStreetMap for example)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    // Handle device orientation (compass and gyroscope)
-    let currentHeading = 0;  // To store the compass heading
+    // Store current heading
+    let currentHeading = 0;
 
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', function(event) {
-        const heading = event.alpha;
+        const heading = event.alpha;  // Device's compass heading in degrees
 
         if (heading !== null) {
-          // Update the compass heading
+          // Update the map bearing to match the device's heading
           currentHeading = heading;
+          
+          // Set the map's rotation (bearing) based on the device's heading
+          map.setBearing(currentHeading); // For newer versions of Leaflet
+          // map.setRotation(currentHeading); // For older versions of Leaflet
 
-          // Rotate the map based on the compass heading
-          map.setBearing(currentHeading); // Apply the heading as the map rotation
-
-          // Optional: Update any other elements (e.g., compass icon)
-          document.getElementById("gyroscope").textContent = `Facing: ${Math.round(heading)}°`;
-
-          // Update the pen icon's rotation based on the device's heading (optional)
-          const penIcon = document.getElementById("penIcon");
-          penIcon.style.transform = `rotate(${heading}deg)`; // Rotate the pen image
+          console.log(`Device Heading: ${Math.round(currentHeading)}°`);
         }
       });
     } else {
