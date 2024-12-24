@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Rotate with Device Compass</title>
+    <title>Leaflet Rotate with Street View</title>
 
     <!-- Leaflet JS / CSS -->
     <script src="https://unpkg.com/leaflet@1.9/dist/leaflet-src.js"></script>
@@ -82,24 +82,6 @@
             var newBearing = e.target.value;  // Get the slider value
             map.setBearing(newBearing);  // Set the map bearing (rotation)
         });
-
-        // Event listener for device orientation (compass)
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', function (event) {
-                var compassHeading = event.alpha; // The compass heading (in degrees)
-
-                // Check if the compassHeading is a valid number
-                if (compassHeading !== null && compassHeading !== undefined) {
-                    // Update map bearing based on compass heading
-                    map.setBearing(compassHeading);
-                    
-                    // Optional: You can sync the slider with the device's compass
-                    document.getElementById('rotation-slider').value = compassHeading;
-                }
-            }, false);
-        } else {
-            console.warn("Device Orientation is not supported on this device.");
-        }
 
     </script>
 
