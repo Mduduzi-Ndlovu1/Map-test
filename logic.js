@@ -254,7 +254,7 @@ function displayPosts(posts) {
       // Check if latitude and longitude are valid numbers
       if (typeof latitude === 'number' && typeof longitude === 'number') {
         // Check if a marker icon exists for the given type, fallback to a default icon if not
-        const icon = markerIcon[type] || defaultMarkerIcon; // Replace `defaultMarkerIcon` with your default icon object
+        const icon = markerIcon[type] ; // Replace `defaultMarkerIcon` with your default icon object
   
         const marker = L.marker([latitude, longitude], { icon }).addTo(map);
   
