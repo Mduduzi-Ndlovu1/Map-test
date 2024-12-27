@@ -3,115 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Playground online Map</title>
+  <title>1pulse online Map</title>
   <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-  
-<! - - - - loader section - - - - >
-<style>
-
-/* Button Styles */
-.button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    position: relative;
-    transition: background-color 0.3s;
-}
-
-/* Loading state styles */
-.button:active {
-    background-color: #3e8e41;
-}
-
-.button.loading {
-    background-color: #f0f0f0;
-    color: #bbb;
-    pointer-events: none;
-}
-
-/* Spinner inside the button */
-.button.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    border: 4px solid #bbb;
-    border-top: 4px solid #4CAF50;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    transform: translate(-50%, -50%);
-}
-
-/* Spinner Animation */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Style for the loader */
-.loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-background-color: white;
-z-index: 10000000;
-}
-
-/* Hide content initially */
-.hidden {
-    display: none;
-}
-
-
-</style>
-
-    <!-- Loader -->
-    <div id="loader" class="loader">
-        <img src="https://1pulse-online-beta.netlify.app/lessed.gif" alt="Loading...">
-    </div>
-
-
-
-<script>
-document.getElementById('loader').addEventListener('click', function() {
-    this.classList.add('loading');
-    // Simulate a delay (e.g., an API call or process)
-    setTimeout(() => {
-        this.classList.remove('loading');  // Remove loading state after some time
-        this.textContent = 'Submitted';    // Change text after loading
-    }, 3000); // 3 seconds delay
-});
-
-
-
-
-// Wait for 5 seconds, then hide the loader and show the content
-window.onload = function () {
-    setTimeout(function () {
-        // Hide the loader
-        document.getElementById("loader").style.display = "none";
-        
-    }, 5000); // 5 seconds delay
-};
-
-</script>
-
-<! - - - - - end of section - - - - >
   <style>
     body.dark-mode {
       background-color: #2b2b2b;
@@ -173,17 +69,6 @@ window.onload = function () {
     </div>
   </div>
 
-      <!-- Search Icon -->
-      <div id="search-icon" class="search-icon">
-        <i class="fas fa-search"></i>
-      </div>
-  
-  <!-- Search Input (initially hidden) -->
-  <div id="search-container" class="hidden">
-    <input type="text" id="search-input" placeholder="Enter location" />
-    <button id="search-button">Search</button>
-  </div>
-
   <!-- Modal for logos -->
 <div id="myModal" class="modal-brah">
   <div class="modal-content-brah">
@@ -221,10 +106,10 @@ window.onload = function () {
         <select id="type" name="type" required class="custom-select">
           <option value="" disabled selected>Select a type...</option>
           <option value="Health">Health</option>
-          <option value="Service Delivery">Service Delivery</option>
+          <option value="Property Damage">Property Damage</option>
           <option value="Violent Crime">Violent Crime</option>
           <option value="Looting">Looting</option>
-          <option value="Non-compliance">Non-compliance</option>
+          <option value="Xenophobia">Xenophobia</option>
         </select>
       </div>
     </div>
