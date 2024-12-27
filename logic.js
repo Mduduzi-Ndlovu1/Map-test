@@ -348,64 +348,71 @@ document.getElementById('commentForm').addEventListener('submit', async (e) => {
 
 // Handle form submission for creating a post
 document.getElementById('postForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const name = formData.get('name');
-    const surname = formData.get('surname');
-    const description = formData.get('description');
-    const type = formData.get('type');
-    const imageInput = document.querySelector('input[name="image"]');
-    const image = imageInput.files[0];  // Ensure this is the actual file
+  const spinner = document.getElementById('spinner'); // Reference to the spinner
+  spinner.style.display = 'block'; // Show the spinner
 
-    // Validation for required fields
-    if (!name || !surname || !description || !image || !type) {
-        alert('Please fill in all fields!');
-        return;
-    }
+  const formData = new FormData(e.target);
+  const name = formData.get('name');
+  const surname = formData.get('surname');
+  const description = formData.get('description');
+  const type = formData.get('type');
+  const imageInput = document.querySelector('input[name="image"]');
+  const image = imageInput.files[0]; // Ensure this is the actual file
 
-    // Ensure valid coordinates are selected
-    if (!selectedLatLng || typeof selectedLatLng.lat !== 'number' || typeof selectedLatLng.lng !== 'number') {
-        alert('Please select a valid location on the map.');
-        return;
-    }
+  // Validation for required fields
+  if (!name || !surname || !description || !image || !type) {
+      alert('Please fill in all fields!');
+      spinner.style.display = 'none'; // Hide the spinner if validation fails
+      return;
+  }
 
-    // Prepare post data
-    const postData = new FormData();
-    postData.append('name', name);
-    postData.append('surname', surname);
-    postData.append('description', description);
-    postData.append('image', image);
-    postData.append('latitude', selectedLatLng.lat);
-    postData.append('longitude', selectedLatLng.lng);
-    postData.append('type', type);
+  // Ensure valid coordinates are selected
+  if (!selectedLatLng || typeof selectedLatLng.lat !== 'number' || typeof selectedLatLng.lng !== 'number') {
+      alert('Please select a valid location on the map.');
+      spinner.style.display = 'none'; // Hide the spinner if validation fails
+      return;
+  }
 
-    try {
-        const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {
-            method: 'POST',
-            body: postData,
-        });
+  // Prepare post data
+  const postData = new FormData();
+  postData.append('name', name);
+  postData.append('surname', surname);
+  postData.append('description', description);
+  postData.append('image', image);
+  postData.append('latitude', selectedLatLng.lat);
+  postData.append('longitude', selectedLatLng.lng);
+  postData.append('type', type);
 
-        if (response.ok) {
-            console.log('Post created successfully!');
-            closeModal();  // Close the modal if successful
-            fetchPosts();  // Refresh posts
-        } else {
-            // Handle response errors
-            let errorData;
-            try {
-                errorData = await response.json();
-            } catch (parseError) {
-                console.error('Error parsing response:', parseError);
-                errorData = { message: 'Unknown error occurred.' };
-            }
-            console.error('Response error:', errorData);
-            alert(`Error: ${errorData.message || 'An error occurred while creating the post.'}`);
-        }
-    } catch (error) {
-        console.error('Fetch error:', error);
-        alert('There was an error submitting the form. Please try again later.');
-    }
+  try {
+      const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {
+          method: 'POST',
+          body: postData,
+      });
+
+      if (response.ok) {
+          console.log('Post created successfully!');
+          closeModal(); // Close the modal if successful
+          fetchPosts(); // Refresh posts
+      } else {
+          // Handle response errors
+          let errorData;
+          try {
+              errorData = await response.json();
+          } catch (parseError) {
+              console.error('Error parsing response:', parseError);
+              errorData = { message: 'Unknown error occurred.' };
+          }
+          console.error('Response error:', errorData);
+          alert(`Error: ${errorData.message || 'An error occurred while creating the post.'}`);
+      }
+  } catch (error) {
+      console.error('Fetch error:', error);
+      alert('There was an error submitting the form. Please try again later.');
+  } finally {
+      spinner.style.display = 'none'; // Always hide the spinner, even if there's an error
+  }
 });
 
 // Close modal when clicking anywhere outside of it (on the overlay)
