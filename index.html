@@ -396,7 +396,34 @@
       </form>
     </div>
 
+    <p id="gyroscope"></p> <!-- Degrees Text -->
+    <div id="penIcon">
+        <!-- Pen Image -->
+        <img src="compass.png" alt="Pen Icon">
+    </div>
 
+    <script>
+        // Handle device orientation (compass and gyroscope)
+        let currentHeading = 0;  // To store the compass heading
+
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                // Get the heading value (alpha) from the compass
+                const heading = event.alpha;
+
+                if (heading !== null) {
+                    // Update the gyroscope degrees text
+                    document.getElementById("gyroscope").textContent = `Facing: ${Math.round(heading)}°`;
+
+                    // Update the pen icon's rotation based on the device's heading
+                    const penIcon = document.getElementById("penIcon");
+                    penIcon.style.transform = `rotate(${heading}deg)`; // Rotate the pen image
+                }
+            });
+        } else {
+            alert("Device Orientation is not supported on your device.");
+        }
+    </script>
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
