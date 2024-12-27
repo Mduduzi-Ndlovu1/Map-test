@@ -1,3 +1,6 @@
+Logic.js
+
+
 // Show the loading screen when the page is loading
 window.addEventListener('load', function() {
   // Show the loading screen initially
@@ -19,7 +22,7 @@ if (postButton) {
   postButton.addEventListener('click', function(e) {
     // Add 'loading' class to button to show spinner
     postButton.classList.add('loading');
-    
+
     // Simulate post submission delay (replace with actual event handling logic)
     setTimeout(function() {
       // After the submission is processed, remove the loading spinner
@@ -235,10 +238,10 @@ async function fetchPosts() {
     try {
       const response = await fetch('https://map-test-xid1.onrender.com/api/posts');  // Updated URL
       const posts = await response.json();
-      
+
       // Filter posts to ensure each has valid latitude and longitude
       const validPosts = posts.filter(post => typeof post.latitude === 'number' && typeof post.longitude === 'number');
-      
+
       displayPosts(validPosts);
       console.log('Fetched posts:', validPosts);
     } catch (error) {
@@ -250,19 +253,19 @@ async function fetchPosts() {
 function displayPosts(posts) {
     posts.forEach((post) => {
       const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
-  
+
       // Check if latitude and longitude are valid numbers
       if (typeof latitude === 'number' && typeof longitude === 'number') {
         // Check if a marker icon exists for the given type, fallback to a default icon if not
         const icon = markerIcon[type] || defaultMarkerIcon; // Replace `defaultMarkerIcon` with your default icon object
-  
+
         const marker = L.marker([latitude, longitude], { icon }).addTo(map);
-  
+
         // Format the creation date for the updated timestamp
         const updated = createdAt
           ? new Date(createdAt).toLocaleString()
           : 'Unknown date';
-  
+
         // Bind a popup with post details
         marker.bindPopup(` 
           <div class="card-header">
@@ -288,7 +291,7 @@ function displayPosts(posts) {
       }
     });
   }
-  
+
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {
     currentPostId = postId;
@@ -421,139 +424,4 @@ document.getElementById('viewModal-overlay').addEventListener('click', function 
 // Prevent closing modal when clicking inside the modal (on the modal content)
 document.getElementById('modal').addEventListener('click', function (event) {
     event.stopPropagation(); // Prevent event from propagating to overlay
-});
-
-document.getElementById('viewModal').addEventListener('click', function (event) {
-    event.stopPropagation(); // Prevent event from propagating to overlay
-});
-
-// Initial fetch of posts
-fetchPosts();
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  // Modal and its content elements
-  var modal_brah = document.getElementById("myModal");
-  var modalTitle = document.querySelector(".modal-title-brah");
-  var modalDescription = document.querySelector(".modal-description-brah");
-  var modalImage = document.querySelector(".modal-image-brah");
-  
-  // Ensure the close button exists
-  var closeButton = document.getElementsByClassName("close-brah")[0];
-
-  // Data for each logo's modal content
-  var modalData = {
-    1: {
-      title: "SAPS - South African Police Service",
-      description: "SAPS is responsible for maintaining law and order in South Africa, preventing crime, and ensuring the safety of citizens.",
-      image: "https://1pulse.online/images/errand%20camel%20logo.png"
-    },
-    2: {
-      title: "Bonizluu",
-      description: "BoniZulu is a fashion brand committed to uniting designers for fabric sourcing and promoting the elderly through crocheting programs.",
-      image: "https://1pulse.online/images/bonizluu-fav.png"
-    },
-    3: {
-      title: "Hillbrow",
-      description: "Hillbrow is a diverse and vibrant neighborhood in Johannesburg, known for its rich culture and mix of residential and commercial spaces.",
-      image: "https://1pulse.online/images/hillbrow.jpeg"
-    },
-    4: {
-      title: "CPF - Community Policing Forum",
-      description: "CPF works closely with SAPS to improve safety and security in communities, promoting cooperation between police and residents.",
-      image: "https://1pulse.online/images/Africa%20City.png"
-    },
-    5: {
-      title: "Pulse",
-      description: "Pulse is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
-      image: "https://1pulse.online/images/pulse.jpeg"
-    },
-    6: {
-      title: "Tae Trax",
-      description: "Tae-Trax by Siya Percy is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
-      image: "https://1pulse.online/images/Tae-Trax-Logo.png"
-    }
-  };
-
-  // Get all logo elements in the navbar
-  var logos = document.querySelectorAll(".logo");
-
-  // When a logo is clicked, open the modal and update content
-  logos.forEach(function(logo) {
-    logo.onclick = function() {
-      var modalId = logo.getAttribute("data-modal-id");
-      var data = modalData[modalId];
-
-      // Update modal content dynamically
-      if (modalTitle && modalDescription && modalImage) {
-        modalTitle.textContent = data.title;
-        modalDescription.textContent = data.description;
-        modalImage.src = data.image;
-      }
-
-      // Display the modal
-      modal_brah.style.display = "block";
-    };
-  });
-
-  // Close modal functionality
-  if (closeButton) {
-    closeButton.onclick = function() {
-      modal_brah.style.display = "none";
-    };
-  }
-
-  // Close modal if clicked outside of modal
-  window.onclick = function(event) {
-    if (event.target == modal_brah) {
-      modal_brah.style.display = "none";
-    }
-  };
-});
-
-
-
-// Function to open the modal
-function pulseopenModal() {
-    // Show the modal
-    document.getElementById('gjnoModal').style.display = 'block';
-  
-    // Get the container to insert images
-    const modalImagesContainer = document.getElementById('modal-images-container');
-  
-    // Logo data from the navigation section (should be inserted dynamically)
-    const logos = [
-      {src: 'https://1pulse.online/images/errand%20camel%20logo.png', alt: 'Logo 1'},
-      {src: 'https://1pulse.online/images/bonizluu-fav.png', alt: 'Logo 2'},
-      {src: 'https://1pulse.online/images/hillbrow.jpeg', alt: 'Logo 3'},
-      {src: 'https://1pulse.online/images/Africa%20City.png', alt: 'Logo 4'},
-      {src: 'https://1pulse.online/images/pulse.jpeg', alt: 'Logo 5'},
-      {src: 'https://1pulse.online/images/Tae-Trax-Logo.png', alt: 'Logo 6'}
-    ];
-  
-    // Clear any existing images
-    modalImagesContainer.innerHTML = '';
-  
-    // Loop through logos and add them to the modal dynamically
-    logos.forEach(logo => {
-        const imgElement = document.createElement('img');
-        imgElement.src = logo.src;
-        imgElement.alt = logo.alt;
-        modalImagesContainer.appendChild(imgElement);
-      });
-  }
-  
-  // Close the modal when the "x" button is clicked
-  document.querySelector('.gjno-close').onclick = function() {
-    document.getElementById('gjnoModal').style.display = 'none';
-  };
-  
-  // Close the modal when clicking outside of the modal
-  window.onclick = function(event) {
-    if (event.target === document.getElementById('gjnoModal')) {
-      document.getElementById('gjnoModal').style.display = 'none';
-    }
-  };
-  
-  
+}); 
