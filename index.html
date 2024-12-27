@@ -88,37 +88,42 @@
 <div class="modal" id="modal">
   <h3>Create a Post</h3>
   <form id="postForm" enctype="multipart/form-data">
-    <div class="form-field">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+  <div class="form-field">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+  </div>
+  <div class="form-field">
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" name="surname" required />
+  </div>
+  <div class="form-field">
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+  </div>
+  <div class="form-field">
+    <label for="type">Type of Post:</label>
+    <div class="custom-select-container">
+      <select id="type" name="type" required class="custom-select">
+        <option value="" disabled selected>Select a type...</option>
+        <option value="Good Deeds">Good Deeds</option>
+        <option value="Health">Health</option>
+        <option value="Service Delivery">Service Delivery</option>
+        <option value="Violent Crime">Violent Crime</option>
+        <option value="Looting">Looting</option>
+        <option value="Non-compliance">Non-compliance</option>
+      </select>
     </div>
-    <div class="form-field">
-      <label for="surname">Surname:</label>
-      <input type="text" id="surname" name="surname" required />
-    </div>
-    <div class="form-field">
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" required></textarea>
-    </div>
-    <div class="form-field">
-      <label for="type">Type of Post:</label>
-      <div class="custom-select-container">
-        <select id="type" name="type" required class="custom-select">
-          <option value="" disabled selected>Select a type...</option>
-          <option value="Health">Health</option>
-          <option value="Service Delivery">Service Delivery</option>
-          <option value="Violent Crime">Violent Crime</option>
-          <option value="Looting">Looting</option>
-          <option value="Non-compliance">Non-compliance</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-field">
-      <label for="image">Image:</label>
-      <input type="file" id="image" name="image" required />
-    </div>
-    <button type="submit">Save Post</button>
-  </form>
+  </div>
+  <div class="form-field">
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" required />
+  </div>
+  <button type="submit">Save Post</button>
+
+  <!-- Spinner -->
+  <div id="spinner" style="display: none;">Submitting...</div>
+</form>
+
 </div>
 
 
