@@ -248,31 +248,28 @@ async function fetchPosts() {
 
 // Display posts on the map
 function displayPosts(posts) {
-    posts.forEach((post) => {
-      const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
-  
-      // Check if latitude and longitude are valid numbers
-      if (typeof latitude === 'number' && typeof longitude === 'number') {
-        // Check if a marker icon exists for the given type, fallback to a default icon if not
-        const icon = markerIcon[type] ; // Replace `defaultMarkerIcon` with your default icon object
-  
+  posts.forEach((post) => {
+    const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
+
+    if (typeof latitude === 'number' && typeof longitude === 'number') {
+      const icon = markerIcon[type] || markerIcon["Good Deeds"]; // Fallback to default icon if type is undefined
+
+      try {
         const marker = L.marker([latitude, longitude], { icon }).addTo(map);
-  
-        // Format the creation date for the updated timestamp
+
         const updated = createdAt
           ? new Date(createdAt).toLocaleString()
           : 'Unknown date';
-  
-        // Bind a popup with post details
-        marker.bindPopup(` 
+
+        marker.bindPopup(`
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
           <div class="header">
-          <div>
-          <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
-          <div class="posted-on"> ${updated}</div>
-          </div>
+            <div>
+              <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
+              <div class="posted-on"> ${updated}</div>
+            </div>
           </div>
           <div class="card-content">
             <div class="description">${description ? `"${description}"` : 'No description available'}</div>
@@ -280,14 +277,17 @@ function displayPosts(posts) {
               <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
             </div>
           </div>
-          <button class="ok-button"
-" onclick="openViewPostModal('${_id}')">View Post</button>
+          <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
         `);
-      } else {
-        console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
+      } catch (error) {
+        console.error(`Error creating marker for post ID: ${_id}`, error);
       }
-    });
-  }
+    } else {
+      console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
+    }
+  });
+}
+
   
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {
