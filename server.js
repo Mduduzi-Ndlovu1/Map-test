@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
@@ -69,10 +68,10 @@ const postSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['Good Deeds', 'Health', 'Service Delivery', 'Violent Crime', 'Looting', 'Non-compliance'], 
+    enum: ['Good Deeds', 'Health', 'Property Damage', 'Violent Crime', 'Looting', 'Non-compliance'], 
     default: 'Good Deeds',
   },
-
+  
   createdAt: {
     type: Date,
     default: Date.now,
@@ -116,7 +115,7 @@ const upload = multer({
 app.get('/api/posts', async (req, res) => {
   try {
     const posts = await Post.find();
-
+    
     // Validate coordinates before sending the response
     const validPosts = posts.filter(post => 
       typeof post.latitude === 'number' && typeof post.longitude === 'number'
@@ -146,7 +145,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path);
       const imageUrl = result.secure_url;
-
+    
       const newPost = new Post({ name, surname, description, latitude, longitude, type, imageUrl, comments: [] });
       await newPost.save();
       return res.json({ post: newPost });
@@ -162,7 +161,7 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
         imageUrl: '', 
         comments: [] 
       });
-
+      
       // Save the post asynchronously
       await newPost.save();
       res.json({ post: newPost });
@@ -189,7 +188,7 @@ app.get('/api/posts/:id', async (req, res) => {
 
 app.post('/api/posts/:id/comments', async (req, res) => {
   const { author, text } = req.body;
-
+  
   if (!author || !text) {
     return res.status(400).json({ message: 'Author and text are required' });
   }
@@ -204,4 +203,4 @@ app.post('/api/posts/:id/comments', async (req, res) => {
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server running on ${publicUrl}:${port}`);
-}); 
+});
