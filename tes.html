@@ -67,31 +67,103 @@
   </div>
 
 
+<!-- Modal for creating a new post -->
+<style>
+  .loader {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+  }
 
-  <!-- Modal for creating a new post -->
-  <div class="modal-overlay" id="modal-overlay"></div>
-  <div class="modal" id="modal">
-    <h3>Create a Post</h3>
-    <form id="postForm" enctype="multipart/form-data">
-      <div class="form-field">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required />
-      </div>
-      <div class="form-field">
-        <label for="surname">Surname:</label>
-        <input type="text" id="surname" name="surname" required />
-      </div>
-      <div class="form-field">
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
-      </div>
-      <div class="form-field">
-        <label for="image">Image:</label>
-        <input type="file" id="image" name="image" required />
-      </div>
-      <button type="submit">Save Post</button>
-    </form>
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<div class="modal-overlay" id="modal-overlay"></div>
+<div class="modal" id="modal">
+  <h3>Create a Post</h3>
+  <form id="postForm" enctype="multipart/form-data">
+    <div class="form-field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required />
+    </div>
+    <div class="form-field">
+      <label for="surname">Surname:</label>
+      <input type="text" id="surname" name="surname" required />
+    </div>
+    <div class="form-field">
+      <label for="description">Description:</label>
+      <textarea id="description" name="description" required></textarea>
+    </div>
+    <div class="form-field">
+      <label for="image">Image:</label>
+      <input type="file" id="image" name="image" required />
+    </div>
+    <button type="submit">Save Post</button>
+  </form>
+
+  <!-- Loader element to show while saving -->
+  <div id="loader" class="loader" style="display: none;">
+    <div class="spinner"></div>
   </div>
+</div>
+
+<script>
+  document.getElementById('postForm').addEventListener('submit', function(e) {
+    e.preventDefault();  // Allow the form to submit normally
+
+    // Show the loader immediately after the form submission begins
+    document.getElementById('loader').style.display = 'flex';
+
+    // Simulate the form submission (replace this with your actual submission process)
+    const formData = new FormData(this);
+
+    // You can replace this with an actual AJAX/fetch request to submit the form
+    fetch('/your-endpoint', { method: 'POST', body: formData })
+      .then(response => response.json())
+      .then(data => {
+        // Form submission complete (you can process the response if needed)
+        // Hide the loader when the modal is closed
+        document.getElementById('loader').style.display = 'none';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Hide the loader if an error occurs
+        document.getElementById('loader').style.display = 'none';
+      });
+  });
+
+  // Close modal when the user clicks on the overlay (or implement your custom close logic)
+  document.getElementById('modal-overlay').addEventListener('click', function() {
+    // Hide the modal and overlay
+    document.getElementById('modal').style.display = 'none';
+    document.getElementById('modal-overlay').style.display = 'none';
+
+    // Hide the loader when the modal is closed
+    document.getElementById('loader').style.display = 'none';
+  });
+</script>
+
+
 
   <!-- Modal for viewing a post -->
   <div class="modal-overlay" id="viewModal-overlay"></div>
