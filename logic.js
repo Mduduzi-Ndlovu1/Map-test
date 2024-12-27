@@ -84,7 +84,7 @@ const markerIcon = {
       popupAnchor: [0, -30]}),
     'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
       popupAnchor: [0, -30]}),
-    'Property Damage': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+    'Service Delivery': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
       popupAnchor: [0, -30]}),
     'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/crime.png', iconSize: [30, 30],  iconAnchor: [15, 30],
       popupAnchor: [0, -30]}),
