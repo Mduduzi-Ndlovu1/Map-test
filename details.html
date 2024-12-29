@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .details {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    .details h2 {
+      margin-top: 0;
+    }
+    .logo {
+      max-width: 200px;
+    }
+    .products img {
+      max-width: 100px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .links img {
+      max-width: 30px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .links a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #007BFF;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Company Details</h1>
+  <div class="details" id="detailsContainer">
+    <!-- Details will be dynamically added here -->
+  </div>
+
+  <script>
+    // Sample Database
+    const companies = [
+      { id: 1, name: "Company A", logo: "logo-a.png", description: "Description of Company A", 
+        products: ["product-a1.png", "product-a2.png", "product-a3.png"],
+        tiktok: "https://www.tiktok.com/@companyA", facebook: "https://facebook.com/companyA", 
+        instagram: "https://instagram.com/companyA", twitter: "https://twitter.com/companyA", 
+        contact: "123-456-7890" 
+      },
+      { id: 2, name: "Company B", logo: "logo-b.png", description: "Description of Company B", 
+        products: ["product-b1.png", "product-b2.png", "product-b3.png"],
+        tiktok: "https://www.tiktok.com/@companyB", facebook: "https://facebook.com/companyB", 
+        instagram: "https://instagram.com/companyB", twitter: "https://twitter.com/companyB", 
+        contact: "987-654-3210"
+      }
+    ];
+
+    // Get the company ID from the URL
+    const params = new URLSearchParams(window.location.search);
+    const companyId = parseInt(params.get('id'));
+
+    // Find the company in the database
+    const company = companies.find(c => c.id === companyId);
+
+    // Display the details
+    if (company) {
+      const container = document.getElementById('detailsContainer');
+      container.innerHTML = `
+        <h2>${company.name}</h2>
+        <img src="${company.logo}" alt="${company.name} Logo" class="logo">
+        <p><strong>Description:</strong> ${company.description}</p>
+        <div class="products">
+          <h3>Products:</h3>
+          ${company.products.map(img => `<img src="${img}" alt="Product">`).join('')}
+        </div>
+        <div class="links">
+          <h3>Links:</h3>
+          <a href="${company.tiktok}" target="_blank"><img src="tiktok-icon.png" alt="TikTok">TikTok</a>
+          <a href="${company.facebook}" target="_blank"><img src="facebook-icon.png" alt="Facebook">Facebook</a>
+          <a href="${company.instagram}" target="_blank"><img src="instagram-icon.png" alt="Instagram">Instagram</a>
+          <a href="${company.twitter}" target="_blank"><img src="twitter-icon.png" alt="Twitter">Twitter</a>
+        </div>
+        <p><strong>Contact:</strong> ${company.contact}</p>
+      `;
+    } else {
+      document.getElementById('detailsContainer').textContent = 'Company not found.';
+    }
+  </script>
+</body>
+</html>
