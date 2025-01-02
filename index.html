@@ -4,42 +4,7 @@
         e.preventDefault(); // This will prevent the context menu from appearing
     });
   </script>
-<div id="install-modal" style="display: none;">
-  <div class="modal-content">
-    <h2>Install Our App</h2>
-    <p>Enjoy faster access by installing our app on your home screen.</p>
-    <button id="modal-install-button">Install App</button>
-  </div>
-<script>
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); // Prevent the default prompt
-  deferredPrompt = e; // Save the event for later
-  const installModal = document.getElementById('install-modal');
-  
-  setTimeout(() => {
-    installModal.style.display = 'block'; // Show modal after delay
-    document.getElementById('modal-install-button').click(); // Automatically click the install button
-  }, 3000); // Auto-open modal after 3 seconds
-});
-
-// Manually trigger the prompt if the modal button is clicked
-document.getElementById('modal-install-button').addEventListener('click', () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('App installed');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-      deferredPrompt = null;
-    });
-  }
-});
-
-
-</script>
 </div>
 
   <!DOCTYPE html>
@@ -229,33 +194,24 @@ const installButton = document.getElementById('install-button');
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault(); // Prevent the default prompt
   deferredPrompt = e; // Save the event for later
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('autoInstall') === 'true') {
-    setTimeout(() => {
-      triggerInstallPrompt();
-    }, 3000); // Trigger install after 3 seconds
-  } else {
-    installButton.style.display = 'block'; // Show the button if not auto
-  }
+  installButton.style.display = 'block'; // Show the install button
 });
 
-// Function to trigger the install prompt
-function triggerInstallPrompt() {
+// Add a click event listener to the Install button
+installButton.addEventListener('click', () => {
+  installButton.style.display = 'none'; // Hide the button after it is clicked
   if (deferredPrompt) {
-    deferredPrompt.prompt();
+    deferredPrompt.prompt(); // Show the install prompt
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('App installed');
+        console.log('User accepted the install prompt');
       } else {
         console.log('User dismissed the install prompt');
       }
-      deferredPrompt = null;
+      deferredPrompt = null; // Clear the saved event
     });
   }
-}
-
-// Button click fallback (if users arrive without the parameter)
-installButton.addEventListener('click', triggerInstallPrompt);
+});
 
 
 </script>
