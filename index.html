@@ -165,6 +165,35 @@
           <div class="image-description">
             <p>This map highlights key community issues and available resources. Explore the markers to find out more.</p>
           </div>
+<button id="install-button" style="display: none;">Install App</button>
+<script>
+let deferredPrompt;
+const installButton = document.getElementById('install-button');
+
+// Listen for the 'beforeinstallprompt' event
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); // Prevent the default prompt
+  deferredPrompt = e; // Save the event for later
+  installButton.style.display = 'block'; // Show the install button
+});
+
+// Add a click event listener to the Install button
+installButton.addEventListener('click', () => {
+  installButton.style.display = 'none'; // Hide the button after it is clicked
+  if (deferredPrompt) {
+    deferredPrompt.prompt(); // Show the install prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null; // Clear the saved event
+    });
+  }
+});
+
+</script>
         </div>
 
         <!-- Section 2: Resources Description -->
