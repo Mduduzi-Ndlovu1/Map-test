@@ -32,34 +32,6 @@ if (postButton) {
 
 
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js').then(() => {
-    console.log('Service Worker registered');
-  });
-}
-
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  // Show install button or message
-});
-
-document.getElementById('install-button').addEventListener('click', () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('App installed');
-      }
-      deferredPrompt = null;
-    });
-  }
-});
-
-
-
 
 
 
