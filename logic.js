@@ -10,7 +10,7 @@ window.addEventListener('load', function() {
   setTimeout(function() {
     // Hide the loading screen after 3 seconds or when the map is ready
     loadingScreen.style.display = 'none';
-  }, 3000); // Adjust time as needed
+  }, 30000); // Adjust time as needed
 });
 
 // Show loading animation on the "Save Post" button
