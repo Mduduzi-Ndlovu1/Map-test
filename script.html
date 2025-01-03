@@ -3,148 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-
-        /* Navbar Styles */
-        nav {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 25px;
-            margin: 20px;
-            display: flex;
-            justify-content: space-around;
-        }
-
-        nav button {
-            background-color: #444;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        nav button:hover {
-            background-color: #555;
-        }
-
-        /* Filter Div Styles */
-        .filter-div {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px;
-        }
-
-        .filter-div select {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .filter-div img {
-            width: 100px;
-            height: 100px;
-            margin: 5px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            width: 400px;
-        }
-
-        .modal-content img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .modal-content h3 {
-            margin-top: 10px;
-        }
-
-        .modal-content p {
-            margin-top: 10px;
-        }
-
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-    </style>
+    <title>Dynamic Landing Page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- Navbar -->
-<nav>
-    <button id="nationalBtn">National</button>
-    <button id="provincialBtn">Provincial</button>
-    <button id="municipalBtn">Municipal</button>
-    <button id="wardalBtn">Wardal</button>
-    <button id="sectionalBtn">Sectional</button>
-    <button id="streetBtn">Street</button>
+<nav id="navbar">
+    <!-- Nav items will be dynamically added here -->
 </nav>
 
 <!-- Filter Div -->
-<div class="filter-div">
-    <select id="nationalSelect">
-        <option value="1">Nation 1</option>
-        <option value="2">Nation 2</option>
-        <option value="3">Nation 3</option>
-        <option value="4">Nation 4</option>
-        <option value="5">Nation 5</option>
-    </select>
-    <img id="nationImg" src="https://via.placeholder.com/100" alt="Nation Image">
-</div>
-
-<div class="filter-div">
-    <select id="provincialSelect">
-        <option value="1">Provincial 1</option>
-        <option value="2">Provincial 2</option>
-        <option value="3">Provincial 3</option>
-        <option value="4">Provincial 4</option>
-        <option value="5">Provincial 5</option>
-    </select>
-    <img id="provincialImg" src="https://via.placeholder.com/100" alt="Provincial Image">
+<div id="filters">
+    <!-- Filter options will be dynamically added here -->
 </div>
 
 <!-- Modal -->
@@ -158,65 +29,88 @@
 </div>
 
 <script>
-// JavaScript functionality
+document.addEventListener("DOMContentLoaded", function () {
+    // Data for National and Provincial options (example data)
+    const navItems = ['National', 'Provincial', 'Municipal', 'Wardal', 'Sectional', 'Street'];
+    const itemsData = {
+        'National': ['nation1.jpg', 'nation2.jpg', 'nation3.jpg', 'nation4.jpg', 'nation5.jpg'],
+        'Provincial': ['provincial1.jpg', 'provincial2.jpg', 'provincial3.jpg', 'provincial4.jpg', 'provincial5.jpg']
+    };
 
-// Images for the filter selection
-const images = {
-    national: {
-        1: "https://via.placeholder.com/100/ff0000",
-        2: "https://via.placeholder.com/100/00ff00",
-        3: "https://via.placeholder.com/100/0000ff",
-        4: "https://via.placeholder.com/100/ffff00",
-        5: "https://via.placeholder.com/100/ff00ff"
-    },
-    provincial: {
-        1: "https://via.placeholder.com/100/ffaaaa",
-        2: "https://via.placeholder.com/100/aaaaff",
-        3: "https://via.placeholder.com/100/aaffaa",
-        4: "https://via.placeholder.com/100/ffffaa",
-        5: "https://via.placeholder.com/100/ff00aa"
+    const descriptions = {
+        'nation1': 'Description for Nation 1.',
+        'nation2': 'Description for Nation 2.',
+        'nation3': 'Description for Nation 3.',
+        'nation4': 'Description for Nation 4.',
+        'nation5': 'Description for Nation 5.',
+        'provincial1': 'Description for Provincial 1.',
+        'provincial2': 'Description for Provincial 2.',
+        'provincial3': 'Description for Provincial 3.',
+        'provincial4': 'Description for Provincial 4.',
+        'provincial5': 'Description for Provincial 5.'
+    };
+
+    const navbar = document.getElementById('navbar');
+    const filtersDiv = document.getElementById('filters');
+    const modal = document.getElementById('myModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalImage = document.getElementById('modalImage');
+    const modalDescription = document.getElementById('modalDescription');
+    const closeModal = document.querySelector('.close');
+
+    // Function to open modal
+    function openModal(itemName, category) {
+        modalTitle.textContent = `You have selected ${category} ${itemName}`;
+        modalImage.src = `images/${category.toLowerCase() + itemName}.jpg`;
+        modalDescription.textContent = descriptions[category.toLowerCase() + itemName];
+        modal.style.display = "flex";
     }
-};
 
-// Modal display function
-function openModal(item, type) {
-    const modal = document.getElementById("myModal");
-    const title = document.getElementById("modalTitle");
-    const image = document.getElementById("modalImage");
-    const description = document.getElementById("modalDescription");
+    // Event listener to close modal
+    closeModal.addEventListener('click', function () {
+        modal.style.display = "none";
+    });
 
-    title.textContent = `You have selected ${type} ${item}`;
-    image.src = images[type.toLowerCase()][item];
-    description.textContent = `This is the description for ${type} ${item}.`;
+    // Create Nav items dynamically
+    navItems.forEach(item => {
+        const button = document.createElement('button');
+        button.textContent = item;
+        button.addEventListener('click', () => {
+            // Example: Open modal for National when clicked
+            openModal('3', item); // Example item (e.g., '3' for nation3)
+        });
+        navbar.appendChild(button);
+    });
 
-    modal.style.display = "flex";
-}
+    // Create filter options dynamically for National and Provincial
+    for (let category in itemsData) {
+        const select = document.createElement('select');
+        select.id = `${category.toLowerCase()}Select`;
+        const imgContainer = document.createElement('div');
+        imgContainer.id = `${category.toLowerCase()}ImgContainer`;
 
-// Close modal functionality
-const closeModal = document.getElementsByClassName("close")[0];
-closeModal.onclick = function() {
-    document.getElementById("myModal").style.display = "none";
-}
+        itemsData[category].forEach((img, index) => {
+            const option = document.createElement('option');
+            option.value = index + 1;
+            option.textContent = `${category} ${index + 1}`;
 
-// Event listeners for Navbar buttons
-document.getElementById("nationalBtn").onclick = function() {
-    openModal(3, "National");
-};
-document.getElementById("provincialBtn").onclick = function() {
-    openModal(2, "Provincial");
-};
+            const imgElement = document.createElement('img');
+            imgElement.src = `images/${img}`;
+            imgElement.alt = `${category} Image ${index + 1}`;
+            imgElement.addEventListener('click', function () {
+                openModal(`${index + 1}`, category);
+            });
 
-// Filter change functionality
-document.getElementById("nationalSelect").addEventListener("change", function(e) {
-    const value = e.target.value;
-    document.getElementById("nationImg").src = images.national[value];
+            imgContainer.appendChild(imgElement);
+            select.appendChild(option);
+        });
+
+        filtersDiv.appendChild(select);
+        filtersDiv.appendChild(imgContainer);
+    }
 });
 
-document.getElementById("provincialSelect").addEventListener("change", function(e) {
-    const value = e.target.value;
-    document.getElementById("provincialImg").src = images.provincial[value];
-});
+
 </script>
-
 </body>
 </html>
