@@ -193,6 +193,10 @@ function openModal(locationType) {
 
   // Populate modal sections dynamically
   if (data[locationType]) {
+    // Set Modal Title
+    const modalTitle = document.getElementById('modal-title');
+    modalTitle.textContent = `Explore ${data[locationType][0].name}`;
+
     // Logo Container
     const logo = document.createElement('img');
     logo.src = data[locationType][0].imagePath; // Assuming the first item represents the location logo
@@ -208,74 +212,29 @@ function openModal(locationType) {
     });
 
     // Community Flag and Description
-    const communityFlag = document.createElement('img');
-    communityFlag.src = data[locationType][0].imagePath; // Same as logo for simplicity
+    const communityFlag = modal.querySelector('#community-flag');
+    communityFlag.src = data[locationType][0].imagePath;
     communityFlag.alt = `${data[locationType][0].name} Flag`;
-    modal.querySelector('#community-flag').appendChild(communityFlag);
+    const communityDescription = modal.querySelector('#community-hero-description');
+    communityDescription.textContent = `Welcome to ${data[locationType][0].name} Community!`;
 
-    const communityDescription = document.createElement('p');
-    communityDescription.textContent = `Welcome to ${data[locationType][0].name}. Here you can explore more about this region.`;
-    modal.querySelector('#community-hero-description').appendChild(communityDescription);
-
-    // Timeline Section (Sample Data)
-    const timeline = ['Event 1: Date', 'Event 2: Date', 'Event 3: Date'];
-    timeline.forEach(event => {
-      const eventItem = document.createElement('div');
-      eventItem.textContent = event;
-      modal.querySelector('#timeline-container').appendChild(eventItem);
-    });
-
-    // Announcements (Sample Data)
-    const announcements = ['Announcement 1', 'Announcement 2', 'Announcement 3'];
-    announcements.forEach(announcement => {
-      const announcementItem = document.createElement('div');
-      announcementItem.textContent = announcement;
-      modal.querySelector('#announcement-list').appendChild(announcementItem);
-    });
-
-    // Achievements Section (Sample Data)
-    const achievements = ['Achievement 1', 'Achievement 2', 'Achievement 3'];
-    achievements.forEach(achievement => {
-      const achievementItem = document.createElement('div');
-      achievementItem.textContent = achievement;
-      modal.querySelector('#achievements-content').appendChild(achievementItem);
-    });
-
-    // Charts Section (Sample Data)
-    const chartData = ['Chart 1', 'Chart 2', 'Chart 3'];
-    chartData.forEach(chart => {
-      const chartItem = document.createElement('div');
-      chartItem.textContent = chart;
-      modal.querySelector('#stats-charts-container').appendChild(chartItem);
-    });
-
-    // News Section (Sample Data)
-    const newsItems = ['News 1', 'News 2', 'News 3'];
-    newsItems.forEach(news => {
-      const newsItem = document.createElement('div');
-      newsItem.textContent = news;
-      modal.querySelector('#news-list').appendChild(newsItem);
-    });
-
-    // Show the modal
-    modal.style.display = 'block';
+    // Timeline, Announcements, etc. can be populated similarly
   }
+
+  // Display modal
+  modal.style.display = 'block';
 }
 
-// Close modal
-document.querySelector('#close-modal').addEventListener('click', function() {
+// Close modal functionality
+document.querySelector('.close-modal').addEventListener('click', function() {
   const modal = document.getElementById('modal');
   modal.style.display = 'none';
 });
 
-// Close modal if user clicks outside of it
-window.addEventListener('click', function(event) {
-  const modal = document.getElementById('modal');
-  if (event.target === modal) {
-    modal.style.display = 'none';
-  }
-});
+// Initialize map (example for Leaflet map)
+const map = L.map('map').setView([51.505, -0.09], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-</script>
+  </script>
 </body>
 </html>
