@@ -1,240 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1Pulse Online Map</title>
-  <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        /* Navbar Styles */
+        nav {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 25px;
+            margin: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav button {
+            background-color: #444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        nav button:hover {
+            background-color: #555;
+        }
+
+        /* Filter Div Styles */
+        .filter-div {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .filter-div select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .filter-div img {
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 400px;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .modal-content h3 {
+            margin-top: 10px;
+        }
+
+        .modal-content p {
+            margin-top: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
 <body>
-  <!-- Logo Navigation Bar -->
-  <nav id="logo-nav">
-    <div id="logo-container">
-      <!-- Logos dynamically updated via JavaScript -->
+
+<!-- Navbar -->
+<nav>
+    <button id="nationalBtn">National</button>
+    <button id="provincialBtn">Provincial</button>
+    <button id="municipalBtn">Municipal</button>
+    <button id="wardalBtn">Wardal</button>
+    <button id="sectionalBtn">Sectional</button>
+    <button id="streetBtn">Street</button>
+</nav>
+
+<!-- Filter Div -->
+<div class="filter-div">
+    <select id="nationalSelect">
+        <option value="1">Nation 1</option>
+        <option value="2">Nation 2</option>
+        <option value="3">Nation 3</option>
+        <option value="4">Nation 4</option>
+        <option value="5">Nation 5</option>
+    </select>
+    <img id="nationImg" src="https://via.placeholder.com/100" alt="Nation Image">
+</div>
+
+<div class="filter-div">
+    <select id="provincialSelect">
+        <option value="1">Provincial 1</option>
+        <option value="2">Provincial 2</option>
+        <option value="3">Provincial 3</option>
+        <option value="4">Provincial 4</option>
+        <option value="5">Provincial 5</option>
+    </select>
+    <img id="provincialImg" src="https://via.placeholder.com/100" alt="Provincial Image">
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modalTitle"></h3>
+        <img id="modalImage" src="" alt="Selected Item Image">
+        <p id="modalDescription"></p>
     </div>
-  </nav>
+</div>
 
-  <!-- Main Content Area -->
-  <main>
-    <!-- Map Section -->
-    <div id="map-container">
-      <div id="map"></div>
-    </div>
+<script>
+// JavaScript functionality
 
-    <!-- Modal: Detailed Information -->
-    <div id="modal" class="modal">
-      <div class="modal-header">
-        <h2 id="modal-title"></h2>
-        <button class="close-modal" aria-label="Close">&times;</button>
-      </div>
-      <div class="modal-content">
-        <!-- Hero-Local Section -->
-        <section id="hero-local" class="modal-section">
-          <div class="carousel" id="hero-carousel">
-            <!-- Images dynamically populated -->
-          </div>
-        </section>
-
-        <!-- Community Hero Section -->
-        <section id="community-hero" class="modal-section">
-          <h3>Community Hero</h3>
-          <div class="hero-content">
-            <img id="community-flag" alt="Local Flag">
-            <p id="community-hero-description"></p>
-            <a href="#" id="read-more-hero" class="cta-button">Read More</a>
-          </div>
-        </section>
-
-        <!-- Community History Section -->
-        <section id="community-history" class="modal-section">
-          <h3>Community History</h3>
-          <div id="timeline-container">
-            <!-- Timeline dynamically populated -->
-          </div>
-        </section>
-
-        <!-- Announcements Section -->
-        <section id="announcements" class="modal-section">
-          <h3>Announcements</h3>
-          <ul id="announcement-list">
-            <!-- Announcements dynamically populated -->
-          </ul>
-        </section>
-
-        <!-- Achievements Section -->
-        <section id="achievements" class="modal-section">
-          <h3>Achievements</h3>
-          <div id="achievements-content">
-            <!-- Dynamic highlights and ratings -->
-          </div>
-        </section>
-
-        <!-- 1Pulse Section -->
-        <section id="1pulse-stats" class="modal-section">
-          <h3>Community Insights</h3>
-          <p id="stats-overview"></p>
-          <div class="stats-charts" id="stats-charts-container">
-            <!-- Charts dynamically generated -->
-          </div>
-        </section>
-
-        <!-- All News Section -->
-        <section id="all-news" class="modal-section">
-          <h3>All News</h3>
-          <ul id="news-list">
-            <!-- News dynamically populated -->
-          </ul>
-        </section>
-      </div>
-    </div>
-
-    <!-- Create Post Modal -->
-    <div id="create-post-modal" class="modal">
-      <h3>Create a Post</h3>
-      <form id="create-post-form">
-        <div class="form-group">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label for="surname">Surname:</label>
-          <input type="text" id="surname" name="surname" required>
-        </div>
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="post-type">Type:</label>
-          <select id="post-type" name="post-type" required>
-            <option value="" disabled selected>Select a type...</option>
-            <option value="Good Deeds">Good Deeds</option>
-            <option value="Health">Health</option>
-            <option value="Service Delivery">Service Delivery</option>
-            <option value="Violent Crime">Violent Crime</option>
-            <option value="Looting">Looting</option>
-            <option value="Non-compliance">Non-compliance</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="image">Image:</label>
-          <input type="file" id="image" name="image" required>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  </main>
-
-  <!-- Scripts -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-// Sample data structure for dynamic content
-const data = {
-  national: [
-    { name: 'South Africa', imagePath: 'path/to/south_africa_flag.png' },
-    { name: 'Mozambique', imagePath: 'path/to/mozambique_flag.png' },
-    { name: 'Lesotho', imagePath: 'path/to/lesotho_flag.png' },
-    { name: 'Eswatini', imagePath: 'path/to/eswatini_flag.png' },
-    { name: 'Zimbabwe', imagePath: 'path/to/zimbabwe_flag.png' }
-  ],
-  provinces: [
-    { name: 'Eastern Cape', imagePath: 'path/to/eastern_cape_flag.png' },
-    { name: 'Free State', imagePath: 'path/to/free_state_flag.png' },
-    { name: 'Gauteng', imagePath: 'path/to/gauteng_flag.png' },
-    { name: 'KwaZulu-Natal', imagePath: 'path/to/kwazulu_natal_flag.png' },
-    { name: 'Limpopo', imagePath: 'path/to/limpopo_flag.png' },
-    { name: 'Mpumalanga', imagePath: 'path/to/mpumalanga_flag.png' },
-    { name: 'Northern Cape', imagePath: 'path/to/northern_cape_flag.png' },
-    { name: 'North West', imagePath: 'path/to/north_west_flag.png' },
-    { name: 'Western Cape', imagePath: 'path/to/western_cape_flag.png' }
-  ],
-  municipalities: [
-    { name: 'City of Cape Town Metropolitan Municipality', imagePath: 'path/to/city_of_cape_town_flag.png' },
-    { name: 'City of Johannesburg Metropolitan Municipality', imagePath: 'path/to/city_of_johannesburg_flag.png' }
-  ],
-  wards: [
-    { name: 'Ward 1', imagePath: 'path/to/ward_placeholder.png' },
-    { name: 'Ward 2', imagePath: 'path/to/ward_placeholder.png' }
-  ],
-  sections: [
-    { name: 'Section 1', imagePath: 'path/to/section_placeholder.png' },
-    { name: 'Section 2', imagePath: 'path/to/section_placeholder.png' }
-  ],
-  streets: [
-    { name: 'Street 1', imagePath: 'path/to/street_placeholder.png' },
-    { name: 'Street 2', imagePath: 'path/to/street_placeholder.png' }
-  ]
+// Images for the filter selection
+const images = {
+    national: {
+        1: "https://via.placeholder.com/100/ff0000",
+        2: "https://via.placeholder.com/100/00ff00",
+        3: "https://via.placeholder.com/100/0000ff",
+        4: "https://via.placeholder.com/100/ffff00",
+        5: "https://via.placeholder.com/100/ff00ff"
+    },
+    provincial: {
+        1: "https://via.placeholder.com/100/ffaaaa",
+        2: "https://via.placeholder.com/100/aaaaff",
+        3: "https://via.placeholder.com/100/aaffaa",
+        4: "https://via.placeholder.com/100/ffffaa",
+        5: "https://via.placeholder.com/100/ff00aa"
+    }
 };
 
-// Event listener for navigation button clicks
-document.querySelectorAll('.nav-button').forEach(button => {
-  button.addEventListener('click', function() {
-    const locationType = button.getAttribute('data-location-type'); // Get location type (e.g., national, province)
-    openModal(locationType);
-  });
-});
+// Modal display function
+function openModal(item, type) {
+    const modal = document.getElementById("myModal");
+    const title = document.getElementById("modalTitle");
+    const image = document.getElementById("modalImage");
+    const description = document.getElementById("modalDescription");
 
-// Open modal and populate with dynamic data based on location type
-function openModal(locationType) {
-  const modal = document.getElementById('modal');
-  
-  // Clear previous content
-  modal.querySelector('#logo-container').innerHTML = '';
-  modal.querySelector('#hero-carousel').innerHTML = '';
-  modal.querySelector('#community-flag').innerHTML = '';
-  modal.querySelector('#community-hero-description').innerHTML = '';
-  modal.querySelector('#timeline-container').innerHTML = '';
-  modal.querySelector('#announcement-list').innerHTML = '';
-  modal.querySelector('#achievements-content').innerHTML = '';
-  modal.querySelector('#stats-charts-container').innerHTML = '';
-  modal.querySelector('#news-list').innerHTML = '';
+    title.textContent = `You have selected ${type} ${item}`;
+    image.src = images[type.toLowerCase()][item];
+    description.textContent = `This is the description for ${type} ${item}.`;
 
-  // Populate modal sections dynamically
-  if (data[locationType]) {
-    // Set Modal Title
-    const modalTitle = document.getElementById('modal-title');
-    modalTitle.textContent = `Explore ${data[locationType][0].name}`;
-
-    // Logo Container
-    const logo = document.createElement('img');
-    logo.src = data[locationType][0].imagePath; // Assuming the first item represents the location logo
-    logo.alt = `${data[locationType][0].name} Flag`;
-    modal.querySelector('#logo-container').appendChild(logo);
-
-    // Hero Carousel
-    data[locationType].forEach(item => {
-      const img = document.createElement('img');
-      img.src = item.imagePath;
-      img.alt = item.name;
-      modal.querySelector('#hero-carousel').appendChild(img);
-    });
-
-    // Community Flag and Description
-    const communityFlag = modal.querySelector('#community-flag');
-    communityFlag.src = data[locationType][0].imagePath;
-    communityFlag.alt = `${data[locationType][0].name} Flag`;
-    const communityDescription = modal.querySelector('#community-hero-description');
-    communityDescription.textContent = `Welcome to ${data[locationType][0].name} Community!`;
-
-    // Timeline, Announcements, etc. can be populated similarly
-  }
-
-  // Display modal
-  modal.style.display = 'block';
+    modal.style.display = "flex";
 }
 
 // Close modal functionality
-document.querySelector('.close-modal').addEventListener('click', function() {
-  const modal = document.getElementById('modal');
-  modal.style.display = 'none';
+const closeModal = document.getElementsByClassName("close")[0];
+closeModal.onclick = function() {
+    document.getElementById("myModal").style.display = "none";
+}
+
+// Event listeners for Navbar buttons
+document.getElementById("nationalBtn").onclick = function() {
+    openModal(3, "National");
+};
+document.getElementById("provincialBtn").onclick = function() {
+    openModal(2, "Provincial");
+};
+
+// Filter change functionality
+document.getElementById("nationalSelect").addEventListener("change", function(e) {
+    const value = e.target.value;
+    document.getElementById("nationImg").src = images.national[value];
 });
 
-// Initialize map (example for Leaflet map)
-const map = L.map('map').setView([51.505, -0.09], 13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+document.getElementById("provincialSelect").addEventListener("change", function(e) {
+    const value = e.target.value;
+    document.getElementById("provincialImg").src = images.provincial[value];
+});
+</script>
 
-  </script>
 </body>
 </html>
