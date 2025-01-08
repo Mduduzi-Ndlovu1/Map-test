@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #ddd;
+    }
+
+    .details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .details h3 {
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Case Management System</h1>
+  <div class="container">
+
+    <h3>Add New Case</h3>
+    <form id="add-case-form">
+      <div class="form-group">
+        <label for="case-title">Case Title:</label>
+        <input type="text" id="case-title" placeholder="Enter case title" required>
+      </div>
+      <div class="form-group">
+        <label for="case-description">Case Description:</label>
+        <textarea id="case-description" rows="3" placeholder="Enter case description" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="case-number">Case Number:</label>
+        <input type="text" id="case-number" placeholder="Enter case number" required>
+      </div>
+      <button type="submit">Add Case</button>
+    </form>
+
+    <h3>Case List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Case Number</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Players Assigned</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="case-table-body">
+        <!-- Cases will be dynamically added here -->
+      </tbody>
+    </table>
+
+    <h3>Assign Players</h3>
+    <form id="assign-player-form">
+      <div class="form-group">
+        <label for="case-select">Select Case:</label>
+        <select id="case-select" required>
+          <option value="">Select a case</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="player-name">Player Name:</label>
+        <input type="text" id="player-name" placeholder="Enter player name" required>
+      </div>
+      <button type="submit">Assign Player</button>
+    </form>
+  </div>
+
+  <script>
+    const cases = [];
+    const caseAssignments = {};
+
+    // Function to render the cases table
+    function renderCases() {
+      const caseTableBody = document.getElementById("case-table-body");
+      caseTableBody.innerHTML = "";
+
+      cases.forEach((c) => {
+        const playersAssigned = caseAssignments[c.caseNumber] || [];
+        caseTableBody.innerHTML += `
+          <tr>
+            <td>${c.caseNumber}</td>
+            <td>${c.title}</td>
+            <td>${c.description}</td>
+            <td>${playersAssigned.length}</td>
+            <td>
+              <button onclick="viewPlayers('${c.caseNumber}')">View Players</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      updateCaseSelect();
+    }
+
+    // Function to update the case dropdown for assigning players
+    function updateCaseSelect() {
+      const caseSelect = document.getElementById("case-select");
+      caseSelect.innerHTML = `<option value="">Select a case</option>`;
+
+      cases.forEach((c) => {
+        caseSelect.innerHTML += `<option value="${c.caseNumber}">${c.caseNumber} - ${c.title}</option>`;
+      });
+    }
+
+    // Function to handle adding a case
+    document.getElementById("add-case-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById("case-title").value;
+      const description = document.getElementById("case-description").value;
+      const caseNumber = document.getElementById("case-number").value;
+
+      if (cases.some((c) => c.caseNumber === caseNumber)) {
+        alert("Case number must be unique!");
+        return;
+      }
+
+      cases.push({ caseNumber, title, description });
+      renderCases();
+
+      document.getElementById("add-case-form").reset();
+    });
+
+    // Function to handle assigning a player
+    document.getElementById("assign-player-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const caseNumber = document.getElementById("case-select").value;
+      const playerName = document.getElementById("player-name").value;
+
+      if (!caseNumber) {
+        alert("Please select a case.");
+        return;
+      }
+
+      if (!caseAssignments[caseNumber]) {
+        caseAssignments[caseNumber] = [];
+      }
+
+      caseAssignments[caseNumber].push(playerName);
+      renderCases();
+
+      document.getElementById("assign-player-form").reset();
+    });
+
+    // Function to view players assigned to a case
+    function viewPlayers(caseNumber) {
+      const players = caseAssignments[caseNumber] || [];
+      alert(`Players assigned to Case ${caseNumber}:\n${players.join(", ") || "No players assigned."}`);
+    }
+  </script>
+</body>
+</html>
