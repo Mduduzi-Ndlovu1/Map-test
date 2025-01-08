@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1pulse.online Scoreboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .scoreboard {
+      max-width: 800px;
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .scoreboard th, .scoreboard td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .scoreboard th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .scoreboard tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .scoreboard tr:hover {
+      background-color: #ddd;
+    }
+
+    .details {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>1pulse.online Scoreboard</h1>
+
+  <table class="scoreboard">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Player</th>
+        <th>League</th>
+        <th>Score</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="scoreboard-body">
+      <tr>
+        <td>1</td>
+        <td data-id="player1">Team A</td>
+        <td>Political Party League</td>
+        <td class="score" data-id="player1">1200</td>
+        <td><button onclick="viewDetails('player1')">View</button></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td data-id="player2">Hero John</td>
+        <td>Independent Hero League</td>
+        <td class="score" data-id="player2">900</td>
+        <td><button onclick="viewDetails('player2')">View</button></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td data-id="player3">NPO Unity</td>
+        <td>NPO League</td>
+        <td class="score" data-id="player3">750</td>
+        <td><button onclick="viewDetails('player3')">View</button></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td data-id="player4">Branch X</td>
+        <td>Municipal League</td>
+        <td class="score" data-id="player4">600</td>
+        <td><button onclick="viewDetails('player4')">View</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="details" id="details-container">
+    <h2>Player Details</h2>
+    <p id="player-details">Click "View" to see player details.</p>
+    <button onclick="updateScore()">Update Score</button>
+  </div>
+
+  <script>
+    const players = {
+      player1: {
+        name: "Team A",
+        league: "Political Party League",
+        score: 1200
+      },
+      player2: {
+        name: "Hero John",
+        league: "Independent Hero League",
+        score: 900
+      },
+      player3: {
+        name: "NPO Unity",
+        league: "NPO League",
+        score: 750
+      },
+      player4: {
+        name: "Branch X",
+        league: "Municipal League",
+        score: 600
+      }
+    };
+
+    let selectedPlayerId = null;
+
+    function viewDetails(playerId) {
+      selectedPlayerId = playerId;
+      const player = players[playerId];
+      document.getElementById("player-details").innerHTML = `
+        <strong>Name:</strong> ${player.name}<br>
+        <strong>League:</strong> ${player.league}<br>
+        <strong>Score:</strong> <span id="current-score">${player.score}</span>
+      `;
+    }
+
+    function updateScore() {
+      if (!selectedPlayerId) {
+        alert("Please select a player first.");
+        return;
+      }
+      
+      const newScore = prompt("Enter the new score:");
+      if (newScore && !isNaN(newScore)) {
+        players[selectedPlayerId].score = parseInt(newScore);
+        document.getElementById("current-score").innerText = newScore;
+        document.querySelector(`.score[data-id="${selectedPlayerId}"]`).innerText = newScore;
+      } else {
+        alert("Invalid score!");
+      }
+    }
+  </script>
+</body>
+</html>
