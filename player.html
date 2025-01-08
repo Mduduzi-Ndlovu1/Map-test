@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Profile Management</title>
+  <title>User Profile System</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,7 +11,7 @@
       padding: 20px;
     }
 
-    h1 {
+    h1, h3 {
       text-align: center;
       color: #333;
     }
@@ -51,4 +51,182 @@
       margin: 20px 0;
     }
 
-    table th
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #ddd;
+    }
+
+    .details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .details h3 {
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Profile Management</h1>
+  <div class="container">
+
+    <h3>Register User</h3>
+    <form id="user-profile-form">
+      <div class="form-group">
+        <label for="user-name">Full Name:</label>
+        <input type="text" id="user-name" placeholder="Enter full name" required>
+      </div>
+      <div class="form-group">
+        <label for="user-age">Age:</label>
+        <input type="number" id="user-age" placeholder="Enter age" required>
+      </div>
+      <div class="form-group">
+        <label for="user-area">Area:</label>
+        <input type="text" id="user-area" placeholder="Enter area (e.g., Ward 5)" required>
+      </div>
+      <div class="form-group">
+        <label for="user-education">Education Level:</label>
+        <select id="user-education" required>
+          <option value="">Select Education Level</option>
+          <option value="None">None</option>
+          <option value="Primary School">Primary School</option>
+          <option value="High School">High School</option>
+          <option value="Undergraduate Degree">Undergraduate Degree</option>
+          <option value="Postgraduate Degree">Postgraduate Degree</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="user-employment">Employment Status:</label>
+        <select id="user-employment" required>
+          <option value="">Select Employment Status</option>
+          <option value="Unemployed">Unemployed</option>
+          <option value="Part-Time">Part-Time</option>
+          <option value="Full-Time">Full-Time</option>
+          <option value="Self-Employed">Self-Employed</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="user-dependents">Number of Dependents:</label>
+        <input type="number" id="user-dependents" placeholder="Enter number of dependents" required>
+      </div>
+      <button type="submit">Add User</button>
+    </form>
+
+    <h3>Community Members</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Area</th>
+          <th>Education</th>
+          <th>Employment</th>
+          <th>Dependents</th>
+        </tr>
+      </thead>
+      <tbody id="user-table-body">
+        <!-- User profiles will be dynamically added here -->
+      </tbody>
+    </table>
+
+    <h3>Area Summary</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Total Population</th>
+          <th>Total Dependents</th>
+        </tr>
+      </thead>
+      <tbody id="area-summary-body">
+        <!-- Area summary will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const users = [];
+    const areaSummary = {};
+
+    // Function to render the user table
+    function renderUsers() {
+      const userTableBody = document.getElementById("user-table-body");
+      userTableBody.innerHTML = "";
+
+      users.forEach(user => {
+        userTableBody.innerHTML += `
+          <tr>
+            <td>${user.name}</td>
+            <td>${user.age}</td>
+            <td>${user.area}</td>
+            <td>${user.education}</td>
+            <td>${user.employment}</td>
+            <td>${user.dependents}</td>
+          </tr>
+        `;
+      });
+
+      updateAreaSummary();
+    }
+
+    // Function to update area summary
+    function updateAreaSummary() {
+      const areaSummaryBody = document.getElementById("area-summary-body");
+      areaSummaryBody.innerHTML = "";
+
+      for (const area in areaSummary) {
+        areaSummaryBody.innerHTML += `
+          <tr>
+            <td>${area}</td>
+            <td>${areaSummary[area].population}</td>
+            <td>${areaSummary[area].dependents}</td>
+          </tr>
+        `;
+      }
+    }
+
+    // Function to handle user form submission
+    document.getElementById("user-profile-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("user-name").value;
+      const age = parseInt(document.getElementById("user-age").value);
+      const area = document.getElementById("user-area").value;
+      const education = document.getElementById("user-education").value;
+      const employment = document.getElementById("user-employment").value;
+      const dependents = parseInt(document.getElementById("user-dependents").value);
+
+      // Add user to the list
+      users.push({ name, age, area, education, employment, dependents });
+
+      // Update area summary
+      if (!areaSummary[area]) {
+        areaSummary[area] = { population: 0, dependents: 0 };
+      }
+      areaSummary[area].population += 1;
+      areaSummary[area].dependents += dependents;
+
+      renderUsers();
+      document.getElementById("user-profile-form").reset();
+    });
+
+    renderUsers();
+  </script>
+</body>
+</html>
