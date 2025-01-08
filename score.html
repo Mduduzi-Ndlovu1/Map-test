@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Tracking System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .case-table, .player-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .case-table th, .case-table td, .player-table th, .player-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .case-table th, .player-table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .case-table tr:nth-child(even), .player-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .case-table tr:hover, .player-table tr:hover {
+      background-color: #ddd;
+    }
+
+    .add-case {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    input, select {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .details h3 {
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Case Tracking System</h1>
+  <div class="container">
+
+    <div class="add-case">
+      <div>
+        <h3>Add a Case</h3>
+        <form id="add-case-form">
+          <input type="text" id="case-title" placeholder="Case Title" required>
+          <select id="case-handler">
+            <option value="">Select Handler</option>
+            <option value="Team A">Team A</option>
+            <option value="Hero John">Hero John</option>
+            <option value="NPO Unity">NPO Unity</option>
+            <option value="Branch X">Branch X</option>
+          </select>
+          <button type="submit">Add Case</button>
+        </form>
+      </div>
+    </div>
+
+    <h3>Case Table</h3>
+    <table class="case-table">
+      <thead>
+        <tr>
+          <th>Case Title</th>
+          <th>Handler</th>
+          <th>Status</th>
+          <th>Progress</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="case-table-body">
+        <!-- Cases will be dynamically added here -->
+      </tbody>
+    </table>
+
+    <h3>Player Progress</h3>
+    <table class="player-table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Cases Solved</th>
+          <th>Cases Pending</th>
+          <th>Cases Outstanding</th>
+          <th>Failed Cases</th>
+        </tr>
+      </thead>
+      <tbody id="player-table-body">
+        <!-- Players' progress will be dynamically updated here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const players = {
+      "Team A": { solved: 0, pending: 0, outstanding: 0, failed: 0 },
+      "Hero John": { solved: 0, pending: 0, outstanding: 0, failed: 0 },
+      "NPO Unity": { solved: 0, pending: 0, outstanding: 0, failed: 0 },
+      "Branch X": { solved: 0, pending: 0, outstanding: 0, failed: 0 }
+    };
+
+    const cases = [];
+
+    function renderCases() {
+      const caseTableBody = document.getElementById("case-table-body");
+      caseTableBody.innerHTML = "";
+
+      cases.forEach((c, index) => {
+        caseTableBody.innerHTML += `
+          <tr>
+            <td>${c.title}</td>
+            <td>${c.handler}</td>
+            <td>${c.status}</td>
+            <td>${c.progress}%</td>
+            <td>
+              <button onclick="updateCase(${index}, 'progress')">Update Progress</button>
+              <button onclick="updateCase(${index}, 'status')">Mark as Solved</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function renderPlayers() {
+      const playerTableBody = document.getElementById("player-table-body");
+      playerTableBody.innerHTML = "";
+
+      Object.entries(players).forEach(([player, stats]) => {
+        playerTableBody.innerHTML += `
+          <tr>
+            <td>${player}</td>
+            <td>${stats.solved}</td>
+            <td>${stats.pending}</td>
+            <td>${stats.outstanding}</td>
+            <td>${stats.failed}</td>
+          </tr>
+        `;
+      });
+    }
+
+    function updateCase(index, action) {
+      const c = cases[index];
+
+      if (action === "progress") {
+        const newProgress = prompt("Enter new progress (0-100):");
+        if (newProgress && !isNaN(newProgress)) {
+          c.progress = Math.min(100, Math.max(0, parseInt(newProgress)));
+          if (c.progress === 100) {
+            c.status = "Solved";
+            players[c.handler].solved++;
+            players[c.handler].pending--;
+          }
+        }
+      } else if (action === "status") {
+        if (c.status === "Pending") {
+          c.status = "Solved";
+          players[c.handler].solved++;
+          players[c.handler].pending--;
+        }
+      }
+      renderCases();
+      renderPlayers();
+    }
+
+    document.getElementById("add-case-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const title = document.getElementById("case-title").value;
+      const handler = document.getElementById("case-handler").value;
+
+      if (!title || !handler) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      cases.push({
+        title,
+        handler,
+        status: "Pending",
+        progress: 0
+      });
+
+      players[handler].pending++;
+      renderCases();
+      renderPlayers();
+
+      document.getElementById("add-case-form").reset();
+    });
+
+    renderCases();
+    renderPlayers();
+  </script>
+</body>
+</html>
