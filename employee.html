@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department Update Call</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Department Update Call</h1>
+  <div class="container">
+    <form id="update-call-form">
+      <div class="form-group">
+        <label for="department-name">Department Name:</label>
+        <select id="department-name" required>
+          <option value="">Select a department</option>
+          <option value="Home Affairs">Home Affairs</option>
+          <option value="Health">Health</option>
+          <option value="Education">Education</option>
+          <option value="Social Services">Social Services</option>
+          <option value="Transport">Transport</option>
+          <option value="Custom">Custom (Enter Below)</option>
+        </select>
+      </div>
+      <div class="form-group" id="custom-department-group" style="display: none;">
+        <label for="custom-department">Custom Department Name:</label>
+        <input type="text" id="custom-department" placeholder="Enter custom department name">
+      </div>
+      <div class="form-group">
+        <label for="system-status">Is the system online?</label>
+        <select id="system-status" required>
+          <option value="">Select status</option>
+          <option value="Online">Online</option>
+          <option value="Offline">Offline</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="queue-length">How many people are in the queue?</label>
+        <input type="number" id="queue-length" min="0" placeholder="Enter queue length" required>
+      </div>
+      <div class="form-group">
+        <label for="employee-name">What is your name?</label>
+        <input type="text" id="employee-name" placeholder="Enter your name (optional)">
+      </div>
+      <div class="form-group">
+        <label for="employee-number">What is your employee number?</label>
+        <input type="text" id="employee-number" placeholder="Enter your employee number (optional)">
+      </div>
+      <div class="form-group">
+        <label for="employee-complaints">Do you have any complaints or comments about your customers?</label>
+        <textarea id="employee-complaints" rows="3" placeholder="Enter your complaints/comments"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="service-satisfaction">Are you happy about the service of the department to you?</label>
+        <select id="service-satisfaction" required>
+          <option value="">Select an option</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="supervisor-complaints">Do you have any complaints about your supervisors?</label>
+        <textarea id="supervisor-complaints" rows="3" placeholder="Enter complaints about supervisors (if any)"></textarea>
+      </div>
+      <button type="submit">Submit Update</button>
+    </form>
+
+    <h2>Recorded Updates</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>System Status</th>
+          <th>Queue Length</th>
+          <th>Comments</th>
+          <th>Service Satisfaction</th>
+          <th>Supervisor Complaints</th>
+        </tr>
+      </thead>
+      <tbody id="updates-table-body">
+        <!-- Updates will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const updates = [];
+
+    // Show/Hide custom department input
+    document.getElementById("department-name").addEventListener("change", (e) => {
+      const customGroup = document.getElementById("custom-department-group");
+      if (e.target.value === "Custom") {
+        customGroup.style.display = "block";
+      } else {
+        customGroup.style.display = "none";
+        document.getElementById("custom-department").value = "";
+      }
+    });
+
+    // Function to render updates
+    function renderUpdates() {
+      const updatesTableBody = document.getElementById("updates-table-body");
+      updatesTableBody.innerHTML = "";
+
+      updates.forEach((update) => {
+        updatesTableBody.innerHTML += `
+          <tr>
+            <td>${update.department}</td>
+            <td>${update.systemStatus}</td>
+            <td>${update.queueLength}</td>
+            <td>${update.comments || "No comments"}</td>
+            <td>${update.serviceSatisfaction}</td>
+            <td>${update.supervisorComplaints || "No complaints"}</td>
+          </tr>
+        `;
+      });
+    }
+
+    // Handle form submission
+    document.getElementById("update-call-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const department = document.getElementById("department-name").value === "Custom"
+        ? document.getElementById("custom-department").value
+        : document.getElementById("department-name").value;
+
+      const systemStatus = document.getElementById("system-status").value;
+      const queueLength = document.getElementById("queue-length").value;
+      const comments = document.getElementById("employee-complaints").value;
+      const serviceSatisfaction = document.getElementById("service-satisfaction").value;
+      const supervisorComplaints = document.getElementById("supervisor-complaints").value;
+
+      if (!department) {
+        alert("Please select or enter a department name.");
+        return;
+      }
+
+      updates.push({
+        department,
+        systemStatus,
+        queueLength,
+        comments,
+        serviceSatisfaction,
+        supervisorComplaints
+      });
+
+      renderUpdates();
+      document.getElementById("update-call-form").reset();
+      document.getElementById("custom-department-group").style.display = "none";
+    });
+
+    renderUpdates();
+  </script>
+</body>
+</html>
