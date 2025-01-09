@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Department Ratings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+
+    h1, h3 {
+      text-align: center;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #ddd;
+    }
+
+    .details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background: #fff;
+    }
+
+    .details h3 {
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <h1>Government Department Ratings</h1>
+  <div class="container">
+
+    <h3>Rate a Government Department</h3>
+    <form id="rating-form">
+      <div class="form-group">
+        <label for="department-name">Department Name:</label>
+        <select id="department-name" required>
+          <option value="">Select a department</option>
+          <option value="Home Affairs">Home Affairs</option>
+          <option value="Health">Health</option>
+          <option value="Education">Education</option>
+          <option value="Social Services">Social Services</option>
+          <option value="Transport">Transport</option>
+          <option value="Custom">Custom (Enter Below)</option>
+        </select>
+      </div>
+      <div class="form-group" id="custom-department-group" style="display: none;">
+        <label for="custom-department">Custom Department Name:</label>
+        <input type="text" id="custom-department" placeholder="Enter custom department name">
+      </div>
+      <div class="form-group">
+        <label for="service-rating">Rating (1-5):</label>
+        <select id="service-rating" required>
+          <option value="">Select a rating</option>
+          <option value="1">1 - Very Poor</option>
+          <option value="2">2 - Poor</option>
+          <option value="3">3 - Average</option>
+          <option value="4">4 - Good</option>
+          <option value="5">5 - Excellent</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="rating-comment">Comment:</label>
+        <textarea id="rating-comment" rows="3" placeholder="Enter your feedback"></textarea>
+      </div>
+      <button type="submit">Submit Rating</button>
+    </form>
+
+    <h3>Department Ratings</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>Rating</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody id="ratings-table-body">
+        <!-- Ratings will be dynamically added here -->
+      </tbody>
+    </table>
+
+    <h3>Department Service Status</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>Opening Time</th>
+          <th>Closing Time</th>
+          <th>System Status</th>
+          <th>Disturbances Logged</th>
+          <th>Updates</th>
+        </tr>
+      </thead>
+      <tbody id="status-table-body">
+        <!-- Status updates will be dynamically added here -->
+      </tbody>
+    </table>
+
+  </div>
+
+  <script>
+    const ratings = [];
+    const departmentStatuses = {
+      "Home Affairs": { openingTime: "08:00", closingTime: "16:00", systemStatus: "Online", disturbances: [], updates: [] },
+      "Health": { openingTime: "08:30", closingTime: "16:30", systemStatus: "Online", disturbances: [], updates: [] },
+      "Education": { openingTime: "09:00", closingTime: "17:00", systemStatus: "Online", disturbances: [], updates: [] },
+      "Social Services": { openingTime: "08:00", closingTime: "16:00", systemStatus: "Online", disturbances: [], updates: [] },
+      "Transport": { openingTime: "07:30", closingTime: "15:30", systemStatus: "Online", disturbances: [], updates: [] },
+    };
+
+    // Show/Hide custom department input
+    document.getElementById("department-name").addEventListener("change", (e) => {
+      const customGroup = document.getElementById("custom-department-group");
+      if (e.target.value === "Custom") {
+        customGroup.style.display = "block";
+      } else {
+        customGroup.style.display = "none";
+        document.getElementById("custom-department").value = "";
+      }
+    });
+
+    // Function to render ratings
+    function renderRatings() {
+      const ratingsTableBody = document.getElementById("ratings-table-body");
+      ratingsTableBody.innerHTML = "";
+
+      ratings.forEach((rating) => {
+        ratingsTableBody.innerHTML += `
+          <tr>
+            <td>${rating.department}</td>
+            <td>${rating.rating}</td>
+            <td>${rating.comment}</td>
+          </tr>
+        `;
+      });
+    }
+
+    // Function to render department statuses
+    function renderStatuses() {
+      const statusTableBody = document.getElementById("status-table-body");
+      statusTableBody.innerHTML = "";
+
+      for (const department in departmentStatuses) {
+        const status = departmentStatuses[department];
+        statusTableBody.innerHTML += `
+          <tr>
+            <td>${department}</td>
+            <td>${status.openingTime}</td>
+            <td>${status.closingTime}</td>
+            <td>${status.systemStatus}</td>
+            <td>${status.disturbances.length > 0 ? status.disturbances.join(", ") : "None"}</td>
+            <td>${status.updates.length > 0 ? status.updates.join(", ") : "No updates"}</td>
+          </tr>
+        `;
+      }
+    }
+
+    // Handle rating form submission
+    document.getElementById("rating-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const department = document.getElementById("department-name").value === "Custom"
+        ? document.getElementById("custom-department").value
+        : document.getElementById("department-name").value;
+
+      const rating = document.getElementById("service-rating").value;
+      const comment = document.getElementById("rating-comment").value;
+
+      if (!department) {
+        alert("Please select or enter a department name.");
+        return;
+      }
+
+      ratings.push({ department, rating, comment });
+      renderRatings();
+      document.getElementById("rating-form").reset();
+      document.getElementById("custom-department-group").style.display = "none";
+    });
+
+    renderStatuses();
+  </script>
+</body>
+</html>
