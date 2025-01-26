@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manager Dashboard</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+  <script type="module" src="../scripts/app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Manager Dashboard</h1>
+
+    <h2>Overview</h2>
+    <p>Total Cases Posted: <span id="cases-posted"></span></p>
+    <p>League Score: <span id="league-score"></span></p>
+    <p>Area Status: <span id="area-status"></span></p>
+
+    <h2>Posts By Type</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Area</th>
+        </tr>
+      </thead>
+      <tbody id="post-types"></tbody>
+    </table>
+  </div>
+</body>
+</html>
