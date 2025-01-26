@@ -1,5 +1,5 @@
 // scripts/app.js
-import { sampleData } from "../data/data.js";
+import { sampleData } from "data.js";
 
 // For User Dashboard
 const loadUserData = () => {
