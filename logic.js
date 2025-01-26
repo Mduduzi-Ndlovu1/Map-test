@@ -343,6 +343,78 @@ document.getElementById('commentForm').addEventListener('submit', async (e) => {
     }
 });
 
+////
+// Display posts in timeline
+function displayTimeline(posts) {
+  const timelineContainer = document.getElementById("timeline-container");
+
+  if (!timelineContainer) {
+    console.error("Timeline container not found");
+    return;
+  }
+
+  posts.forEach((post) => {
+    const { name, surname, description, imageUrl, type, _id, createdAt } = post;
+
+    const updated = createdAt
+      ? new Date(createdAt).toLocaleString()
+      : 'Unknown date';
+
+    // Create a timeline card
+    const card = document.createElement("div");
+    card.classList.add("timeline-card");
+
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="type">${type || 'Unknown Type'}</span>
+      </div>
+      <div class="card-content">
+        <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
+        <div class="posted-on">Date: ${updated}</div>
+        <div class="description">${description ? `"${description}"` : 'No description available'}</div>
+        ${
+          imageUrl
+            ? `<div class="image"><img src="${imageUrl}" alt="${type || 'Image'}"></div>`
+            : ''
+        }
+        <button class="view-post-btn" onclick="openViewPostModal('${_id}')">View Post</button>
+      </div>
+    `;
+
+    // Append to timeline container
+    timelineContainer.appendChild(card);
+  });
+}
+
+// Fetch and display posts in timeline
+async function fetchAndDisplayTimeline() {
+  try {
+    const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
+    const posts = await response.json();
+
+    // Filter posts with valid data
+    const validPosts = posts.filter(
+      (post) =>
+        typeof post.latitude === 'number' &&
+        typeof post.longitude === 'number' &&
+        post.type
+    );
+
+    displayTimeline(validPosts);
+    console.log('Fetched posts for timeline:', validPosts);
+  } catch (error) {
+    console.error('Error fetching posts for timeline:', error);
+  }
+}
+
+// Initialize timeline on page load
+if (document.title === "Timeline") {
+  fetchAndDisplayTimeline();
+}
+
+////
+
+
 // Handle form submission for creating a post
 document.getElementById('postForm').addEventListener('submit', async (e) => {
   e.preventDefault();
