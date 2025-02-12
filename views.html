@@ -106,7 +106,51 @@ ul li {
             <button onclick="rateCounselor()">Rate Counselor</button>
         </div>
     </div>
+<script>
+let currentView = 0; // 0: Map, 1: Scroll, 2: Dash, 3: Counselor
+const views = ["mapView", "scrollView", "dashView", "counselorView"];
 
+function changeView() {
+    document.getElementById(views[currentView]).classList.remove("active");
+    currentView = (currentView + 1) % views.length;
+    document.getElementById(views[currentView]).classList.add("active");
+}
+
+function openPostModal() {
+    alert("Post feature coming soon!"); 
+}
+
+function searchReports() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let reports = document.querySelectorAll("#reportsList li");
+
+    reports.forEach(report => {
+        if (report.textContent.toLowerCase().includes(input)) {
+            report.style.display = "block";
+        } else {
+            report.style.display = "none";
+        }
+    });
+}
+
+function filterReports() {
+    let filter = document.getElementById("filterType").value;
+    let reports = document.querySelectorAll("#reportsList li");
+
+    reports.forEach(report => {
+        if (filter === "all" || report.classList.contains(filter)) {
+            report.style.display = "block";
+        } else {
+            report.style.display = "none";
+        }
+    });
+}
+
+function rateCounselor() {
+    alert("Rating feature coming soon!");
+}
+
+</script>
     <script src="script.js"></script>
 </body>
 </html>
