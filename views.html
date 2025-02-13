@@ -5,152 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1Pulse.online</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
 
-.top-bar {
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    background: #333;
-}
+    <!-- Leaflet Map (Background) -->
+    <div id="map"></div>
 
-.top-bar input, .top-bar select, .top-bar button {
-    margin: 0 5px;
-    padding: 8px;
-}
+    <!-- Top UI Overlay -->
+    <div class="overlay">
+        <input type="text" id="searchInput" placeholder="Search reports..." onkeyup="searchReports()">
+        <select id="filterType" onchange="filterReports()">
+            <option value="all">All</option>
+            <option value="crime">Crime</option>
+            <option value="service">Service Issue</option>
+        </select>
+        <button onclick="changeView()">Next View</button>
+    </div>
 
-#map {
-    width: 100%;
-    height: 400px;
-    background-color: lightgray;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+    <!-- Post Button -->
+    <button class="post-btn" onclick="openPostModal()">Post</button>
 
-.view {
-    display: none;
-    padding: 20px;
-}
+    <!-- UI Views (Switchable Tabs) -->
+    <div id="scrollView" class="view active">
+        <ul id="reportsList">
+            <li class="crime">Crime reported in Villa Liza</li>
+            <li class="service">Water issue reported in Braamfontein</li>
+        </ul>
+    </div>
 
-.view.active {
-    display: block;
-}
+    <div id="dashView" class="view">
+        <h2>📊 Case Progress</h2>
+        <p>Active Cases: 23</p>
+        <p>Resolved Cases: 112</p>
+    </div>
 
-.post-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-ul li {
-    padding: 10px;
-    margin: 5px;
-    background: lightgray;
-}
-
-</style>
-    <div id="app">
-        <!-- Search and Filter Bar -->
-        <div class="top-bar">
-            <input type="text" id="searchInput" placeholder="Search reports..." onkeyup="searchReports()">
-            <select id="filterType" onchange="filterReports()">
-                <option value="all">All</option>
-                <option value="crime">Crime</option>
-                <option value="service">Service Issue</option>
-            </select>
-            <button onclick="changeView()">Next View</button>
-        </div>
-
-        <!-- Main Content View -->
-        <div id="mapView" class="view active">
-            <div id="map">🗺️ Map Placeholder</div>
-            <button class="post-btn" onclick="openPostModal()">Post</button>
-        </div>
-
-        <div id="scrollView" class="view">
-            <ul id="reportsList">
-                <li class="crime">Crime reported in Villa Liza</li>
-                <li class="service">Water issue reported in Braamfontein</li>
-            </ul>
-        </div>
-
-        <div id="dashView" class="view">
-            <h2>📊 Case Progress</h2>
-            <p>Active Cases: 23</p>
-            <p>Resolved Cases: 112</p>
-        </div>
-
-        <div id="counselorView" class="view">
-            <h2>👤 Counselor Ratings</h2>
-            <p>Average Rating: 4.5/5</p>
-            <button onclick="rateCounselor()">Rate Counselor</button>
+    <div id="performanceView" class="view">
+        <h2>🏆 Performance Scoreboard</h2>
+        <div class="scoreboard">
+            <div class="user-card">
+                <h3>John Doe</h3>
+                <p>Ward: 12</p>
+                <p>Line of Work: NPO</p>
+                <p>Years in Service: 5</p>
+                <p>Cases: 120 solved / 30 pending / 10 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>Jane Smith</h3>
+                <p>Ward: 8</p>
+                <p>Line of Work: Private Investigator</p>
+                <p>Years in Service: 7</p>
+                <p>Cases: 85 solved / 20 pending / 15 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>Mike Johnson</h3>
+                <p>Ward: 5</p>
+                <p>Line of Work: Government</p>
+                <p>Years in Service: 10</p>
+                <p>Cases: 200 solved / 15 pending / 25 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>Sarah Lee</h3>
+                <p>Ward: 3</p>
+                <p>Line of Work: Community Volunteer</p>
+                <p>Years in Service: 3</p>
+                <p>Cases: 50 solved / 10 pending / 5 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>David Brown</h3>
+                <p>Ward: 6</p>
+                <p>Line of Work: Police Officer</p>
+                <p>Years in Service: 12</p>
+                <p>Cases: 180 solved / 40 pending / 30 reviewed</p>
+            </div>
         </div>
     </div>
-<script>
-let currentView = 0; // 0: Map, 1: Scroll, 2: Dash, 3: Counselor
-const views = ["mapView", "scrollView", "dashView", "counselorView"];
 
-function changeView() {
-    document.getElementById(views[currentView]).classList.remove("active");
-    currentView = (currentView + 1) % views.length;
-    document.getElementById(views[currentView]).classList.add("active");
-}
+    <!-- Post Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePostModal()">&times;</span>
+            <h2>Create a Post</h2>
+            <textarea id="postText" placeholder="Write your story..."></textarea>
+            <input type="file" id="postImages" accept="image/*" multiple>
+            <button onclick="submitPost()">Submit</button>
+        </div>
+    </div>
 
-function openPostModal() {
-    alert("Post feature coming soon!"); 
-}
-
-function searchReports() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let reports = document.querySelectorAll("#reportsList li");
-
-    reports.forEach(report => {
-        if (report.textContent.toLowerCase().includes(input)) {
-            report.style.display = "block";
-        } else {
-            report.style.display = "none";
-        }
-    });
-}
-
-function filterReports() {
-    let filter = document.getElementById("filterType").value;
-    let reports = document.querySelectorAll("#reportsList li");
-
-    reports.forEach(report => {
-        if (filter === "all" || report.classList.contains(filter)) {
-            report.style.display = "block";
-        } else {
-            report.style.display = "none";
-        }
-    });
-}
-
-function rateCounselor() {
-    alert("Rating feature coming soon!");
-}
-
-</script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
+
 </body>
 </html>
