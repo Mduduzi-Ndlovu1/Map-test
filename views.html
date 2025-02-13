@@ -8,7 +8,74 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
 
+/* Map Fullscreen */
+#map {
+    height: 100vh;
+    width: 100vw;
+}
+
+/* UI Overlay */
+.overlay {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+/* Post Button */
+.post-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    z-index: 1000;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    z-index: 2000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* User Card */
+.user-card {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 5px;
+    background: lightgray;
+}
+
+</style>
     <!-- Leaflet Map (Background) -->
     <div id="map"></div>
 
