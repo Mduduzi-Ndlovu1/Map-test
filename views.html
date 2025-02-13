@@ -161,6 +161,38 @@ body, html {
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
+<script>
+// Initialize Leaflet Map
+var map = L.map('map').setView([-26.2041, 28.0473], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Handle Views Switching
+let currentView = 0;
+const views = ["scrollView", "dashView", "performanceView"];
+
+function changeView() {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    currentView = (currentView + 1) % views.length;
+    document.getElementById(views[currentView]).classList.add("active");
+}
+
+// Handle Post Modal
+function openPostModal() {
+    document.getElementById("postModal").style.display = "block";
+}
+
+function closePostModal() {
+    document.getElementById("postModal").style.display = "none";
+}
+
+function submitPost() {
+    alert("Post submitted!");
+    closePostModal();
+}
+
+</script>
 
 </body>
 </html>
