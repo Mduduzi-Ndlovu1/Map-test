@@ -1,17 +1,4 @@
-// Show the loading screen when the page is loading
-window.addEventListener('load', function() {
-  // Show the loading screen initially
-  const loadingScreen = document.createElement('div');
-  loadingScreen.id = 'loading-screen';
-  loadingScreen.innerHTML = '<div class="spinner"></div>';
-  document.body.appendChild(loadingScreen);
 
-  // Simulate map loading time (you can replace this with actual map loading logic)
-  setTimeout(function() {
-    // Hide the loading screen after 3 seconds or when the map is ready
-    loadingScreen.style.display = 'none';
-  }, 30000); // Adjust time as needed
-});
 
 // Show loading animation on the "Save Post" button
 const postButton = document.querySelector('button[type="submit"]');
