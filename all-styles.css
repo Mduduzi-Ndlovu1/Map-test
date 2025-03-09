@@ -107,4 +107,34 @@
 .typing-text {
     animation: blink 0.7s step-end infinite;
 }
-</style>
+
+*/---cta buttons */
+    
+.cta-button {
+    background-color: #0e5aff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: solid 1px #f0f0f0;
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.363);
+}
+
+.cta-button:hover {
+    background-color: #1077d8;
+}
+
+
+      body.dark-mode {
+        background-color: #2b2b2b;
+        color: #fff;
+      }
+
+      .dark-mode .modal {
+        background-color: #444;
+      }
+
+      /* Additional styles for dark mode if needed */
+   
