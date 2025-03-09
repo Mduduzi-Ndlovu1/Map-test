@@ -490,6 +490,79 @@ document.getElementById('install-button').addEventListener('click', () => {
 </script>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const overlay = document.getElementById('overlay-main');
+            const showOverlayButton = document.getElementById('show-overlay');
+            let startX = 0;
+            let isDragging = false;
+
+            overlay.addEventListener('touchstart', function(e) {
+                startX = e.touches[0].clientX;
+                isDragging = true;
+            });
+
+            overlay.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                const currentX = e.touches[0].clientX;
+                const diff = startX - currentX;
+                if (diff > 50) { 
+                    overlay.style.transform = 'translateX(-100%)';
+                    showOverlayButton.style.display = 'block';
+                    isDragging = false;
+                }
+            });
+
+            showOverlayButton.addEventListener('click', function() {
+                overlay.style.transform = 'translateX(0)';
+                showOverlayButton.style.display = 'none';
+            });
+
+            const carousel = document.querySelector('.carousel');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                const offset = -currentIndex * 320;
+                carousel.style.transform = `translateX(${offset}px)`;
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % carousel.children.length;
+                updateCarousel();
+            }
+
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + carousel.children.length) % carousel.children.length;
+                updateCarousel();
+            }
+
+            prevButton.addEventListener('click', prevSlide);
+            nextButton.addEventListener('click', nextSlide);
+
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            carousel.addEventListener('touchstart', function(e) {
+                touchStartX = e.touches[0].clientX;
+            });
+
+            carousel.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].clientX;
+                handleSwipe();
+            });
+
+            function handleSwipe() {
+                const swipeDistance = touchStartX - touchEndX;
+                if (swipeDistance > 50) {
+                    nextSlide();
+                } else if (swipeDistance < -50) {
+                    prevSlide();
+                }
+            }
+        });
+    </script>
     <!-- Custom JS -->
     <script src="logic.js"></script>
   </body>
