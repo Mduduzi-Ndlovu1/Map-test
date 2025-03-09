@@ -137,4 +137,140 @@
       }
 
       /* Additional styles for dark mode if needed */
-   
+  /* resource section */
+       
+            /* General Container */
+    .container {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    /* Section 1 */
+    .section-1 header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-1 h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .hero-image img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .image-description p {
+      font-size: 16px;
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+    }
+
+    /* Section 2: Resources */
+    .section-2 {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .section-2 h2 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .section-2 p {
+      font-size: 16px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    /* Section 3: Markers and Sponsors */
+    .section-3 {
+      margin-top: 40px;
+    }
+
+    .markers h3, .sponsors h3 {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .marker-item, .sponsor-item {
+      display: flex;
+      align-items: center;
+      border-radius: 22px;
+      background-color: #f7f7f7;
+      margin-bottom: 20px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .marker-item img, .sponsor-item img {
+      width: 40px;
+      height: 40px;
+      margin-right: 20px;
+    }
+
+    .marker-info h4, .sponsor-info h4 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .marker-info p, .sponsor-info p {
+      font-size: 14px;
+      color: #777;
+    }
+
+    .sponsor-item {
+      border-radius: 30px;
+      background-color: #e9f7fb;
+    }
+
+    .marker-item:last-child, .sponsor-item:last-child {
+      margin-bottom: 0;
+    }
+
+.cta-button {
+
+}
+
+.cta-button:hover {
+    background-color: #1077d8;
+}
+
+#install-button {
+
+background-color: #0e5aff; width:95%;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: solid 1px #f0f0f0;
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.363);
+
+
+  cursor: pointer;
+}
+
+#install-button:hover {
+  background-color: #0056b3;
+}
+
+        
