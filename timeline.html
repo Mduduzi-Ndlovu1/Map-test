@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline with Leaflet Map Background</title>
+    <title>Timeline with Light-Themed Leaflet Map</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
@@ -15,7 +15,7 @@
             overflow: hidden; 
         }
         #map { 
-            position: absolute; 
+            position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
@@ -32,6 +32,8 @@
             padding: 20px; 
             border-radius: 8px; 
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
+            max-height: 80vh; 
+            overflow-y: auto; 
         }
         .post { 
             background: white; 
@@ -70,11 +72,14 @@
             color: white; 
             padding: 10px; 
             cursor: pointer; 
-            margin: 15px 0; 
-            width: 100%; 
+            margin: 15px auto; 
+            display: block; 
+            width: 90%; 
             max-width: 600px; 
             border: none; 
             border-radius: 5px; 
+            position: relative; 
+            z-index: 2; 
         }
         /* Modal styles */
         .modal { 
@@ -160,10 +165,10 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Initialize the map
+        // Initialize the map with a light-themed tile layer
         const map = L.map('map').setView([0, 0], 13); // Default view, will be updated with user's location
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors, © CartoDB'
         }).addTo(map);
 
         let currentPostId = null;
