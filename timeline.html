@@ -40,14 +40,41 @@
             box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
         }
         .post img {
-            max-width: 100%;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
             border-radius: 5px;
-            margin-top: 10px;
+            cursor: pointer;
         }
         #spinner {
             display: none;
             text-align: center;
             margin: 10px 0;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -60,6 +87,12 @@
         <h2>Timeline</h2>
         <div id="spinner">Loading posts...</div>
         <div class="timeline" id="timeline"></div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <script>
@@ -79,7 +112,7 @@
                     },
                     error => {
                         console.error("Error getting location:", error);
-                        fetchPosts();  // Fetch posts even if location fails
+                        fetchPosts();
                     }
                 );
             } else {
@@ -88,16 +121,16 @@
             }
         }
 
-        // Calculate distance between two coordinates (Haversine formula)
+        // Calculate distance between two coordinates
         function getDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radius of the Earth in km
+            const R = 6371;
             const dLat = (lat2 - lat1) * (Math.PI / 180);
             const dLon = (lon2 - lon1) * (Math.PI / 180);
             const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
                       Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
                       Math.sin(dLon / 2) * Math.sin(dLon / 2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c; // Distance in km
+            return R * c;
         }
 
         async function fetchPosts() {
@@ -108,17 +141,15 @@
                 const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
                 const posts = await response.json();
 
-                // Filter valid posts with coordinates
                 const validPosts = posts.filter(post =>
                     typeof post.latitude === 'number' && typeof post.longitude === 'number'
                 );
 
-                // Sort posts by proximity to user location
                 if (userLocation) {
                     validPosts.sort((a, b) => {
                         const distA = getDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
                         const distB = getDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
-                        return distA - distB; // Closest first
+                        return distA - distB;
                     });
                 }
 
@@ -132,32 +163,39 @@
             }
         }
 
-        // Update the banner with location and nearby posts
+        // Convert coordinates to street, town, and ward
+        async function getLocationDetails(lat, lon) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+                return {
+                    street: data.address.road || "Unknown Street",
+                    town: data.address.city || data.address.town || "Unknown Town",
+                    ward: data.address.suburb || "Unknown Ward"
+                };
+            } catch (error) {
+                console.error("Error fetching location details:", error);
+                return { street: "Unknown", town: "Unknown", ward: "Unknown" };
+            }
+        }
+
         function updateLocationBanner(posts = []) {
             const banner = document.getElementById('locationBanner');
 
             if (userLocation) {
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.latitude}&lon=${userLocation.longitude}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const location = data.display_name || "your area";
-                        const categoryCounts = countPostsByCategory(posts);
-                        const postSummary = Object.entries(categoryCounts)
-                            .map(([category, count]) => `${count} ${category}`)
-                            .join(", ");
-                        
-                        banner.textContent = `You are in ${location}. Nearby: ${postSummary || "No posts found"}.`;
-                    })
-                    .catch(error => {
-                        console.error("Error fetching location name:", error);
-                        banner.textContent = "Location detected, fetching posts...";
-                    });
+                getLocationDetails(userLocation.latitude, userLocation.longitude).then(location => {
+                    const categoryCounts = countPostsByCategory(posts);
+                    const postSummary = Object.entries(categoryCounts)
+                        .map(([category, count]) => `${count} ${category}`)
+                        .join(", ");
+                    
+                    banner.textContent = `You are near ${location.street}, ${location.town}, Ward ${location.ward}. Nearby: ${postSummary || "No posts found"}.`;
+                });
             } else {
                 banner.textContent = "Unable to get your location.";
             }
         }
 
-        // Count posts by category
         function countPostsByCategory(posts) {
             return posts.reduce((counts, post) => {
                 const category = post.type || "Uncategorized";
@@ -166,12 +204,13 @@
             }, {});
         }
 
-        function displayPosts(posts) {
+        async function displayPosts(posts) {
             const timeline = document.getElementById('timeline');
-            timeline.innerHTML = ''; // Clear previous posts
+            timeline.innerHTML = '';
 
-            posts.forEach(post => {
+            for (const post of posts) {
                 const { name, surname, description, type, latitude, longitude, imageUrl, createdAt } = post;
+                const location = await getLocationDetails(latitude, longitude);
 
                 const postContainer = document.createElement('div');
                 postContainer.classList.add('post');
@@ -182,23 +221,32 @@
                     <strong>${name || 'Anonymous'} ${surname || ''}</strong> <br>
                     <small>Type: ${type || 'Unknown'}</small> <br>
                     <p>${description || 'No description provided'}</p>
-                    <p><small>Location: Lat ${latitude}, Lng ${longitude}</small></p>
+                    <p><small>Location: ${location.street}, ${location.town}, Ward ${location.ward}</small></p>
                     <p><small>Posted on: ${updated}</small></p>
                 `;
 
-                // Render image properly
                 if (imageUrl) {
                     const img = document.createElement('img');
                     img.src = imageUrl;
                     img.alt = type || 'Post Image';
+                    img.onclick = () => openModal(imageUrl);
                     postContainer.appendChild(img);
                 }
 
                 timeline.appendChild(postContainer);
-            });
+            }
         }
 
-        // Run the script
+        function openModal(imageUrl) {
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modalImage').src = imageUrl;
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').style.display = "none";
+        }
+
         getUserLocation();
     </script>
 
