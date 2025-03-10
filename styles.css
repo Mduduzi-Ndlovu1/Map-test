@@ -701,12 +701,12 @@ display:flex;
   width: 150px;
   height: 50px;
   z-index: 99999;
-  background: #fff;
-  border: solid 1px blue;
   border-radius: 22px;
   display: flex; /* Use flexbox to align buttons horizontally */
   justify-content: space-around; /* Space buttons evenly */
   align-items: center; /* Vertically center buttons */
+background: rgba(255, 255, 255, 0.5); /* White with 50% opacity */
+border: 2px solid white; /* Solid white border */
 }
 
 .circle-button {
