@@ -699,7 +699,8 @@ position: absolute;
   width: 150px;
   height: 50px;
 z-index: 99999;
-background: Green;
+background: #fff;
+border: solid 1px blue;
 border-radius: 22px;
 } 
 /* Styling for the pen icon */
