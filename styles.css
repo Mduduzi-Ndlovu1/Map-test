@@ -689,6 +689,7 @@ button[type="submit"]:hover {
   height: 50px;
   transition: transform 0.2s ease-in-out;
   z-index: 99999;
+display:flex;
 }
 
 .bottom-touch {
