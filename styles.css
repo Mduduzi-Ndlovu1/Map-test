@@ -714,7 +714,7 @@ border: 2px solid white; /* Solid white border */
   height: 30px; /* Diameter of the circle */
   border-radius: 50%; /* Make it circular */
   background: #fff ; /* Default background color */
-  border: solid 1px #000; /* Optional: Add a border */
+  border: solid 1px #0096FF; /* Optional: Add a border */
   cursor: pointer; /* Change cursor to pointer on hover */
   display: flex; /* Use flexbox to center the icon */
   justify-content: center; /* Center horizontally */
