@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline with Comments</title>
+    <title>Timeline with Comments, New Post & Location</title>
     <style>
         body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center; }
         .timeline-container { width: 50%; max-width: 600px; margin: auto; }
@@ -19,9 +19,18 @@
         .close { float: right; font-size: 20px; cursor: pointer; }
         .comments { margin-top: 10px; }
         .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
+        .location-banner { background: #4CAF50; color: white; padding: 10px; font-size: 18px; }
+        .new-post-btn { background: #007bff; color: white; padding: 10px; cursor: pointer; margin: 15px 0; }
+        .location-input { margin-top: 10px; }
     </style>
 </head>
 <body>
+
+    <!-- Location Banner -->
+    <div id="locationBanner" class="location-banner">Loading your location...</div>
+
+    <!-- New Post Button -->
+    <button class="new-post-btn" onclick="openNewPostModal()">New Post</button>
 
     <h2>Timeline</h2>
     <div class="timeline-container" id="timeline"></div>
@@ -53,8 +62,23 @@
         </div>
     </div>
 
+    <!-- New Post Modal -->
+    <div id="newPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewPostModal()">&times;</span>
+            <h3 id="newPostTitle">What's happening?</h3>
+            <form id="newPostForm">
+                <input type="text" id="newPostName" placeholder="Name" required><br>
+                <input type="text" id="newPostSurname" placeholder="Surname" required><br>
+                <textarea id="newPostDescription" placeholder="Describe your post" required></textarea><br>
+                <button type="submit" class="btn">Post</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         let currentPostId = null;
+        let currentLocation = { latitude: null, longitude: null, street: '', town: '', ward: '' };
 
         // Fetch posts and display them
         async function fetchPosts() {
@@ -174,14 +198,12 @@
                 fetchPosts();
                 closeEditModal();
             } catch (error) {
-                alert('Error updating post!');
+                alert('Error saving changes!');
             }
         }
 
         // Delete Post
         async function deletePost(postId) {
-            if (!confirm('Are you sure you want to delete this post?')) return;
-
             try {
                 await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`, { method: 'DELETE' });
                 fetchPosts();
@@ -190,10 +212,62 @@
             }
         }
 
-        function closeModal() { document.getElementById('viewModal').style.display = 'none'; }
-        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+        // Open New Post Modal
+        function openNewPostModal() {
+            if (!currentLocation.street) {
+                alert('Please allow location access first!');
+                return;
+            }
 
+            document.getElementById('newPostTitle').textContent = `What's happening on ${currentLocation.street}?`;
+            document.getElementById('newPostModal').style.display = 'flex';
+        }
+
+        // Close Modals
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function closeNewPostModal() {
+            document.getElementById('newPostModal').style.display = 'none';
+        }
+
+        // Fetch User Location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    currentLocation.latitude = position.coords.latitude;
+                    currentLocation.longitude = position.coords.longitude;
+                    fetchStreetData();
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        async function fetchStreetData() {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&format=json`);
+                const data = await response.json();
+                currentLocation.street = data.address.road || 'Unknown Street';
+                currentLocation.town = data.address.town || 'Unknown Town';
+                currentLocation.ward = data.address.ward || 'Unknown Ward';
+
+                // Update Location Banner
+                document.getElementById('locationBanner').textContent = `You are in ${currentLocation.street}, ${currentLocation.town}. Ward: ${currentLocation.ward}`;
+            } catch (error) {
+                console.error('Error fetching street data:', error);
+            }
+        }
+
+        // Initialize
+        getUserLocation();
         fetchPosts();
     </script>
+
 </body>
 </html>
