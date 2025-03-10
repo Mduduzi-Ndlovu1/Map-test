@@ -14,6 +14,16 @@
             flex-direction: column;
             align-items: center;
         }
+        .banner {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            width: 50%;
+            max-width: 600px;
+            text-align: center;
+            font-weight: bold;
+        }
         .timeline-container {
             width: 50%;
             max-width: 600px;
@@ -43,6 +53,9 @@
 </head>
 <body>
 
+    <!-- Location Banner -->
+    <div id="locationBanner" class="banner">Detecting your location...</div>
+
     <div class="timeline-container">
         <h2>Timeline</h2>
         <div id="spinner">Loading posts...</div>
@@ -50,49 +63,134 @@
     </div>
 
     <script>
+        let userLocation = null;
+
+        // Get user's location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        userLocation = {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        };
+                        fetchPosts();
+                        updateLocationBanner();
+                    },
+                    error => {
+                        console.error("Error getting location:", error);
+                        fetchPosts();  // Fetch posts even if location fails
+                    }
+                );
+            } else {
+                console.warn("Geolocation not supported");
+                fetchPosts();
+            }
+        }
+
+        // Calculate distance between two coordinates (Haversine formula)
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the Earth in km
+            const dLat = (lat2 - lat1) * (Math.PI / 180);
+            const dLon = (lon2 - lon1) * (Math.PI / 180);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c; // Distance in km
+        }
+
         async function fetchPosts() {
             const spinner = document.getElementById('spinner');
-            spinner.style.display = 'block';  // Show spinner while loading
-            
+            spinner.style.display = 'block';
+
             try {
                 const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
                 const posts = await response.json();
 
-                // Ensure each post has valid latitude and longitude
-                const validPosts = posts.filter(post => 
+                // Filter valid posts with coordinates
+                const validPosts = posts.filter(post =>
                     typeof post.latitude === 'number' && typeof post.longitude === 'number'
                 );
 
+                // Sort posts by proximity to user location
+                if (userLocation) {
+                    validPosts.sort((a, b) => {
+                        const distA = getDistance(userLocation.latitude, userLocation.longitude, a.latitude, a.longitude);
+                        const distB = getDistance(userLocation.latitude, userLocation.longitude, b.latitude, b.longitude);
+                        return distA - distB; // Closest first
+                    });
+                }
+
                 displayPosts(validPosts);
-                console.log('Fetched posts:', validPosts);
+                updateLocationBanner(validPosts);
+
             } catch (error) {
                 console.error('Error fetching posts:', error);
             } finally {
-                spinner.style.display = 'none';  // Hide spinner when done
+                spinner.style.display = 'none';
             }
+        }
+
+        // Update the banner with location and nearby posts
+        function updateLocationBanner(posts = []) {
+            const banner = document.getElementById('locationBanner');
+
+            if (userLocation) {
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.latitude}&lon=${userLocation.longitude}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const location = data.display_name || "your area";
+                        const categoryCounts = countPostsByCategory(posts);
+                        const postSummary = Object.entries(categoryCounts)
+                            .map(([category, count]) => `${count} ${category}`)
+                            .join(", ");
+                        
+                        banner.textContent = `You are in ${location}. Nearby: ${postSummary || "No posts found"}.`;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching location name:", error);
+                        banner.textContent = "Location detected, fetching posts...";
+                    });
+            } else {
+                banner.textContent = "Unable to get your location.";
+            }
+        }
+
+        // Count posts by category
+        function countPostsByCategory(posts) {
+            return posts.reduce((counts, post) => {
+                const category = post.type || "Uncategorized";
+                counts[category] = (counts[category] || 0) + 1;
+                return counts;
+            }, {});
         }
 
         function displayPosts(posts) {
             const timeline = document.getElementById('timeline');
-            timeline.innerHTML = '';  // Clear previous posts
+            timeline.innerHTML = ''; // Clear previous posts
 
             posts.forEach(post => {
+                const { name, surname, description, type, latitude, longitude, imageUrl, createdAt } = post;
+
                 const postContainer = document.createElement('div');
                 postContainer.classList.add('post');
 
-                // Format the post content
+                const updated = createdAt ? new Date(createdAt).toLocaleString() : 'Unknown date';
+
                 postContainer.innerHTML = `
-                    <strong>${post.name || 'Anonymous'} ${post.surname || ''}</strong> <br>
-                    <small>Type: ${post.type || 'Unknown'}</small> <br>
-                    <p>${post.description || 'No description provided'}</p>
-                    <p><small>Location: Lat ${post.latitude}, Lng ${post.longitude}</small></p>
+                    <strong>${name || 'Anonymous'} ${surname || ''}</strong> <br>
+                    <small>Type: ${type || 'Unknown'}</small> <br>
+                    <p>${description || 'No description provided'}</p>
+                    <p><small>Location: Lat ${latitude}, Lng ${longitude}</small></p>
+                    <p><small>Posted on: ${updated}</small></p>
                 `;
 
-                // Check if there is an image
-                if (post.image) {
+                // Render image properly
+                if (imageUrl) {
                     const img = document.createElement('img');
-                    img.src = post.image;  // Assuming API returns a direct image URL
-                    img.alt = 'Post image';
+                    img.src = imageUrl;
+                    img.alt = type || 'Post Image';
                     postContainer.appendChild(img);
                 }
 
@@ -100,8 +198,8 @@
             });
         }
 
-        // Fetch posts on page load
-        fetchPosts();
+        // Run the script
+        getUserLocation();
     </script>
 
 </body>
