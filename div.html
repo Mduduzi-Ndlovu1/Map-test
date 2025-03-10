@@ -1,4 +1,3 @@
-
 <script>
     // Disable right-click on the page
     document.addEventListener('contextmenu', function(e) {
@@ -16,37 +15,192 @@
     <title>1pulse online Map</title>
     <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="all-styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="manifest" href="/manifest.json">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+
+    <style>
+.cta-button {
+    background-color: #0e5aff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: solid 1px #f0f0f0;
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.363);
+}
+
+.cta-button:hover {
+    background-color: #1077d8;
+}
+
+
+      body.dark-mode {
+        background-color: #2b2b2b;
+        color: #fff;
+      }
+
+      .dark-mode .modal {
+        background-color: #444;
+      }
+
+      /* Additional styles for dark mode if needed */
+    </style>
   </head>
   <body>
     <div id="map"></div>
 
     <!-- Dark Mode Toggle Button -->
     <button id="modal-button" onclick="pulseopenModal()">
-      <img src="https://i.ibb.co/Q35sd45k/1pulse-online-logo-CRc-L2.png" alt="1Pulse" style="width: 53px; height: 50px; vertical-align: middle;">
+      <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px; vertical-align: middle;">
     </button>
 
     <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
   <div id="gjnoModal" class="gjno-modal">
     <div class="gjno-modal-content">
-      <span class="gjno-close" style="color: #2b2b2b; margin: 0px! Important;">&times;</span>
+      <span class="gjno-close" style="color: #2b2b2b;">&times;</span>
       <div class="cotainer">
+        <style>
+            /* General Container */
+    .container {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
 
+    /* Section 1 */
+    .section-1 header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .section-1 h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .hero-image img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .image-description p {
+      font-size: 16px;
+      text-align: center;
+      margin-top: 10px;
+      color: #555;
+    }
+
+    /* Section 2: Resources */
+    .section-2 {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .section-2 h2 {
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .section-2 p {
+      font-size: 16px;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    /* Section 3: Markers and Sponsors */
+    .section-3 {
+      margin-top: 40px;
+    }
+
+    .markers h3, .sponsors h3 {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .marker-item, .sponsor-item {
+      display: flex;
+      align-items: center;
+      border-radius: 22px;
+      background-color: #f7f7f7;
+      margin-bottom: 20px;
+      padding: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .marker-item img, .sponsor-item img {
+      width: 40px;
+      height: 40px;
+      margin-right: 20px;
+    }
+
+    .marker-info h4, .sponsor-info h4 {
+      font-size: 18px;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .marker-info p, .sponsor-info p {
+      font-size: 14px;
+      color: #777;
+    }
+
+    .sponsor-item {
+      border-radius: 30px;
+      background-color: #e9f7fb;
+    }
+
+    .marker-item:last-child, .sponsor-item:last-child {
+      margin-bottom: 0;
+    }
+
+.cta-button {
+
+}
+
+.cta-button:hover {
+    background-color: #1077d8;
+}
+
+#install-button {
+
+background-color: #0e5aff; width:95%;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: solid 1px #f0f0f0;
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.363);
+
+
+  cursor: pointer;
+}
+
+#install-button:hover {
+  background-color: #0056b3;
+}
+
+        </style>
         <!-- Section 1: Header, Search Bar, Hero Image -->
         <div class="section-1">
- <header>
-            <div class="side-logo">
-                <img src="https://i.ibb.co/S4jWXkFv/1pulse-online-logo-CRc-L3.png" alt="Logo">
-                <span></span>
-            </div>
-
-            <button id="guest-button" onclick="window.location.href='https://1pulse.online/dashboard/three.html'" style="border-radius:22px; margin-right:10px;">Guest</button>
-        </header>
           <header>
             <h1>Community Resources Map</h1>
           </header>
@@ -92,108 +246,14 @@ installButton.addEventListener('click', () => {
 </script>
         </div>
 
-        <!-- Section 2: Resources Description Also has the new Overlay-->
+        <!-- Section 2: Resources Description -->
 
 
-     <!--<div class="hero-section">
-            <div class="carousel">
-                <div class="carousel-item">
-                    <img src="https://1pulse.online/images/1pulse-promo-map.png" alt="Post Image">
-                    <h3>User Name</h3>
-                    <p>This is a sample post. It can contain text, images, or other content.</p>
-                </div>
-                <div class="carousel-item">
-                    <img src="https://1pulse.online/images/1pulse-promo-map.png" alt="Post Image">
-                    <h3>User Name</h3>
-                    <p>Another sample post with different content.</p>
-                </div>
-                <div class="carousel-item">
-                    <img src="https://1pulse.online/images/1pulse-promo-map.png" alt="Post Image">
-                    <h3>User Name</h3>
-                    <p>Yet another post for demonstration purposes.</p>
-                </div>
-            </div>
-            <div class="carousel-controls">
-                <button id="prev-button">&#10094;</button>
-                <button id="next-button">&#10095;</button>
-            </div>
-        </div>
--->
-        <div class="faq-section">
-           <div class="overlay-container">
-    <!-- FAQ Section with Landing Pop -->
-
-        <div class="content-containe">
-
-            <p><span id="typingText" class="typing-text"><strong>The heartbeat of the community.</strong></span></p>
-
-            <!-- Embedded Video -->
-            <div class="video-container" style="text-align: center; margin-bottom: 20px; width: 100%; border-radius: 23px;">
-                <iframe 
-                    src="https://www.youtube.com/embed/fLQwwh5sSWQ" 
-                    title="1Pulse Online Video" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen 
-                    style="width: 100%; height: 200px; max-width: 560px; border-radius: 23px;">
-                </iframe>
-                <p style="font-size: 14px; margin-top: 10px;">Watch this video to learn more about 1Pulse Online!</p>
-            </div>
-
-            <!-- FAQ Section -->
-            <div class="faq">
-                <button class="faq-question" onclick="toggleAnswer('answer1')">What is 1Pulse Online?</button>
-                <div class="faq-answer" id="answer1">
-                    <p>1Pulse Online is a map-driven platform that allows community members to post issues and track progress on resolutions.</p>
-                </div>
-
-                <button class="faq-question" onclick="toggleAnswer('answer2')">How can I post an alert?</button>
-                <div class="faq-answer" id="answer2">
-                    <p>Click on the specific map location, enter details, and hit "Post" to share an alert with the community.</p>
-                </div>
-
-                <button class="faq-question" onclick="toggleAnswer('answer3')">How long will my post stay on the platform?</button>
-                <div class="faq-answer" id="answer3">
-                    <p>Posts remain visible until they are resolved or, in the case of events, until they conclude.</p>
-                </div>
-
-                <button class="faq-question" onclick="toggleAnswer('helpDeskAnswer')">Community Help Desk</button>
-                <div class="faq-answer" id="helpDeskAnswer">
-                    <img style="width: 100%; border-radius: 23px;" src="images/Back-to-School-Stationery-Drive-.jpg" alt="Back to School Drive">
-                    <p>The 1Pulse Community Help Desk serves as a vital resource, assisting families in need and improving the quality of life in the community.</p>
-                    <p>Its mission is to create safer environments and enhance well-being through active community engagement.</p>
-                    <div class="cta-container">
-                        <a href="https://m.youtube.com/watch?v=fLQwwh5sSWQ&t=59s" class="cta-button">Check Progress</a>
-                    </div>
-                </div>
-
-                <button class="faq-question" onclick="toggleAnswer('promoAnswer')">Business Promotion (R250 for 2 weeks)</button>
-                <div class="faq-answer" id="promoAnswer">
-                    <img style="width: 100%; border-radius: 23px;" src="https://i.ibb.co/rt7sYXv/easy-cars.jpg" alt="Business Promotion">
-                    <p>Event organizers and businesses can post promotions to inform the community. Advertisements stay live for two weeks at R250.</p>
-                    <p>Promote your business and increase visibility within the local community.</p>
-                    <div class="cta-container">
-                        <a href="https://errandcamel.co.za/carhire" class="cta-button">Sign Up</a>
-                    </div>
-                </div>
-
-                <button class="faq-question" onclick="toggleAnswer('ComHubAnswer')">Community Development Hub</button>
-                <div class="faq-answer" id="ComHubAnswer">
-                    <img style="width: 100%; border-radius: 23px;" src="images/Back-to-School-Stationery-Drive-.jpg" alt="Community Development Hub">
-                    <p>The 1Pulse Community Development Hub provides essential resources and support to foster local growth and collaboration.</p>
-                    <p>By working together, we aim to build inclusive spaces that empower individuals and businesses alike.</p>
-                    <div class="cta-container">
-                        <a href="https://m.youtube.com/watch?v=fLQwwh5sSWQ&t=59s" class="cta-button">Check Progress</a>
-                    </div>
-                </div>
-
-                <button class="faq-question" onclick="toggleAnswer('schoolAnswer')">Marker Resources</button>
-                <div class="faq-answer" id="schoolAnswer">
-                     <!-- Section 3: Markers and Sponsors -->
+        <!-- Section 3: Markers and Sponsors -->
         <div class="section-3">
           <!-- Marker Divs -->
           <div class="markers">
-
+            <h3>Marker Resources</h3>
             <div class="marker-item">
               <img src="https://1pulse.online/images/user-here.png" alt="Marker Icon 1" />
               <div class="marker-info">
@@ -245,18 +305,6 @@ installButton.addEventListener('click', () => {
               </div>
             </div>
           </div>
-                </div>
-            </div>
-
-            <!-- Proceed to App Button --
-            <div class="cta-container">
-                <a href="https://1pulse-online-beta.netlify.app/" class="cta-button">Proceed to Map</a>
-            </div>-->
-        </div>
-    </div>
-</div> 
-
-
 
           <!-- Sponsors Divs --
           <div class="sponsors">
@@ -336,22 +384,18 @@ installButton.addEventListener('click', () => {
           <div class="logo" data-modal-id="1"> 
               <img src="https://1pulse.online/images/errand%20camel%20logo.png" alt="Logo 1">
           </div>
- <div class="logo" data-modal-id="5">
-              <img src="https://i.ibb.co/39Z55ry2/JmJ.png" alt="Logo 2">
-          </div>
- <div class="logo" data-modal-id="5">
-              <img src="https://i.ibb.co/YwWPCP8/G20-logo.png" alt="Logo 3">
-          </div>
-          <div class="logo" data-modal-id="4">
+          <div class="logo" data-modal-id="2">
               <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
           </div>
-          <div class="logo" data-modal-id="5">
+          <div class="logo" data-modal-id="3">
             <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
         </div>
           <div class="logo" data-modal-id="4">
-              <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 5">
+              <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 4">
           </div>
-
+          <div class="logo" data-modal-id="5">
+              <img src="https://1pulse.online/images/pulse.jpeg" alt="Logo 5">
+          </div>
           <div class="logo" data-modal-id="6">
               <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
           </div>
@@ -434,31 +478,13 @@ installButton.addEventListener('click', () => {
     </div>
 
     <p id="gyroscope"></p> <!-- Degrees Text -->
-<div class="bottom-touch">
-  <div id="penIcon">
+    <div id="penIcon">
         <!-- Pen Image -->
         <img src="compass.png" alt="Pen Icon">
-    </div> 
-
-<a href="timeline.html" class="circle-button">
-    <i class="fas fa-stream"></i> <!-- Timeline icon -->
-  </a>
- <div class="circle-button" onclick="openNewPostModal()">
-  <i class="fas fa-pen"></i> <!-- Pen icon -->
-</div>
-  <a href="https://1pulse.online/dashboard/" class="circle-button">
-    <i class="fas fa-user"></i> <!-- User icon -->
-  </a>
-
-</div>
-
- 
-
-
-
+    </div>
 
     <script>
-// Handle device orientation (compass and gyroscope)
+        // Handle device orientation (compass and gyroscope)
         let currentHeading = 0;  // To store the compass heading
 
         if (window.DeviceOrientationEvent) {
@@ -512,148 +538,6 @@ document.getElementById('install-button').addEventListener('click', () => {
 </script>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const overlay = document.getElementById('overlay-main');
-            const showOverlayButton = document.getElementById('show-overlay');
-            let startX = 0;
-            let isDragging = false;
-
-            overlay.addEventListener('touchstart', function(e) {
-                startX = e.touches[0].clientX;
-                isDragging = true;
-            });
-
-            overlay.addEventListener('touchmove', function(e) {
-                if (!isDragging) return;
-                const currentX = e.touches[0].clientX;
-                const diff = startX - currentX;
-                if (diff > 50) { 
-                    overlay.style.transform = 'translateX(-100%)';
-                    showOverlayButton.style.display = 'block';
-                    isDragging = false;
-                }
-            });
-
-            showOverlayButton.addEventListener('click', function() {
-                overlay.style.transform = 'translateX(0)';
-                showOverlayButton.style.display = 'none';
-            });
-
-            const carousel = document.querySelector('.carousel');
-            const prevButton = document.getElementById('prev-button');
-            const nextButton = document.getElementById('next-button');
-            let currentIndex = 0;
-
-            function updateCarousel() {
-                const offset = -currentIndex * 320;
-                carousel.style.transform = `translateX(${offset}px)`;
-            }
-
-            function nextSlide() {
-                currentIndex = (currentIndex + 1) % carousel.children.length;
-                updateCarousel();
-            }
-
-            function prevSlide() {
-                currentIndex = (currentIndex - 1 + carousel.children.length) % carousel.children.length;
-                updateCarousel();
-            }
-
-            prevButton.addEventListener('click', prevSlide);
-            nextButton.addEventListener('click', nextSlide);
-
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            carousel.addEventListener('touchstart', function(e) {
-                touchStartX = e.touches[0].clientX;
-            });
-
-            carousel.addEventListener('touchend', function(e) {
-                touchEndX = e.changedTouches[0].clientX;
-                handleSwipe();
-            });
-
-            function handleSwipe() {
-                const swipeDistance = touchStartX - touchEndX;
-                if (swipeDistance > 50) {
-                    nextSlide();
-                } else if (swipeDistance < -50) {
-                    prevSlide();
-                }
-            }
-        });
-    </script>
- <script>
-  // Function to toggle the visibility of FAQ answers
-function toggleAnswer(answerId) {
-    var answer = document.getElementById(answerId);
-    if (answer.style.display === "none" || answer.style.display === "") {
-        answer.style.display = "block";
-    } else {
-        answer.style.display = "none";
-    }
-}
-
-
-
-// JavaScript for the typing effect
-
-
-// Start the typing effect when the page loads
-window.onload = function() {
-    typeWriter();
-};
-
-
-
-// JavaScript for the typing effect
-let typingText = document.getElementById('typingText');
-let textArray = ['The heart beat of the community.'];
-let currentText = '';
-let textIndex = 0;
-let isErasing = false;
-let eraseSpeed = 100;  // Speed of erasing
-let typeSpeed = 150;   // Speed of typing
-
-function typeWriter() {
-    // Check if we are currently erasing or typing
-    if (isErasing) {
-        currentText = currentText.slice(0, -1);  // Remove the last character
-        typingText.textContent = currentText;
-
-        // If the text has been fully erased, start typing again
-        if (currentText === '') {
-            isErasing = false;
-            textIndex = 0;  // Reset the text index to start typing again
-            setTimeout(typeWriter, typeSpeed); // Delay before starting to type
-        } else {
-            setTimeout(typeWriter, eraseSpeed);
-        }
-    } else {
-        // Add the next character from the text array
-        currentText += textArray[0][textIndex];  
-        typingText.textContent = currentText;
-
-        // If the entire text is typed, start erasing
-        if (currentText === textArray[0]) {
-            isErasing = true;
-            setTimeout(typeWriter, 1000);  // Wait a moment before erasing starts
-        } else {
-            textIndex++;  // Move to the next character
-            setTimeout(typeWriter, typeSpeed);
-        }
-    }
-}
-
-// Start the typing effect loop
-typeWriter();
-
-
-
- </script>
-
     <!-- Custom JS -->
     <script src="logic.js"></script>
   </body>
