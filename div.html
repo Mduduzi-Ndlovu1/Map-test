@@ -443,9 +443,9 @@ installButton.addEventListener('click', () => {
 <a href="timeline.html" class="circle-button">
     <i class="fas fa-stream"></i> <!-- Timeline icon -->
   </a>
-  <div class="circle-button">
-    <i class="fas fa-pen"></i> <!-- Pen icon -->
-  </div>
+ <div class="circle-button" onclick="openNewPostModal()">
+  <i class="fas fa-pen"></i> <!-- Pen icon -->
+</div>
   <a href="https://1pulse.online/dashboard/" class="circle-button">
     <i class="fas fa-user"></i> <!-- User icon -->
   </a>
@@ -465,23 +465,117 @@ installButton.addEventListener('click', () => {
         .location-input { margin-top: 10px; }
 </style>
     <div id="newPostModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeNewPostModal()">&times;</span>
-            <h3 id="newPostTitle">What's happening?</h3>
-            <form id="newPostForm">
-                <input type="text" id="newPostName" placeholder="Name" required><br>
-                <input type="text" id="newPostSurname" placeholder="Surname" required><br>
-                <textarea id="newPostDescription" placeholder="Describe your post" required></textarea><br>
-                <button type="submit" class="btn">Post</button>
-            </form>
-        </div>
+    <div class="modal-content">
+        <span class="close" onclick="closeNewPostModal()">&times;</span>
+        <h3 id="newPostTitle">What's happening?</h3>
+        <div class="location-banner" id="locationBanner"></div> <!-- Location Banner -->
+        <form id="newPostForm">
+            <input type="text" id="newPostName" placeholder="Name" required><br>
+            <input type="text" id="newPostSurname" placeholder="Surname" required><br>
+            <textarea id="newPostDescription" placeholder="Describe your post" required></textarea><br>
+            <button type="submit" class="btn">Post</button>
+        </form>
     </div>
+</div>
 
 
 
 
 
     <script>
+///new post modal 
+// Global variable to store location data
+let currentLocation = {
+    latitude: null,
+    longitude: null,
+    street: null,
+    town: null,
+    ward: null
+};
+
+// Open New Post Modal
+function openNewPostModal() {
+    if (!currentLocation.street) {
+        alert('Please allow location access first!');
+        return;
+    }
+
+    // Update the modal title with the current location
+    document.getElementById('newPostTitle').textContent = `What's happening on ${currentLocation.street}?`;
+    document.getElementById('newPostModal').style.display = 'flex';
+}
+
+// Close Modals
+function closeModal() {
+    document.getElementById('viewModal').style.display = 'none';
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+function closeNewPostModal() {
+    document.getElementById('newPostModal').style.display = 'none';
+}
+
+// Fetch User Location
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            currentLocation.latitude = position.coords.latitude;
+            currentLocation.longitude = position.coords.longitude;
+            fetchStreetData();
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+// Fetch Street Data from OpenStreetMap
+async function fetchStreetData() {
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&format=json`);
+        const data = await response.json();
+        currentLocation.street = data.address.road || 'Unknown Street';
+        currentLocation.town = data.address.town || 'Unknown Town';
+        currentLocation.ward = data.address.ward || 'Unknown Ward';
+
+        // Update Location Banner
+        document.getElementById('locationBanner').textContent = `You are in ${currentLocation.street}, ${currentLocation.town}. Ward: ${currentLocation.ward}`;
+    } catch (error) {
+        console.error('Error fetching street data:', error);
+    }
+}
+
+// Handle New Post Form Submission
+document.getElementById('newPostForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting the traditional way
+
+    // Get form data
+    const name = document.getElementById('newPostName').value;
+    const surname = document.getElementById('newPostSurname').value;
+    const description = document.getElementById('newPostDescription').value;
+
+    // Include location data
+    const postData = {
+        name,
+        surname,
+        description,
+        location: currentLocation // Add the location object
+    };
+
+    // Log the post data (you can replace this with an API call to save the post)
+    console.log('New Post:', postData);
+
+    // Close the modal
+    closeNewPostModal();
+
+    // Clear the form
+    document.getElementById('newPostForm').reset();
+});
+
+// Initialize
+getUserLocation();
         // Handle device orientation (compass and gyroscope)
         let currentHeading = 0;  // To store the compass heading
 
