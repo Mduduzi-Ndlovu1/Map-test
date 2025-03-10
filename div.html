@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="manifest" href="/manifest.json">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   </head>
   <body>
@@ -434,15 +435,17 @@ installButton.addEventListener('click', () => {
 
     <p id="gyroscope"></p> <!-- Degrees Text -->
 <div class="bottom-touch">
-            <button id="guest-button" onclick="window.location.href='https://1pulse.online/dashboard/three.html'" style="border-radius:22px; margin-right:10px;">Guest</button>
-    <div id="penIcon">
+  <div id="penIcon">
         <!-- Pen Image -->
         <img src="compass.png" alt="Pen Icon">
-    </div>
-<div id="penIcon">
-        <!-- Pen Image -->
-        <img src="compass.png" alt="Pen Icon">
-    </div></div> 
+    </div> 
+  <a href="timeline.html" class="circle-button">
+    <i class="fas fa-stream"></i> <!-- Timeline icon -->
+  </a>
+  <div class="circle-button">
+    <i class="fas fa-pen"></i> <!-- Pen icon -->
+  </div>
+</div>
     <script>
         // Handle device orientation (compass and gyroscope)
         let currentHeading = 0;  // To store the compass heading
