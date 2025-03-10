@@ -451,6 +451,25 @@ installButton.addEventListener('click', () => {
   </a>
 
 </div>
+
+    <!-- New Post Modal -->
+    <div id="newPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewPostModal()">&times;</span>
+            <h3 id="newPostTitle">What's happening?</h3>
+            <form id="newPostForm">
+                <input type="text" id="newPostName" placeholder="Name" required><br>
+                <input type="text" id="newPostSurname" placeholder="Surname" required><br>
+                <textarea id="newPostDescription" placeholder="Describe your post" required></textarea><br>
+                <button type="submit" class="btn">Post</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
     <script>
         // Handle device orientation (compass and gyroscope)
         let currentHeading = 0;  // To store the compass heading
