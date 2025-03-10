@@ -1,11 +1,110 @@
- <script>
-const spinner = document.getElementById('spinner'); // Reference to the spinner
-  spinner.style.display = 'block'; // Show the spinner
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .timeline-container {
+            width: 50%;
+            max-width: 600px;
+        }
+        .post-form {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .post {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+        .post img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        #spinner {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
 
-  const formData = new FormData(e.target);
-  const name = formData.get('name');
-  const surname = formData.get('surname');
-  const description = formData.get('description');
-  const type = formData.get('type');
-  const imageInput = document.querySelector('input[name="image"]');
-  const image = imageInput.files[0]; // Ensure this is the actual file </script>
+    <div class="timeline-container">
+        <form id="postForm" class="post-form">
+            <input type="text" name="name" placeholder="Name" required><br><br>
+            <input type="text" name="surname" placeholder="Surname" required><br><br>
+            <textarea name="description" placeholder="Write something..." required></textarea><br><br>
+            <input type="text" name="type" placeholder="Type (e.g., status, photo, update)" required><br><br>
+            <input type="file" name="image" accept="image/*"><br><br>
+            <button type="submit">Post</button>
+        </form>
+
+        <div id="spinner">Posting...</div>
+
+        <div class="timeline" id="timeline"></div>
+    </div>
+
+    <script>
+        document.getElementById('postForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const spinner = document.getElementById('spinner');
+            spinner.style.display = 'block'; // Show the spinner
+
+            const formData = new FormData(e.target);
+            const name = formData.get('name');
+            const surname = formData.get('surname');
+            const description = formData.get('description');
+            const type = formData.get('type');
+            const imageInput = document.querySelector('input[name="image"]');
+            const image = imageInput.files[0];
+
+            const postContainer = document.createElement('div');
+            postContainer.classList.add('post');
+            postContainer.innerHTML = `
+                <strong>${name} ${surname}</strong> <br>
+                <small>Type: ${type}</small> <br>
+                <p>${description}</p>
+            `;
+
+            if (image) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    postContainer.appendChild(img);
+                };
+                reader.readAsDataURL(image);
+            }
+
+            setTimeout(() => {
+                document.getElementById('timeline').prepend(postContainer);
+                spinner.style.display = 'none'; // Hide the spinner
+                e.target.reset();
+            }, 1000); // Simulate loading time
+        });
+    </script>
+
+</body>
+</html>
