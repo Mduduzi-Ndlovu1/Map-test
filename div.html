@@ -562,6 +562,75 @@ document.getElementById('install-button').addEventListener('click', () => {
             }
         });
     </script>
+ <script>
+  // Function to toggle the visibility of FAQ answers
+function toggleAnswer(answerId) {
+    var answer = document.getElementById(answerId);
+    if (answer.style.display === "none" || answer.style.display === "") {
+        answer.style.display = "block";
+    } else {
+        answer.style.display = "none";
+    }
+}
+
+
+
+// JavaScript for the typing effect
+
+
+// Start the typing effect when the page loads
+window.onload = function() {
+    typeWriter();
+};
+
+
+
+// JavaScript for the typing effect
+let typingText = document.getElementById('typingText');
+let textArray = ['The heart beat of the community.'];
+let currentText = '';
+let textIndex = 0;
+let isErasing = false;
+let eraseSpeed = 100;  // Speed of erasing
+let typeSpeed = 150;   // Speed of typing
+
+function typeWriter() {
+    // Check if we are currently erasing or typing
+    if (isErasing) {
+        currentText = currentText.slice(0, -1);  // Remove the last character
+        typingText.textContent = currentText;
+
+        // If the text has been fully erased, start typing again
+        if (currentText === '') {
+            isErasing = false;
+            textIndex = 0;  // Reset the text index to start typing again
+            setTimeout(typeWriter, typeSpeed); // Delay before starting to type
+        } else {
+            setTimeout(typeWriter, eraseSpeed);
+        }
+    } else {
+        // Add the next character from the text array
+        currentText += textArray[0][textIndex];  
+        typingText.textContent = currentText;
+
+        // If the entire text is typed, start erasing
+        if (currentText === textArray[0]) {
+            isErasing = true;
+            setTimeout(typeWriter, 1000);  // Wait a moment before erasing starts
+        } else {
+            textIndex++;  // Move to the next character
+            setTimeout(typeWriter, typeSpeed);
+        }
+    }
+}
+
+// Start the typing effect loop
+typeWriter();
+
+
+
+ </script>
+
     <!-- Custom JS -->
     <script src="logic.js"></script>
   </body>
