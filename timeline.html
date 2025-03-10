@@ -9,7 +9,8 @@
         .timeline-container { width: 50%; max-width: 600px; margin: auto; }
         .post { background: white; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); margin-bottom: 15px; text-align: left; }
         .post img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; cursor: pointer; }
-        .btn { padding: 5px 10px; margin-top: 5px; cursor: pointer; }
+        .btn { padding: 5px 10px; margin-top: 5px; cursor: pointer; transition: opacity 0.3s; }
+        .btn:hover { opacity: 0.8; }
         .edit-btn { background: #ffc107; }
         .delete-btn { background: #dc3545; color: white; }
         .comment-btn { background: #007bff; color: white; }
@@ -19,6 +20,10 @@
         .close { float: right; font-size: 20px; cursor: pointer; }
         .comments { margin-top: 10px; }
         .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
+        @media (max-width: 600px) {
+            .timeline-container { width: 90%; }
+            .modal-content { width: 90%; }
+        }
     </style>
 </head>
 <body>
@@ -29,7 +34,7 @@
     <!-- View Post Modal -->
     <div id="viewModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal()" aria-label="Close modal">&times;</span>
             <div id="postDetails"></div>
             <h3>Comments</h3>
             <div id="commentsList"></div>
@@ -44,7 +49,7 @@
     <!-- Edit Post Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
+            <span class="close" onclick="closeEditModal()" aria-label="Close modal">&times;</span>
             <h3>Edit Post</h3>
             <input type="text" id="editName" placeholder="Name"><br>
             <input type="text" id="editSurname" placeholder="Surname"><br>
@@ -77,7 +82,7 @@
                 postContainer.innerHTML = `
                     <b>${post.name || 'Anonymous'} ${post.surname || ''}</b><br>
                     <p>${post.description || 'No description provided'}</p>
-                    <img src="${post.imageUrl}" alt="Post Image" onclick="openViewPostModal('${post._id}')"><br>
+                    <img src="${post.imageUrl || 'default-image.jpg'}" alt="Post Image" onclick="openViewPostModal('${post._id}')"><br>
                     <button class="btn edit-btn" onclick="openEditModal('${post._id}')">Edit</button>
                     <button class="btn delete-btn" onclick="deletePost('${post._id}')">Delete</button>
                 `;
@@ -96,7 +101,7 @@
                     <b>${post.name} ${post.surname}</b><br>
                     <i>Type: ${post.type}</i><br>
                     ${post.description}<br>
-                    <img src="${post.imageUrl}" width="100%"><br>
+                    <img src="${post.imageUrl}" alt="Post Image" width="100%"><br>
                 `;
 
                 const commentsList = document.getElementById('commentsList');
@@ -192,6 +197,14 @@
 
         function closeModal() { document.getElementById('viewModal').style.display = 'none'; }
         function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+                closeEditModal();
+            }
+        };
 
         fetchPosts();
     </script>
