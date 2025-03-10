@@ -1,212 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline with Comments</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center; }
-        .timeline-container { width: 50%; max-width: 600px; margin: auto; }
-        .post { background: white; padding: 15px; border-radius: 8px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); margin-bottom: 15px; text-align: left; }
-        .post img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; cursor: pointer; }
-        .btn { padding: 5px 10px; margin-top: 5px; cursor: pointer; transition: opacity 0.3s; }
-        .btn:hover { opacity: 0.8; }
-        .edit-btn { background: #ffc107; }
-        .delete-btn { background: #dc3545; color: white; }
-        .comment-btn { background: #007bff; color: white; }
-        /* Modal styles */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 5px; text-align: left; width: 400px; }
-        .close { float: right; font-size: 20px; cursor: pointer; }
-        .comments { margin-top: 10px; }
-        .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
-        @media (max-width: 600px) {
-            .timeline-container { width: 90%; }
-            .modal-content { width: 90%; }
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1pulse Online Map</title>
+    <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="all-styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+    <div id="map"></div>
 
-    <h2>Timeline</h2>
-    <div class="timeline-container" id="timeline"></div>
+    <!-- Dark Mode Toggle Button -->
+    <button id="modal-button">
+        <img src="https://1pulse.online/images/ipulse-logo.png" alt="1Pulse" style="width: 50px; height: 50px;">
+    </button>
 
-    <!-- View Post Modal -->
-    <div id="viewModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()" aria-label="Close modal">&times;</span>
-            <div id="postDetails"></div>
-            <h3>Comments</h3>
-            <div id="commentsList"></div>
-            <form id="commentForm">
-                <input type="text" id="commentName" placeholder="Your name" required><br>
-                <textarea id="commentText" placeholder="Add a comment" required></textarea><br>
-                <button type="submit" class="btn comment-btn">Post Comment</button>
-            </form>
+    <!-- Modal for Greater Johannesburg Neighborhood Oversight -->
+    <div id="gjnoModal" class="gjno-modal">
+        <div class="gjno-modal-content">
+            <span class="gjno-close">&times;</span>
+            <div class="cotainer">
+                <!-- Section 1: Header, Search Bar, Hero Image -->
+                <div class="section-1">
+                    <header>
+                        <h1>Community Resources Map</h1>
+                    </header>
+                    <div class="hero-image">
+                        <img src="https://1pulse.online/images/1pulse-promo-map.png" alt="Community map image">
+                    </div>
+                    <div class="image-description">
+                        <p>This map highlights key community issues and available resources. Explore the markers to find out more.</p>
+                    </div>
+                    <button id="install-button" style="display: none;">Install App</button>
+                </div>
+
+                <!-- Section 2: Resources Description -->
+                <div class="section-2">
+                    <header>
+                        <div class="logo">
+                            <img src="https://1pulse.online/images/ipulse-logo.png" alt="Logo">
+                        </div>
+                        <button id="guest-button">Guest</button>
+                    </header>
+                    <div class="hero-section">
+                        <div class="carousel">
+                            <div class="carousel-item">
+                                <img src="https://via.placeholder.com/300x150" alt="Post Image">
+                                <h3>User Name</h3>
+                                <p>This is a sample post. It can contain text, images, or other content.</p>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://via.placeholder.com/300x150" alt="Post Image">
+                                <h3>User Name</h3>
+                                <p>Another sample post with different content.</p>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://via.placeholder.com/300x150" alt="Post Image">
+                                <h3>User Name</h3>
+                                <p>Yet another post for demonstration purposes.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-controls">
+                            <button id="prev-button">&#10094;</button>
+                            <button id="next-button">&#10095;</button>
+                        </div>
+                    </div>
+
+                    <div class="faq-section">
+                        <div class="overlay-container">
+                            <div class="content-container">
+                                <h3>Welcome to 1Pulse Online!</h3>
+                                <p><span id="typingText" class="typing-text"><strong>The heartbeat of the community.</strong></span></p>
+                                <div class="video-container">
+                                    <iframe src="https://www.youtube.com/embed/fLQwwh5sSWQ" title="1Pulse Online Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <p>Watch this video to learn more about 1Pulse Online!</p>
+                                </div>
+                                <div class="faq">
+                                    <button class="faq-question">What is 1Pulse Online?</button>
+                                    <div class="faq-answer">
+                                        <p>1Pulse Online is a map-driven platform that allows community members to post issues and track progress on resolutions.</p>
+                                    </div>
+                                </div>
+                                <div class="cta-container">
+                                    <a href="https://1pulse-online-beta.netlify.app/" class="cta-button">Proceed to Map</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Markers and Sponsors -->
+                <div class="section-3">
+                    <div class="markers">
+                        <h3>Marker Resources</h3>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Edit Post Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeEditModal()" aria-label="Close modal">&times;</span>
-            <h3>Edit Post</h3>
-            <input type="text" id="editName" placeholder="Name"><br>
-            <input type="text" id="editSurname" placeholder="Surname"><br>
-            <textarea id="editDescription" placeholder="Description"></textarea><br>
-            <button onclick="savePostChanges()" class="btn edit-btn">Save Changes</button>
+    <!-- Modal for logos -->
+    <div id="myModal" class="modal-brah">
+        <div class="modal-content-brah">
+            <span class="close-brah">&times;</span>
+            <h2 class="modal-title-brah"></h2>
+            <p class="modal-description-brah"></p>
+            <div class="image-container">
+                <img class="modal-image-brah" src="" alt="Modal Image">
+            </div>
         </div>
+    </div>
+
+    <!-- Modal for creating a new post -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal" id="modal">
+        <h3>Create a Post</h3>
+        <form id="postForm" enctype="multipart/form-data">
+        </form>
+    </div>
+
+    <!-- Modal for viewing a post -->
+    <div class="modal-overlay" id="viewModal-overlay"></div>
+    <div class="modal" id="viewModal">
+        <div id="postDetails"></div>
+        <h4>Comments:</h4>
+        <div id="commentsList"></div>
+        <form id="commentForm">
+        </form>
+    </div>
+
+    <p id="gyroscope"></p>
+    <div id="penIcon">
+        <img src="compass.png" alt="Pen Icon">
     </div>
 
     <script>
-        let currentPostId = null;
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
 
-        // Fetch posts and display them
-        async function fetchPosts() {
-            try {
-                const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
-                const posts = await response.json();
-                displayPosts(posts);
-            } catch (error) {
-                console.error('Error fetching posts:', error);
-            }
+        let currentHeading = 0; 
+
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', function(event) {
+                const heading = event.alpha;
+                if (heading !== null) {
+                    document.getElementById("gyroscope").textContent = `Facing: ${Math.round(heading)}°`;
+                    const penIcon = document.getElementById("penIcon");
+                    penIcon.style.transform = `rotate(${heading}deg)`;
+                }
+            });
+        } else {
+            alert("Device Orientation is not supported on your device.");
         }
 
-        function displayPosts(posts) {
-            const timeline = document.getElementById('timeline');
-            timeline.innerHTML = '';
-
-            posts.forEach(post => {
-                const postContainer = document.createElement('div');
-                postContainer.classList.add('post');
-                postContainer.innerHTML = `
-                    <b>${post.name || 'Anonymous'} ${post.surname || ''}</b><br>
-                    <p>${post.description || 'No description provided'}</p>
-                    <img src="${post.imageUrl || 'default-image.jpg'}" alt="Post Image" onclick="openViewPostModal('${post._id}')"><br>
-                    <button class="btn edit-btn" onclick="openEditModal('${post._id}')">Edit</button>
-                    <button class="btn delete-btn" onclick="deletePost('${post._id}')">Delete</button>
-                `;
-                timeline.appendChild(postContainer);
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js').then(() => {
+                console.log('Service Worker registered');
             });
         }
 
-        // Open View Post Modal
-        async function openViewPostModal(postId) {
-            currentPostId = postId;
-            try {
-                const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
-                const post = await response.json();
-
-                document.getElementById('postDetails').innerHTML = `
-                    <b>${post.name} ${post.surname}</b><br>
-                    <i>Type: ${post.type}</i><br>
-                    ${post.description}<br>
-                    <img src="${post.imageUrl}" alt="Post Image" width="100%"><br>
-                `;
-
-                const commentsList = document.getElementById('commentsList');
-                commentsList.innerHTML = '';
-                post.comments.forEach(comment => {
-                    commentsList.innerHTML += `
-                        <div class="comment">
-                            <b>${comment.author}</b><br>
-                            ${comment.text}
-                        </div>
-                    `;
-                });
-
-                document.getElementById('viewModal').style.display = 'flex';
-            } catch (error) {
-                console.error('Error fetching post:', error);
-            }
-        }
-
-        // Add Comment
-        document.getElementById('commentForm').addEventListener('submit', async function (e) {
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            const commentName = document.getElementById('commentName').value;
-            const commentText = document.getElementById('commentText').value;
-
-            if (!commentName || !commentText) {
-                alert('Please fill in both fields!');
-                return;
-            }
-
-            try {
-                await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}/comments`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ author: commentName, text: commentText })
-                });
-                fetchPosts();
-                closeModal();
-            } catch (error) {
-                alert('Error adding comment!');
-            }
+            deferredPrompt = e;
+            document.getElementById('install-button').style.display = 'block';
         });
 
-        // Open Edit Post Modal
-        async function openEditModal(postId) {
-            currentPostId = postId;
-            try {
-                const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
-                const post = await response.json();
-
-                document.getElementById('editName').value = post.name || '';
-                document.getElementById('editSurname').value = post.surname || '';
-                document.getElementById('editDescription').value = post.description || '';
-
-                document.getElementById('editModal').style.display = 'flex';
-            } catch (error) {
-                console.error('Error fetching post:', error);
-            }
-        }
-
-        // Save Post Changes
-        async function savePostChanges() {
-            const updatedPost = {
-                name: document.getElementById('editName').value,
-                surname: document.getElementById('editSurname').value,
-                description: document.getElementById('editDescription').value
-            };
-
-            try {
-                await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedPost)
+        document.getElementById('install-button').addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('App installed');
+                    }
+                    deferredPrompt = null;
                 });
-                fetchPosts();
-                closeEditModal();
-            } catch (error) {
-                alert('Error updating post!');
             }
-        }
-
-        // Delete Post
-        async function deletePost(postId) {
-            if (!confirm('Are you sure you want to delete this post?')) return;
-
-            try {
-                await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`, { method: 'DELETE' });
-                fetchPosts();
-            } catch (error) {
-                alert('Error deleting post!');
-            }
-        }
-
-        function closeModal() { document.getElementById('viewModal').style.display = 'none'; }
-        function closeEditModal() { document.getElementById('editModal').style.display = 'none'; }
-
-        // Close modal when clicking outside
-        window.onclick = function (event) {
-            if (event.target.classList.contains('modal')) {
-                closeModal();
-                closeEditModal();
-            }
-        };
-
-        fetchPosts();
+        });
     </script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="logic.js"></script>
 </body>
 </html>
