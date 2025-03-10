@@ -307,7 +307,7 @@ background-color: #0e5aff; width:95%;
         .logo img {
             width: 110px;
             height: 50px;
-            border-radius: 50%;
+            border-radius: 5%;
         }
 
         nav ul {
