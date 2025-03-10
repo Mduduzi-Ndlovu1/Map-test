@@ -677,6 +677,7 @@ button[type="submit"]:hover {
 #gyroscope {
   font-size: 24px;
   margin-bottom: 20px;
+
 }
 
 #penIcon {
@@ -684,10 +685,12 @@ button[type="submit"]:hover {
   top: 90%;
   left: 50%;
   transform-origin: center center;
-  width: 50px;
+  width: 100px;
   height: 50px;
   transition: transform 0.2s ease-in-out;
   z-index: 99999;
+background: Green;
+border-radius: 22px;
 }
 
 /* Styling for the pen icon */
