@@ -3,186 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ward Councillor Search</title>
+    <title>Ward Councillor Locator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            text-align: center;
         }
-        #search-bar {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
+        #location {
+            font-size: 18px;
             margin-bottom: 20px;
         }
-        table {
+        #contact-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #contact-modal button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
 <body>
-    <h1>Ward Councillor Search</h1>
-    <input type="text" id="search-bar" placeholder="Enter ward number, address, or councillor name...">
-    <table id="results-table">
-        <thead>
-            <tr>
-                <th>No.</th>
-                <th>Cllr Name</th>
-                <th>Party</th>
-                <th>Ward No</th>
-                <th>Ward Suburbs</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Results will be populated here -->
-        </tbody>
-    </table>
+    <h1>Ward Councillor Locator</h1>
+    <div id="location">Detecting your location...</div>
+    <div id="result"></div>
+
+    <!-- Modal for contact options -->
+    <div id="overlay"></div>
+    <div id="contact-modal">
+        <p>Would you like to contact your ward councillor?</p>
+        <button id="whatsapp-btn">WhatsApp</button>
+        <button id="phone-btn">Call</button>
+    </div>
 
     <script>
-        // JavaScript database (JS DB) with all ward councillors
+        // JavaScript database (JS DB) with ward councillors
         const wardCouncillors = [
             {
                 no: 1,
-                councillorName: "Cllr. Msingathi Mazibukwana 078 248 0981 011 850 1008 MasingathiM@joburg.org.za",
+                councillorName: "Cllr. Msingathi Mazibukwana",
+                Cllr Cont: "0782480981",
+                Cllr Tel: "0118501008",
                 party: "ANC",
                 region: "G",
                 wardNo: 1,
                 wardSuburbs: "Streford 5,6,7,8 and 9 Phase 1, 2 and 3",
-                wardAdministrator: "Bongani Dlamini 082 553 7672 011 850 1097"
+                wardAdministrator: "Bongani Dlamini",
+                Admin Cont: "0825537672",
+                Admin Tel: "0118501097"
             },
             {
                 no: 2,
-                councillorName: "Cllr. Dimakstso Jeanette Ramafikeng 074 574 4774 011 850 116",
+                councillorName: "Cllr. Dimakstso Jeanette Ramafikeng",
+                Cllr Cont: "0745744774",
+                Cllr Tel: "011850116",
                 party: "ANC",
                 region: "G",
                 wardNo: 2,
                 wardSuburbs: "Lakeside 1,2,3 and 5 Orange Farm Ext.1 part of",
-                wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
+                wardAdministrator: "Mzwanele Dioboyi",
+                Admin Cont: "0834069643",
+                Admin Tel: "0118501071"
             },
-            {
-                no: 3,
-                councillorName: "Cllr. Lucky Mbuso 082 550 4965 011 850 1073",
-                party: "ANC",
-                region: "G",
-                wardNo: 3,
-                wardSuburbs: "Orange Farm Proper Ext 4, 6 and 7",
-                wardAdministrator: "Bongani Dlamini 082 553 7672 011 850 1097"
-            },
-            {
-                no: 4,
-                councillorName: "Cllr. Simon Miekeleli Motha 082 550 4965 011 850 1073 jerrysa@joburg.org.za",
-                party: "ANC",
-                region: "G",
-                wardNo: 4,
-                wardSuburbs: "Orange Farm Ext 2,8 & 9 Drieziek 1 Drieziek Part 4",
-                wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
-            },
-            {
-                no: 5,
-                councillorName: "Cllr. Penny Martha Mphole 082 834 5352 011 850 1068 jerrysa@joburg.org.za",
-                party: "ANC",
-                region: "G",
-                wardNo: 5,
-                wardSuburbs: "Dreziek 1,2,3,5 and 6 Poortje Streford Ext 7 part Streford Ext 8 part Kapok Drieziek Proper",
-                wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
-            },
-            {
-                no: 6,
-                councillorName: "Shirley Nepfumbada 076 553 9543 010 230 0068",
-                party: "ANC",
-                region: "G",
-                wardNo: 6,
-                wardSuburbs: "Kanama park (wellers farm) Finetown block 1,2,3 and 5 Thulamntwana Mountain view",
-                wardAdministrator: "Bongani Dlamini 082 553 7672 011 850 1097"
-            },
-            {
-                no: 7,
-                councillorName: "Danny Netnow 011 211-0670 078 665 5186 netnowdanny@gmail.com",
-                party: "DA",
-                region: "G",
-                wardNo: 7,
-                wardSuburbs: "Emerdale 1,3,6,10,11,12,13 and 14 Mid – Emerdale Finetown Block 4 and 5 (part) Finetown East ( part) Finetown North Meriting",
-                wardAdministrator: "Mzwanele Dloboyi 011 850 1071 083 406 9643"
-            },
-            {
-                no: 8,
-                councillorName: "Mosotho Tsotetsi 079 979 6300 011 857 1981 MosothoT@joburg.org.za",
-                party: "ANC",
-                region: "G",
-                wardNo: 8,
-                wardSuburbs: "Lenasia Ext 2,4,6,11A, and 11B Volta precast informal settlement Lawley informal settlement Anchorville Thembaihle Lenasia Ext 9 and 10 Narens Farm (part) Patsing Lehae phase 2 part Lehae phase 3 and 4",
-                wardAdministrator: "Nomathemba Masimula 083 406 9687 011 211 0679"
-            },
-            {
-                no: 9,
-                councillorName: "VACANT",
-                party: "",
-                region: "G",
-                wardNo: 9,
-                wardSuburbs: "Lenasia Ext 1 (part),2,5(part),7,8,11,11A(part) and 13 Nanas Farm",
-                wardAdministrator: "Nomathemba Masimula 083 406 9687 011 211 0679"
-            },
-            {
-                no: 10,
-                councillorName: "Joseph Matjila 011 980-4947 079 685 8539 Joseph matjila@yahoo.com",
-                party: "ANC",
-                region: "D",
-                wardNo: 10,
-                wardSuburbs: "Protea South Lenasia Ext 1,5 Klipriviers Oog",
-                wardAdministrator: "Happy Nkala 011 980 5464 082 467 9354"
-            },
-            // Add the remaining entries here...
+            // Add more entries here...
         ];
 
-        // Function to search the data
-        function searchData(query) {
-            return wardCouncillors.filter(ward => {
-                return (
-                    ward.wardNo.toString().includes(query) || // Search by ward number
-                    ward.councillorName.toLowerCase().includes(query.toLowerCase()) || // Search by councillor name
-                    ward.wardSuburbs.toLowerCase().includes(query.toLowerCase()) // Search by ward suburbs
-                );
-            });
+        // Function to get ward councillor by ward number
+        function getCouncillorByWard(wardNo) {
+            return wardCouncillors.find(ward => ward.wardNo === wardNo);
         }
 
-        // Function to display results
-        function displayResults(results) {
-            const tableBody = document.querySelector("#results-table tbody");
-            tableBody.innerHTML = ""; // Clear previous results
+        // Function to display the contact modal
+        function showContactModal(councillor) {
+            const modal = document.getElementById("contact-modal");
+            const overlay = document.getElementById("overlay");
+            const whatsappBtn = document.getElementById("whatsapp-btn");
+            const phoneBtn = document.getElementById("phone-btn");
 
-            results.forEach(ward => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${ward.no}</td>
-                    <td>${ward.councillorName.split(" ").slice(0, 3).join(" ")}</td>
-                    <td>${ward.party}</td>
-                    <td>${ward.wardNo}</td>
-                    <td>${ward.wardSuburbs}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
+            // Set up WhatsApp button
+            whatsappBtn.onclick = () => {
+                window.open(`https://wa.me/27${councillor.Cllr Cont}`, "_blank");
+            };
+
+            // Set up phone button
+            phoneBtn.onclick = () => {
+                window.open(`tel:${councillor.Cllr Tel}`);
+            };
+
+            // Show modal and overlay
+            modal.style.display = "block";
+            overlay.style.display = "block";
         }
 
-        // Event listener for the search bar
-        const searchBar = document.getElementById("search-bar");
-        searchBar.addEventListener("input", (event) => {
-            const query = event.target.value;
-            const results = searchData(query);
-            displayResults(results);
-        });
+        // Function to hide the contact modal
+        function hideContactModal() {
+            const modal = document.getElementById("contact-modal");
+            const overlay = document.getElementById("overlay");
+            modal.style.display = "none";
+            overlay.style.display = "none";
+        }
 
-        // Display all data initially
-        displayResults(wardCouncillors);
+        // Detect user location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                // Reverse geocode to get street and suburb name
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+                const address = data.address;
+                const street = address.road || "Unknown Street";
+                const suburb = address.suburb || address.neighbourhood || "Unknown Suburb";
+
+                // Display location
+                const locationDiv = document.getElementById("location");
+                locationDiv.textContent = `You are in ${street}, ${suburb}.`;
+
+                // Simulate ward number lookup (replace with actual logic)
+                const wardNo = 1; // Example: Replace with actual ward number lookup logic
+                const councillor = getCouncillorByWard(wardNo);
+
+                if (councillor) {
+                    const resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = `You are in Ward ${wardNo}. Your ward councillor is ${councillor.councillorName}. <button onclick="showContactModal(${JSON.stringify(councillor)})">Would you like to contact them?</button>`;
+                } else {
+                    const resultDiv = document.getElementById("result");
+                    resultDiv.textContent = "No councillor found for your ward.";
+                }
+            }, (error) => {
+                console.error("Error getting location:", error);
+                document.getElementById("location").textContent = "Unable to detect your location.";
+            });
+        } else {
+            document.getElementById("location").textContent = "Geolocation is not supported by your browser.";
+        }
+
+        // Close modal when clicking outside
+        document.getElementById("overlay").onclick = hideContactModal;
     </script>
-<script src="wardCouncillors.js"></script>
 </body>
 </html>
