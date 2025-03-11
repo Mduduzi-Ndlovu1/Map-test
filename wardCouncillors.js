@@ -128,6 +128,108 @@ const wardCouncillors = [
         wardAdministrator: "Happy Nkala",
         adminCont: "0824679354",
         adminTel: "0119805464"
+    }, 
+    // Add more entries as needed 
+
+
+
+
+
+
+
+
+
+
+
+    {
+        no: 119,
+        councillorName: "Cllr. Mangaliso Leonard Ngwerya",
+        cllrCont: "0738262809",
+        cllrTel: "0119451245",
+        party: "ANC",
+        region: "G",
+        wardNo: 119,
+        wardSuburbs: "Part of old Naturena, Naturena Ext 11,15,19 and 26 Part of Freedom Park (Siyaya and Dark City) Devland Ext 27,31,30 & 35 Olifantsvlei Buschkopples Van Valley",
+        wardAdministrator: "Bheki Thwala",
+        adminCont: "0834317787",
+        adminTel: "0113424298"
+    },
+    {
+        no: 120,
+        councillorName: "VACANT",
+        cllrCont: "",
+        cllrTel: "",
+        party: "",
+        region: "G",
+        wardNo: 120,
+        wardSuburbs: "Hospitalhills (Lenasia South Ext 28) Lenasia South Ext 1 and 4, Vlakfontein Ext 3 (part), Migson Manor (Lenasia South Ext 7, Unaville plots and Narens farm (part) Hillside",
+        wardAdministrator: "Nomathemba Masimula",
+        adminCont: "0834069687",
+        adminTel: "0112110679"
+    },
+    {
+        no: 121,
+        councillorName: "Cllr. Margaret Mobason",
+        cllrCont: "0726739175",
+        cllrTel: "0112110669",
+        party: "ANC",
+        region: "G",
+        wardNo: 121,
+        wardSuburbs: "Emerdale Ext 2, 5,8 and 9 Hiltonia Hopefield Lawley Ext 1 and 2 Lenasia South Ext 2",
+        wardAdministrator: "Bheki Thwala",
+        adminCont: "0834317787",
+        adminTel: "0113424298"
+    },
+    {
+        no: 122,
+        councillorName: "Cllr. Nkosephayo God-Slove Zungu",
+        cllrCont: "0815818649",
+        cllrTel: "0118592892",
+        party: "ANC",
+        region: "G",
+        wardNo: 122,
+        wardSuburbs: "Vlakfontein Ext 1, 2 and 3 (part) Zakariya park Valkfontein Lehae Ext 1 Lehae Phase 3 Lehae Phase 4 part Eikenhof Jackson Informal Settlements",
+        wardAdministrator: "Nomathemba Masimula",
+        adminCont: "0834069687",
+        adminTel: "0112110679"
+    },
+    {
+        no: 123,
+        councillorName: "Cllr. Mzwandile Enock Tyobeka",
+        cllrCont: "0726927002",
+        cllrTel: "0110260768",
+        party: "ANC",
+        region: "F",
+        wardNo: 123,
+        wardSuburbs: "Berea- Lily/ Joe- East Saratoga Avenue-south, Nugget- west, O'Reilly, Joubert Park-Kaptein- North, Bree-South Twist-West Nugget –East, New Doornfontein- Saratoga Avenue-North Nugget-west Bertrams Road- East Commissioner-South",
+        wardAdministrator: "Diane Geluk",
+        adminCont: "0834069834",
+        adminTel: "0113768615"
+    },
+    {
+        no: 124,
+        councillorName: "Cllr. Morganeil Mnyameni",
+        cllrCont: "0782642930",
+        cllrTel: "0113768622",
+        party: "ANC",
+        region: "F",
+        wardNo: 124,
+        wardSuburbs: "Rifle Range, Southdale, Landesbrough Road, Booyesens, Westgate Station, Bree Str up to Rissik Str in the North, President Str, End Str in the East, Rossetenville road",
+        wardAdministrator: "Sharon Louw",
+        adminCont: "0826437631",
+        adminTel: "0113768618"
+    },
+    {
+        no: 125,
+        councillorName: "Cllr. Peter Stewart",
+        cllrCont: "0626912011",
+        cllrTel: "",
+        party: "DA",
+        region: "F",
+        wardNo: 125,
+        wardSuburbs: "Ormonde View, Meredale, Diepkloot Ext, Mogase View, Kibler Park, Diepkloot Hostel, South Fork, Comptonville, Sodringate, Crown Mines, Wyman Park",
+        wardAdministrator: "Lijeng Mbuli",
+        adminCont: "0837630235",
+        adminTel: "0116818092"
     }
-    // Add more entries as needed
 ];
