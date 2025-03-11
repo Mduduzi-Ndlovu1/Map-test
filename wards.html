@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ward Councillors PDF Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #pdf-viewer {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ward Councillors PDF Viewer</h1>
+    <p>Displaying the content of the PDF from the provided URL:</p>
+    <div id="pdf-viewer"></div>
+
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script>
+        // URL of the PDF
+        const pdfUrl = 'https://joburg.org.za/about_/documents/ward%20councillors%20by%20region-suburbs-ward%202019.pdf';
+
+        // Asynchronous function to render the PDF
+        async function renderPDF(url) {
+            // Load the PDF document
+            const loadingTask = pdfjsLib.getDocument(url);
+            const pdf = await loadingTask.promise;
+
+            // Get the first page
+            const pageNumber = 1;
+            const page = await pdf.getPage(pageNumber);
+
+            // Set the scale of the viewport
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
+
+            // Prepare the canvas for rendering
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Append the canvas to the PDF viewer container
+            const pdfViewer = document.getElementById('pdf-viewer');
+            pdfViewer.appendChild(canvas);
+
+            // Render the PDF page into the canvas context
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            await page.render(renderContext).promise;
+        }
+
+        // Call the function to render the PDF
+        renderPDF(pdfUrl);
+    </script>
+</body>
+</html>
