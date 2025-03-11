@@ -100,15 +100,16 @@
             justify-content: center; 
             align-items: center; 
         }
-        .modal-content-tl { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 5px; 
-            text-align: left; 
-            width: 90%; 
-            max-height: 70%;
-            max-width: 400px; 
-        }
+       .modal-content-tl { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 5px; 
+    text-align: left; 
+    width: 90%; 
+    max-height: 70vh; /* Use vh for better responsiveness */
+    max-width: 400px; 
+    overflow-y: auto; /* Enable vertical scrolling */
+}
         .close { float: right; font-size: 20px; cursor: pointer; }
         .comments { margin-top: 10px; }
         .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
