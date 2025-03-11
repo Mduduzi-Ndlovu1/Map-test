@@ -101,16 +101,28 @@ function setUserLocation() {
                 map.setView([userLat, userLng], 18);
 
                 // Add marker for the user's location
-                let userMarker = L.marker([userLat, userLng],{ icon: youAreHereIcon }).addTo(map);
+                let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
 
-                // Reverse geocode the coordinates to get the address
+                // Reverse geocode to get an approximate address
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
                     .then(response => response.json())
                     .then(data => {
-                        // If the geocoding request returns a valid address
                         const address = data.display_name;
-                        userMarker.bindPopup("Your current location is: " + address + "<strong>Whats going on?</strong>").openPopup();
 
+                        // Determine the ward and councillor
+                        const wardData = findWardByLocation(userLat, userLng);
+                        if (wardData) {
+                            const popupContent = `
+                                <div>
+                                    <p>You are in <strong>Ward ${wardData.wardNo}</strong>.</p>
+                                    <p>Your ward councillor is <strong>${wardData.councillorName}</strong>.</p>
+                                    <button onclick="showContactModal(${wardData.wardNo})">Contact Councillor</button>
+                                </div>
+                            `;
+                            userMarker.bindPopup(popupContent).openPopup();
+                        } else {
+                            userMarker.bindPopup("Your current location: " + address).openPopup();
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching address:', error);
@@ -119,7 +131,6 @@ function setUserLocation() {
             },
             (error) => {
                 console.log(error);
-                // Fallback to a default location if geolocation fails
                 map.setView([-26.2041, 28.0473], 18);
             }
         );
@@ -127,6 +138,21 @@ function setUserLocation() {
         alert('Geolocation is not supported by this browser.');
     }
 }
+
+// Function to find the ward based on user coordinates (this needs proper geo-boundaries per ward)
+function findWardByLocation(lat, lng) {
+    // Placeholder: Ideally, you would check if (lat, lng) falls within ward boundaries
+    // For now, you can approximate based on predefined points or proximity checks
+
+    // Example: If the user's location is near a specific area, return a matching ward
+    return wardCouncillors.find(ward => ward.wardNo === 1); // Replace this with actual logic
+}
+
+// Placeholder function for opening a contact modal
+function showContactModal(wardNo) {
+    alert(`Contacting councillor for Ward ${wardNo}`);
+}
+
 
 // Function to toggle between light and dark mode
 function toggleDarkMode() {
