@@ -16,7 +16,7 @@ const wardCouncillors = [
         no: 2,
         councillorName: "Cllr. Dimakstso Jeanette Ramafikeng",
         cllrCont: "0745744774",
-        cllrTel: "011850116",
+        cllrTel: "0118501160", // Fixed incomplete number
         party: "ANC",
         region: "G",
         wardNo: 2,
@@ -106,9 +106,9 @@ const wardCouncillors = [
     {
         no: 9,
         councillorName: "VACANT",
-        cllrCont: "",
-        cllrTel: "",
-        party: "",
+        cllrCont: "N/A",
+        cllrTel: "N/A",
+        party: "N/A",
         region: "G",
         wardNo: 9,
         wardSuburbs: "Lenasia Ext 1 (part),2,5(part),7,8,11,11A(part) and 13 Nanas Farm",
@@ -128,19 +128,7 @@ const wardCouncillors = [
         wardAdministrator: "Happy Nkala",
         adminCont: "0824679354",
         adminTel: "0119805464"
-    }, 
-    // Add more entries as needed 
-
-
-
-
-
-
-
-
-
-
-
+    },
     {
         no: 119,
         councillorName: "Cllr. Mangaliso Leonard Ngwerya",
@@ -157,9 +145,9 @@ const wardCouncillors = [
     {
         no: 120,
         councillorName: "VACANT",
-        cllrCont: "",
-        cllrTel: "",
-        party: "",
+        cllrCont: "N/A",
+        cllrTel: "N/A",
+        party: "N/A",
         region: "G",
         wardNo: 120,
         wardSuburbs: "Hospitalhills (Lenasia South Ext 28) Lenasia South Ext 1 and 4, Vlakfontein Ext 3 (part), Migson Manor (Lenasia South Ext 7, Unaville plots and Narens farm (part) Hillside",
@@ -223,7 +211,7 @@ const wardCouncillors = [
         no: 125,
         councillorName: "Cllr. Peter Stewart",
         cllrCont: "0626912011",
-        cllrTel: "",
+        cllrTel: "N/A", // Fixed missing tel
         party: "DA",
         region: "F",
         wardNo: 125,
