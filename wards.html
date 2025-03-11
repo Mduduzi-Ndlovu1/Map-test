@@ -48,7 +48,7 @@
     </table>
 
     <script>
-        // Sample JSON data (replace with the full dataset)
+        // JavaScript database (JS DB) with all ward councillors
         const wardCouncillors = [
             {
                 no: 1,
@@ -68,19 +68,90 @@
                 wardSuburbs: "Lakeside 1,2,3 and 5 Orange Farm Ext.1 part of",
                 wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
             },
-            // Add all 135+ entries here...
+            {
+                no: 3,
+                councillorName: "Cllr. Lucky Mbuso 082 550 4965 011 850 1073",
+                party: "ANC",
+                region: "G",
+                wardNo: 3,
+                wardSuburbs: "Orange Farm Proper Ext 4, 6 and 7",
+                wardAdministrator: "Bongani Dlamini 082 553 7672 011 850 1097"
+            },
+            {
+                no: 4,
+                councillorName: "Cllr. Simon Miekeleli Motha 082 550 4965 011 850 1073 jerrysa@joburg.org.za",
+                party: "ANC",
+                region: "G",
+                wardNo: 4,
+                wardSuburbs: "Orange Farm Ext 2,8 & 9 Drieziek 1 Drieziek Part 4",
+                wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
+            },
+            {
+                no: 5,
+                councillorName: "Cllr. Penny Martha Mphole 082 834 5352 011 850 1068 jerrysa@joburg.org.za",
+                party: "ANC",
+                region: "G",
+                wardNo: 5,
+                wardSuburbs: "Dreziek 1,2,3,5 and 6 Poortje Streford Ext 7 part Streford Ext 8 part Kapok Drieziek Proper",
+                wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
+            },
+            {
+                no: 6,
+                councillorName: "Shirley Nepfumbada 076 553 9543 010 230 0068",
+                party: "ANC",
+                region: "G",
+                wardNo: 6,
+                wardSuburbs: "Kanama park (wellers farm) Finetown block 1,2,3 and 5 Thulamntwana Mountain view",
+                wardAdministrator: "Bongani Dlamini 082 553 7672 011 850 1097"
+            },
+            {
+                no: 7,
+                councillorName: "Danny Netnow 011 211-0670 078 665 5186 netnowdanny@gmail.com",
+                party: "DA",
+                region: "G",
+                wardNo: 7,
+                wardSuburbs: "Emerdale 1,3,6,10,11,12,13 and 14 Mid – Emerdale Finetown Block 4 and 5 (part) Finetown East ( part) Finetown North Meriting",
+                wardAdministrator: "Mzwanele Dloboyi 011 850 1071 083 406 9643"
+            },
+            {
+                no: 8,
+                councillorName: "Mosotho Tsotetsi 079 979 6300 011 857 1981 MosothoT@joburg.org.za",
+                party: "ANC",
+                region: "G",
+                wardNo: 8,
+                wardSuburbs: "Lenasia Ext 2,4,6,11A, and 11B Volta precast informal settlement Lawley informal settlement Anchorville Thembaihle Lenasia Ext 9 and 10 Narens Farm (part) Patsing Lehae phase 2 part Lehae phase 3 and 4",
+                wardAdministrator: "Nomathemba Masimula 083 406 9687 011 211 0679"
+            },
+            {
+                no: 9,
+                councillorName: "VACANT",
+                party: "",
+                region: "G",
+                wardNo: 9,
+                wardSuburbs: "Lenasia Ext 1 (part),2,5(part),7,8,11,11A(part) and 13 Nanas Farm",
+                wardAdministrator: "Nomathemba Masimula 083 406 9687 011 211 0679"
+            },
+            {
+                no: 10,
+                councillorName: "Joseph Matjila 011 980-4947 079 685 8539 Joseph matjila@yahoo.com",
+                party: "ANC",
+                region: "D",
+                wardNo: 10,
+                wardSuburbs: "Protea South Lenasia Ext 1,5 Klipriviers Oog",
+                wardAdministrator: "Happy Nkala 011 980 5464 082 467 9354"
+            },
+            // Add the remaining entries here...
         ];
 
         // Function to search the data
         function searchData(query) {
-            const results = wardCouncillors.filter(ward => {
+            return wardCouncillors.filter(ward => {
                 return (
                     ward.wardNo.toString().includes(query) || // Search by ward number
                     ward.councillorName.toLowerCase().includes(query.toLowerCase()) || // Search by councillor name
                     ward.wardSuburbs.toLowerCase().includes(query.toLowerCase()) // Search by ward suburbs
                 );
             });
-            return results;
         }
 
         // Function to display results
@@ -109,15 +180,8 @@
             displayResults(results);
         });
 
-        // Detect user location (optional)
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                console.log("User location:", lat, lon);
-                // You can use a reverse geocoding API to get the user's address
-            });
-        }
+        // Display all data initially
+        displayResults(wardCouncillors);
     </script>
 </body>
 </html>
