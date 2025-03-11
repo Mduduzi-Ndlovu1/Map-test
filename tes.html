@@ -3,136 +3,364 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1Pulse Online</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <title>Timeline with Light-Themed Leaflet Map</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
+            overflow: hidden; 
         }
-        #map {
-            height: 300px;
-            width: 100%;
+        #map { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1; 
         }
-        .post {
-            border: 1px solid #ccc;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            background: #f9f9f9;
+        .timeline-container { 
+            position: relative; 
+            z-index: 2; 
+            width: 90%; 
+            max-width: 600px; 
+            margin: 20px auto; 
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
+            max-height: 80vh; 
+            overflow-y: auto; 
         }
-        .comment-button {
-            background-color: blue;
-            color: white;
-            border: 2px solid white;
-            border-radius: 22px;
-            padding: 5px 15px;
-            cursor: pointer;
+        .post { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 8px; 
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+            margin-bottom: 15px; 
+            text-align: left; 
         }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+        .post img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+            cursor: pointer; 
         }
-        .modal-content {
-            background: white;
-            padding: 20px;
-            margin: 10% auto;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
+        .btn { 
+            padding: 5px 10px; 
+            margin-top: 5px; 
+            cursor: pointer; 
         }
-        .close {
-            float: right;
-            cursor: pointer;
-            font-size: 20px;
+        .edit-btn { background: #ffc107; }
+        .delete-btn { background: #dc3545; color: white; }
+        .comment-btn { background: #007bff; color: white; }
+        .location-banner { 
+            background: #4CAF50; 
+            color: white; 
+            padding: 10px; 
+            font-size: 18px; 
+            text-align: center; 
+            position: relative; 
+            z-index: 2; 
         }
+        .new-post-btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px; 
+            cursor: pointer; 
+            margin: 15px auto; 
+            display: block; 
+            width: 90%; 
+            max-width: 600px; 
+            border: none; 
+            border-radius: 5px; 
+            position: relative; 
+            z-index: 2; 
+        }
+        /* Modal styles */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .modal-content { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 5px; 
+            text-align: left; 
+            width: 90%; 
+            max-width: 400px; 
+        }
+        .close { float: right; font-size: 20px; cursor: pointer; }
+        .comments { margin-top: 10px; }
+        .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
     </style>
 </head>
 <body>
 
+    <!-- Leaflet Map -->
     <div id="map"></div>
 
-    <div id="locationBanner">
-        Welcome to Pulse, you are currently in <span id="streetName">Loading...</span>.
-    </div>
+    <!-- Location Banner -->
+    <div id="locationBanner" class="location-banner">Loading your location...</div>
 
-    <div id="postsContainer"></div>
+    <!-- New Post Button -->
+    <button class="new-post-btn" onclick="openNewPostModal()">New Post</button>
 
-    <!-- Modal for commenting -->
-    <div id="commentModal" class="modal">
+    <!-- Timeline Container -->
+    <div class="timeline-container" id="timeline"></div>
+
+    <!-- View Post Modal -->
+    <div id="viewModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('commentModal')">&times;</span>
-            <h2>Leave a Comment</h2>
-            <textarea id="commentText" rows="4" style="width: 100%;"></textarea>
-            <button onclick="submitComment()">Post Comment</button>
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="postDetails"></div>
+            <h3>Comments</h3>
+            <div id="commentsList"></div>
+            <form id="commentForm">
+                <input type="text" id="commentName" placeholder="Your name" required><br>
+                <textarea id="commentText" placeholder="Add a comment" required></textarea><br>
+                <button type="submit" class="btn comment-btn">Post Comment</button>
+            </form>
         </div>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Edit Post Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h3>Edit Post</h3>
+            <input type="text" id="editName" placeholder="Name"><br>
+            <input type="text" id="editSurname" placeholder="Surname"><br>
+            <textarea id="editDescription" placeholder="Description"></textarea><br>
+            <button onclick="savePostChanges()" class="btn edit-btn">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- New Post Modal -->
+    <div id="newPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewPostModal()">&times;</span>
+            <h3 id="newPostTitle">What's happening?</h3>
+            <form id="newPostForm">
+                <input type="text" id="newPostName" placeholder="Name" required><br>
+                <input type="text" id="newPostSurname" placeholder="Surname" required><br>
+                <textarea id="newPostDescription" placeholder="Describe your post" required></textarea><br>
+                <button type="submit" class="btn">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        let currentLocation = { street: "Unknown" };
+        // Initialize the map with a light-themed tile layer
+        const map = L.map('map').setView([0, 0], 13); // Default view, will be updated with user's location
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors, © CartoDB'
+        }).addTo(map);
 
-        // Initialize map
-        const map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        let currentPostId = null;
+        let currentLocation = { latitude: null, longitude: null, street: '', town: '', ward: '' };
 
-        function updateLocationBanner(street) {
-            document.getElementById("streetName").innerText = street;
-        }
-
-        // Fetch and display posts
+        // Fetch posts and display them
         async function fetchPosts() {
             try {
-                let response = await fetch('/api/posts');
-                let posts = await response.json();
+                const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
+                const posts = await response.json();
                 displayPosts(posts);
             } catch (error) {
-                console.error("Error fetching posts:", error);
+                console.error('Error fetching posts:', error);
             }
         }
 
         function displayPosts(posts) {
-            let container = document.getElementById("postsContainer");
-            container.innerHTML = "";
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
 
             posts.forEach(post => {
-                let postDiv = document.createElement("div");
-                postDiv.className = "post";
-                postDiv.innerHTML = `
-                    <h3>${post.title}</h3>
-                    <p>${post.content}</p>
-                    <img src="${post.imageUrl || ''}" style="width: 100%; max-height: 200px;">
-                    <button class="comment-button" onclick="openModal('commentModal')">Comment</button>
+                const postContainer = document.createElement('div');
+                postContainer.classList.add('post');
+                postContainer.innerHTML = `
+                    <b>${post.name || 'Anonymous'} ${post.surname || ''}</b><br>
+                    <p>${post.description || 'No description provided'}</p>
+                    <img src="${post.imageUrl}" alt="Post Image" onclick="openViewPostModal('${post._id}')"><br>
+                    <button class="btn edit-btn" onclick="openEditModal('${post._id}')">Edit</button>
+                    <button class="btn delete-btn" onclick="deletePost('${post._id}')">Delete</button>
                 `;
-                container.appendChild(postDiv);
+                timeline.appendChild(postContainer);
             });
         }
 
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
-        }
+        // Open View Post Modal
+        async function openViewPostModal(postId) {
+            currentPostId = postId;
+            try {
+                const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
+                const post = await response.json();
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
-        }
+                document.getElementById('postDetails').innerHTML = `
+                    <b>${post.name} ${post.surname}</b><br>
+                    <i>Type: ${post.type}</i><br>
+                    ${post.description}<br>
+                    <img src="${post.imageUrl}" width="100%"><br>
+                `;
 
-        function submitComment() {
-            let commentText = document.getElementById("commentText").value;
-            if (commentText.trim() !== "") {
-                alert("Comment Posted: " + commentText);
-                closeModal("commentModal");
-            } else {
-                alert("Please enter a comment!");
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = '';
+                post.comments.forEach(comment => {
+                    commentsList.innerHTML += `
+                        <div class="comment">
+                            <b>${comment.author}</b><br>
+                            ${comment.text}
+                        </div>
+                    `;
+                });
+
+                document.getElementById('viewModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error fetching post:', error);
             }
         }
 
+        // Add Comment
+        document.getElementById('commentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const commentName = document.getElementById('commentName').value;
+            const commentText = document.getElementById('commentText').value;
+
+            if (!commentName || !commentText) {
+                alert('Please fill in both fields!');
+                return;
+            }
+
+            try {
+                await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ author: commentName, text: commentText })
+                });
+                fetchPosts();
+                closeModal();
+            } catch (error) {
+                alert('Error adding comment!');
+            }
+        });
+
+        // Open Edit Post Modal
+        async function openEditModal(postId) {
+            currentPostId = postId;
+            try {
+                const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
+                const post = await response.json();
+
+                document.getElementById('editName').value = post.name || '';
+                document.getElementById('editSurname').value = post.surname || '';
+                document.getElementById('editDescription').value = post.description || '';
+
+                document.getElementById('editModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error fetching post:', error);
+            }
+        }
+
+        // Save Post Changes
+        async function savePostChanges() {
+            const updatedPost = {
+                name: document.getElementById('editName').value,
+                surname: document.getElementById('editSurname').value,
+                description: document.getElementById('editDescription').value
+            };
+
+            try {
+                await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedPost)
+                });
+                fetchPosts();
+                closeEditModal();
+            } catch (error) {
+                alert('Error saving changes!');
+            }
+        }
+
+        // Delete Post
+        async function deletePost(postId) {
+            try {
+                await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`, { method: 'DELETE' });
+                fetchPosts();
+            } catch (error) {
+                alert('Error deleting post!');
+            }
+        }
+
+        // Open New Post Modal
+        function openNewPostModal() {
+            if (!currentLocation.street) {
+                alert('Please allow location access first!');
+                return;
+            }
+
+            document.getElementById('newPostTitle').textContent = `What's happening on ${currentLocation.street}?`;
+            document.getElementById('newPostModal').style.display = 'flex';
+        }
+
+        // Close Modals
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        function closeNewPostModal() {
+            document.getElementById('newPostModal').style.display = 'none';
+        }
+
+        // Fetch User Location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    currentLocation.latitude = position.coords.latitude;
+                    currentLocation.longitude = position.coords.longitude;
+                    map.setView([currentLocation.latitude, currentLocation.longitude], 13); // Update map view
+                    fetchStreetData();
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        async function fetchStreetData() {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&format=json`);
+                const data = await response.json();
+                currentLocation.street = data.address.road || 'Unknown Street';
+                currentLocation.town = data.address.town || 'Unknown Town';
+                currentLocation.ward = data.address.ward || 'Unknown Ward';
+
+                // Update Location Banner
+                document.getElementById('locationBanner').textContent = `You are in ${currentLocation.street}, ${currentLocation.town}. Ward: ${currentLocation.ward}`;
+            } catch (error) {
+                console.error('Error fetching street data:', error);
+            }
+        }
+
+        // Initialize
+        getUserLocation();
         fetchPosts();
     </script>
 </body>
