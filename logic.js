@@ -32,8 +32,6 @@ if (postButton) {
 
 
 
-
-
 // Initialize the map with a light theme
 let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
 
@@ -69,6 +67,34 @@ const markerIcon = {
     'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
 };
 
+// Define ward councillors data
+const wardCouncillors = [
+    { wardNo: '1', councillorName: 'John Doe', cllrCont: '+1234567890' },
+    { wardNo: '2', councillorName: 'Jane Smith', cllrCont: '+0987654321' },
+    // Add more councillors as needed
+];
+
+// Function to extract ward number from address
+function getWardNoFromAddress(address) {
+    const wardMatch = address.match(/Ward (\d+)/);
+    return wardMatch ? wardMatch[1] : 'Unknown';
+}
+
+// Function to get councillor by ward number
+function getCouncilorByWard(wardNo) {
+    if (!wardCouncillors || wardCouncillors.length === 0) {
+        console.error('Councillors data is not available.');
+        return null;
+    }
+    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
+    if (councillor) {
+        return councillor;
+    } else {
+        console.error('Councilor not found for ward:', wardNo);
+        return null;
+    }
+}
+
 // Call the function to set the user's location when the page loads
 setUserLocation();
 
@@ -88,15 +114,18 @@ function setUserLocation() {
 
                 // Reverse geocode the coordinates to get the address
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        // Get the street, suburb, and ward number
                         const address = data.display_name;
                         const streetName = data.address.road || 'Unknown Street';
                         const suburbName = data.address.suburb || 'Unknown Suburb';
-                        const wardNo = getWardNoFromAddress(address); // You need to write this function
+                        const wardNo = getWardNoFromAddress(address);
 
-                        // Get the councillor info based on the ward number
                         const councillor = getCouncilorByWard(wardNo);
                         const councillorName = councillor ? councillor.councillorName : 'No councillor found';
 
@@ -115,8 +144,7 @@ function setUserLocation() {
                     });
             },
             (error) => {
-                console.log(error);
-                // Fallback to a default location if geolocation fails
+                console.error('Geolocation error:', error);
                 map.setView([-26.2041, 28.0473], 18);
             }
         );
@@ -125,19 +153,9 @@ function setUserLocation() {
     }
 }
 
-// Function to search for the councilor by ward number
-function getCouncilorByWard(wardNo) {
-    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
-    if (councillor) {
-        return councillor;
-    } else {
-        console.error('Councilor not found for ward:', wardNo);
-        return null;
-    }
-}
-
 // Modal Functions
 function openWardModal() {
+    const wardNo = getWardNoFromAddress(document.querySelector('.leaflet-popup-content strong').textContent);
     const councillor = getCouncilorByWard(wardNo);
     if (!councillor) return;
 
@@ -163,54 +181,24 @@ function openPostModal() {
     postModal.style.display = "block";
 }
 
-// WardModal HTML
-/*
-<div id="WardModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Contact Your Councilor</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Would you like to contact the councilor?</p>
-                <button id="whatsappButton" class="btn btn-success">WhatsApp</button>
-                <button id="phoneButton" class="btn btn-primary">Call</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-*/
+// Close modals when clicking outside or on close buttons
+document.querySelectorAll('.close, .btn-secondary').forEach(button => {
+    button.addEventListener('click', () => {
+        const modal = button.closest('.modal');
+        modal.style.display = 'none';
+    });
+});
 
-// RateModal HTML
-/*
-<div id="RateModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Rate Your Councilor</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Rate the councilor out of 5:</p>
-                <input type="number" min="1" max="5" />
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-*/
+window.onclick = (event) => {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
+}; 
 
-// PostModal HTML (To Be Defined Later)
+
+
+
+
 
 
 
