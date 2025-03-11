@@ -34,7 +34,6 @@ if (postButton) {
 
 
 
-
 // Initialize the map with a light theme
 let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
 
@@ -43,6 +42,14 @@ let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net
     attribution: '&copy; <a href="https://carto.com">CARTO</a>',
     maxZoom: 20
 }).addTo(map);
+
+// Tile layer for dark mode
+let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+});
+
+// Add the default light layer
+lightLayer.addTo(map);
 
 // Custom "You Are Here" icon using a PNG
 const youAreHereIcon = L.icon({
@@ -54,31 +61,16 @@ const youAreHereIcon = L.icon({
 
 // Define icons for each incident type
 const markerIcon = {
-    'Good Deeds': L.icon({
-        iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png',
-        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-    }),
-    'Health': L.icon({
-        iconUrl: 'https://1pulse.online/images/Health-location.png',
-        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-    }),
-    'Service Delivery': L.icon({
-        iconUrl: 'https://1pulse.online/images/property.png',
-        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-    }),
-    'Violent Crime': L.icon({
-        iconUrl: 'https://1pulse.online/images/crime.png',
-        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-    }),
-    'Looting': L.icon({
-        iconUrl: 'https://1pulse.online/images/looting.png',
-        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-    }),
-    'Non-compliance': L.icon({
-        iconUrl: 'https://1pulse.online/images/xenophobia.png',
-        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
-    })
+    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
+    'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
+    'Service Delivery': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
+    'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/crime.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
+    'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
+    'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
 };
+
+// Call the function to set the user's location when the page loads
+setUserLocation();
 
 // Function to get user's location and set the map view
 function setUserLocation() {
@@ -98,9 +90,24 @@ function setUserLocation() {
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
                     .then(response => response.json())
                     .then(data => {
-                        // If the geocoding request returns a valid address
+                        // Get the street, suburb, and ward number
                         const address = data.display_name;
-                        userMarker.bindPopup(`Your current location is: ${address} <strong>What's going on?</strong>`).openPopup();
+                        const streetName = data.address.road || 'Unknown Street';
+                        const suburbName = data.address.suburb || 'Unknown Suburb';
+                        const wardNo = getWardNoFromAddress(address); // You need to write this function
+
+                        // Get the councillor info based on the ward number
+                        const councillor = getCouncilorByWard(wardNo);
+                        const councillorName = councillor ? councillor.councillorName : 'No councillor found';
+
+                        // Update the popup message
+                        userMarker.bindPopup(`
+                            <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
+                            Your ward councillor is ${councillorName}.<br>
+                            <button onclick="openWardModal()">Contact Councilor</button>
+                            <button onclick="openRateModal()">Rate Councilor</button>
+                            <button onclick="openPostModal()">What's Up?</button>
+                        `).openPopup();
                     })
                     .catch(error => {
                         console.error('Error fetching address:', error);
@@ -118,14 +125,93 @@ function setUserLocation() {
     }
 }
 
-// Call the function to set the user's location when the page loads
-setUserLocation();
+// Function to search for the councilor by ward number
+function getCouncilorByWard(wardNo) {
+    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
+    if (councillor) {
+        return councillor;
+    } else {
+        console.error('Councilor not found for ward:', wardNo);
+        return null;
+    }
+}
 
-let darkMode = false;
-let currentPosition = 0; // Keeping the variable as requested
+// Modal Functions
+function openWardModal() {
+    const councillor = getCouncilorByWard(wardNo);
+    if (!councillor) return;
 
-const logos = document.querySelectorAll(".logo"); // Get all the logo divs
-let logoWidth = logos.length > 0 ? logos[0].offsetWidth + 16 : 0; // Check if logos exist before accessing
+    const wardModal = document.getElementById("WardModal");
+    const whatsappButton = document.getElementById("whatsappButton");
+    const phoneButton = document.getElementById("phoneButton");
+
+    // Set WhatsApp and Phone links
+    whatsappButton.onclick = () => window.open(`https://wa.me/${councillor.cllrCont}`);
+    phoneButton.onclick = () => window.location.href = `tel:${councillor.cllrCont}`;
+
+    // Show the modal
+    wardModal.style.display = "block";
+}
+
+function openRateModal() {
+    const rateModal = document.getElementById("RateModal");
+    rateModal.style.display = "block";
+}
+
+function openPostModal() {
+    const postModal = document.getElementById("PostModal");
+    postModal.style.display = "block";
+}
+
+// WardModal HTML
+/*
+<div id="WardModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Contact Your Councilor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Would you like to contact the councilor?</p>
+                <button id="whatsappButton" class="btn btn-success">WhatsApp</button>
+                <button id="phoneButton" class="btn btn-primary">Call</button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+*/
+
+// RateModal HTML
+/*
+<div id="RateModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rate Your Councilor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Rate the councilor out of 5:</p>
+                <input type="number" min="1" max="5" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+*/
+
+// PostModal HTML (To Be Defined Later)
+
 
 
 
