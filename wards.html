@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ward Councillors Data</title>
+    <title>Ward Councillor Search</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #search-bar {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -20,26 +30,25 @@
     </style>
 </head>
 <body>
-    <h1>Ward Councillors Data</h1>
-    <table id="wards-table">
+    <h1>Ward Councillor Search</h1>
+    <input type="text" id="search-bar" placeholder="Enter ward number, address, or councillor name...">
+    <table id="results-table">
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Councillor Name</th>
+                <th>Cllr Name</th>
                 <th>Party</th>
-                <th>Region</th>
                 <th>Ward No</th>
                 <th>Ward Suburbs</th>
-                <th>Ward Administrator</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Rows will be populated by JavaScript -->
+            <!-- Results will be populated here -->
         </tbody>
     </table>
 
     <script>
-        // JavaScript database format
+        // Sample JSON data (replace with the full dataset)
         const wardCouncillors = [
             {
                 no: 1,
@@ -59,24 +68,56 @@
                 wardSuburbs: "Lakeside 1,2,3 and 5 Orange Farm Ext.1 part of",
                 wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
             },
-            // Add more entries as needed...
+            // Add all 135+ entries here...
         ];
 
-        // Populate the table with data
-        const tableBody = document.querySelector("#wards-table tbody");
-        wardCouncillors.forEach(ward => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${ward.no}</td>
-                <td>${ward.councillorName}</td>
-                <td>${ward.party}</td>
-                <td>${ward.region}</td>
-                <td>${ward.wardNo}</td>
-                <td>${ward.wardSuburbs}</td>
-                <td>${ward.wardAdministrator}</td>
-            `;
-            tableBody.appendChild(tr);
+        // Function to search the data
+        function searchData(query) {
+            const results = wardCouncillors.filter(ward => {
+                return (
+                    ward.wardNo.toString().includes(query) || // Search by ward number
+                    ward.councillorName.toLowerCase().includes(query.toLowerCase()) || // Search by councillor name
+                    ward.wardSuburbs.toLowerCase().includes(query.toLowerCase()) // Search by ward suburbs
+                );
+            });
+            return results;
+        }
+
+        // Function to display results
+        function displayResults(results) {
+            const tableBody = document.querySelector("#results-table tbody");
+            tableBody.innerHTML = ""; // Clear previous results
+
+            results.forEach(ward => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${ward.no}</td>
+                    <td>${ward.councillorName.split(" ").slice(0, 3).join(" ")}</td>
+                    <td>${ward.party}</td>
+                    <td>${ward.wardNo}</td>
+                    <td>${ward.wardSuburbs}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Event listener for the search bar
+        const searchBar = document.getElementById("search-bar");
+        searchBar.addEventListener("input", (event) => {
+            const query = event.target.value;
+            const results = searchData(query);
+            displayResults(results);
         });
+
+        // Detect user location (optional)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                console.log("User location:", lat, lon);
+                // You can use a reverse geocoding API to get the user's address
+            });
+        }
     </script>
 </body>
 </html>
