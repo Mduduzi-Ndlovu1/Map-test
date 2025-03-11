@@ -1065,7 +1065,9 @@ border-radius: 10px;
   color: #aaa;
   font-size: 28px;
   font-weight: bold;
-  
+  position: absolute;
+  float: right ;
+  righ: 25px;
 }
 
 .close-brah:hover,
