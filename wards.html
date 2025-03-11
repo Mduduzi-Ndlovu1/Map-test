@@ -3,65 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ward Councillors PDF Viewer</title>
+    <title>Ward Councillors Data</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #pdf-viewer {
+        table {
             width: 100%;
-            height: 80vh;
-            border: 1px solid #ccc;
-            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
-    <h1>Ward Councillors PDF Viewer</h1>
-    <p>Displaying the content of the PDF from the provided URL:</p>
-    <div id="pdf-viewer"></div>
+    <h1>Ward Councillors Data</h1>
+    <table id="wards-table">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Councillor Name</th>
+                <th>Party</th>
+                <th>Region</th>
+                <th>Ward No</th>
+                <th>Ward Suburbs</th>
+                <th>Ward Administrator</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be populated by JavaScript -->
+        </tbody>
+    </table>
 
-    <!-- PDF.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script>
-        // URL of the PDF
-        const pdfUrl = 'https://joburg.org.za/about_/documents/ward%20councillors%20by%20region-suburbs-ward%202019.pdf';
+        // JavaScript database format
+        const wardCouncillors = [
+            {
+                no: 1,
+                councillorName: "Cllr. Msingathi Mazibukwana 078 248 0981 011 850 1008 MasingathiM@joburg.org.za",
+                party: "ANC",
+                region: "G",
+                wardNo: 1,
+                wardSuburbs: "Streford 5,6,7,8 and 9 Phase 1, 2 and 3",
+                wardAdministrator: "Bongani Dlamini 082 553 7672 011 850 1097"
+            },
+            {
+                no: 2,
+                councillorName: "Cllr. Dimakstso Jeanette Ramafikeng 074 574 4774 011 850 116",
+                party: "ANC",
+                region: "G",
+                wardNo: 2,
+                wardSuburbs: "Lakeside 1,2,3 and 5 Orange Farm Ext.1 part of",
+                wardAdministrator: "Mzwanele Dioboyi 011 850 1071 083 406 9643"
+            },
+            // Add more entries as needed...
+        ];
 
-        // Asynchronous function to render the PDF
-        async function renderPDF(url) {
-            // Load the PDF document
-            const loadingTask = pdfjsLib.getDocument(url);
-            const pdf = await loadingTask.promise;
-
-            // Get the first page
-            const pageNumber = 1;
-            const page = await pdf.getPage(pageNumber);
-
-            // Set the scale of the viewport
-            const scale = 1.5;
-            const viewport = page.getViewport({ scale });
-
-            // Prepare the canvas for rendering
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            // Append the canvas to the PDF viewer container
-            const pdfViewer = document.getElementById('pdf-viewer');
-            pdfViewer.appendChild(canvas);
-
-            // Render the PDF page into the canvas context
-            const renderContext = {
-                canvasContext: context,
-                viewport: viewport
-            };
-            await page.render(renderContext).promise;
-        }
-
-        // Call the function to render the PDF
-        renderPDF(pdfUrl);
+        // Populate the table with data
+        const tableBody = document.querySelector("#wards-table tbody");
+        wardCouncillors.forEach(ward => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${ward.no}</td>
+                <td>${ward.councillorName}</td>
+                <td>${ward.party}</td>
+                <td>${ward.region}</td>
+                <td>${ward.wardNo}</td>
+                <td>${ward.wardSuburbs}</td>
+                <td>${ward.wardAdministrator}</td>
+            `;
+            tableBody.appendChild(tr);
+        });
     </script>
 </body>
 </html>
