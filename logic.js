@@ -35,10 +35,8 @@ if (postButton) {
 
 
 
-
-
 // Initialize the map with a light theme
-let map = L.map('map',{zoomControl: false}).setView([-26.2041, 28.0473], 18);
+let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
 
 // Tile layer for light mode
 let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
@@ -46,49 +44,42 @@ let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net
     maxZoom: 20
 }).addTo(map);
 
-// Tile layer for dark mode
-let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-});
-
-// Add the default light layer
-lightLayer.addTo(map);
-
 // Custom "You Are Here" icon using a PNG
-  const youAreHereIcon = L.icon({
+const youAreHereIcon = L.icon({
     iconUrl: 'https://1pulse.online/images/user-here.png', // Replace with your PNG URL
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
-  });
+});
 
-  // Define icons for each incident type
+// Define icons for each incident type
 const markerIcon = {
-    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-      popupAnchor: [0, -30]}),
-    'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-      popupAnchor: [0, -30]}),
-    'Service Delivery': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-      popupAnchor: [0, -30]}),
-    'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/crime.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-      popupAnchor: [0, -30]}),
-    'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30],  iconAnchor: [15, 30],
-      popupAnchor: [0, -30]}),
-    'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
-      popupAnchor: [0, -30] })
-  };
+    'Good Deeds': L.icon({
+        iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png',
+        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+    }),
+    'Health': L.icon({
+        iconUrl: 'https://1pulse.online/images/Health-location.png',
+        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+    }),
+    'Service Delivery': L.icon({
+        iconUrl: 'https://1pulse.online/images/property.png',
+        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+    }),
+    'Violent Crime': L.icon({
+        iconUrl: 'https://1pulse.online/images/crime.png',
+        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+    }),
+    'Looting': L.icon({
+        iconUrl: 'https://1pulse.online/images/looting.png',
+        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+    }),
+    'Non-compliance': L.icon({
+        iconUrl: 'https://1pulse.online/images/xenophobia.png',
+        iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30]
+    })
+};
 
-// Call the function to set the user's location when the page loads
-setUserLocation();
-
-let darkMode = false;
-
- const logos = document.querySelectorAll(".logo"); // Get all the logo divs
-
-const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
-let currentPosition = 0;
-
-// All fuctions from here onwards
 // Function to get user's location and set the map view
 function setUserLocation() {
     if (navigator.geolocation) {
@@ -101,16 +92,15 @@ function setUserLocation() {
                 map.setView([userLat, userLng], 18);
 
                 // Add marker for the user's location
-                let userMarker = L.marker([userLat, userLng],{ icon: youAreHereIcon }).addTo(map);
+                let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
 
                 // Reverse geocode the coordinates to get the address
-                fetch(https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json)
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
                     .then(response => response.json())
                     .then(data => {
                         // If the geocoding request returns a valid address
                         const address = data.display_name;
-                        userMarker.bindPopup("Your current location is: " + address + "<strong>Whats going on?</strong>").openPopup();
-
+                        userMarker.bindPopup(`Your current location is: ${address} <strong>What's going on?</strong>`).openPopup();
                     })
                     .catch(error => {
                         console.error('Error fetching address:', error);
@@ -127,6 +117,19 @@ function setUserLocation() {
         alert('Geolocation is not supported by this browser.');
     }
 }
+
+// Call the function to set the user's location when the page loads
+setUserLocation();
+
+let darkMode = false;
+let currentPosition = 0; // Keeping the variable as requested
+
+const logos = document.querySelectorAll(".logo"); // Get all the logo divs
+let logoWidth = logos.length > 0 ? logos[0].offsetWidth + 16 : 0; // Check if logos exist before accessing
+
+
+
+
 
 // Function to toggle between light and dark mode
 function toggleDarkMode() {
