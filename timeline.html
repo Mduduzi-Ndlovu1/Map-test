@@ -6,18 +6,12 @@
     <title>Timeline with Light-Themed Leaflet Map</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  
-
     <link rel="icon" href="https://1pulse.online/images/ipulse-logo.png" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="all-styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="all-styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<link rel="manifest" href="/manifest.json">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
- 
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -35,13 +29,13 @@
             z-index: 1; 
         }
         .timeline-container { 
-top: 60px;
+            top: 10px;
             position: relative; 
             z-index: 2; 
             width: 90%; 
             max-width: 600px; 
             margin: 20px auto; 
-            background: rgba(255, 255, 255, 0.5); 
+            background: rgba(255, 255, 255, 0.2); 
             padding: 20px; 
             border-radius: 8px; 
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); 
@@ -68,8 +62,6 @@ top: 60px;
             margin-top: 5px; 
             cursor: pointer; 
         }
-        .edit-btn { background: #ffc107; }
-        .delete-btn { background: #dc3545; color: white; }
         .comment-btn { background: #007bff; color: white; }
         .location-banner { 
             background: #4CAF50; 
@@ -78,8 +70,8 @@ top: 60px;
             font-size: 18px; 
             text-align: center; 
             position: relative; 
-            z-index: 2; 
-top:60px;
+            z-index: 2;
+            visibility: hidden;
         }
         .new-post-btn { 
             background: #007bff; 
@@ -96,10 +88,10 @@ top:60px;
             z-index: 2; 
         }
         /* Modal styles */
-        .modal { 
+        .modal-tl { 
             display: none; 
             position: fixed; 
-            z-index: 1000; 
+            z-index: 9999999; 
             left: 0; 
             top: 0; 
             width: 100%; 
@@ -108,31 +100,32 @@ top:60px;
             justify-content: center; 
             align-items: center; 
         }
-        .modal-content { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 5px; 
-            text-align: left; 
-            width: 90%; 
-            max-width: 400px; 
-        }
+       .modal-content-tl { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 5px; 
+    text-align: left; 
+    width: 90%; 
+    max-height: 70vh; /* Use vh for better responsiveness */
+    max-width: 400px; 
+    overflow-y: auto; /* Enable vertical scrolling */
+}
         .close { float: right; font-size: 20px; cursor: pointer; }
         .comments { margin-top: 10px; }
         .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
     </style>
 </head>
 <body>
-
     <!-- Logo Navigation -->
     <div id="logo-nav">
       <div id="logo-container">
           <div class="logo" data-modal-id="1"> 
               <img src="https://1pulse.online/images/errand%20camel%20logo.png" alt="Logo 1">
           </div>
- <div class="logo" data-modal-id="5">
+          <div class="logo" data-modal-id="5">
               <img src="https://i.ibb.co/39Z55ry2/JmJ.png" alt="Logo 2">
           </div>
- <div class="logo" data-modal-id="5">
+          <div class="logo" data-modal-id="5">
               <img src="https://i.ibb.co/YwWPCP8/G20-logo.png" alt="Logo 3">
           </div>
           <div class="logo" data-modal-id="4">
@@ -144,40 +137,34 @@ top:60px;
           <div class="logo" data-modal-id="4">
               <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 5">
           </div>
-
           <div class="logo" data-modal-id="6">
               <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
           </div>
       </div>
     </div>
- </div>
     <!-- Modal for logos -->
-  <div id="myModal" class="modal-brah">
-    <div class="modal-content-brah">
-      <span class="close-brah">&times;</span>
-      <h2 class="modal-title-brah"></h2>
-      <p class="modal-description-brah"></p>
-      <div class="image-container">
-        <img class="modal-image-brah" src="" alt="Modal Image">
-
-      </div>
+    <div id="myModal" class="modal-brah">
+        <div class="modal-content-brah">
+            <span class="close-brah">&times;</span>
+            <h2 class="modal-title-brah"></h2>
+            <p class="modal-description-brah"></p>
+            <div class="image-container">
+                <img class="modal-image-brah" src="" alt="Modal Image">
+            </div>
+        </div>
     </div>
-  </div>
-
     <!-- Leaflet Map -->
     <div id="map"></div>
 
-    <!-- Location Banner --
-    <div id="locationBanner" class="location-banner">Loading your location...</div>-->
-
- 
+    <!-- Location Banner -->
+    <div id="locationBanner" class="location-banner">Loading your location...</div>
 
     <!-- Timeline Container -->
     <div class="timeline-container" id="timeline"></div>
 
     <!-- View Post Modal -->
-    <div id="viewModal" class="modal">
-        <div class="modal-content">
+    <div id="viewModal" class="modal-tl">
+        <div class="modal-content-tl">
             <span class="close" onclick="closeModal()">&times;</span>
             <div id="postDetails"></div>
             <h3>Comments</h3>
@@ -187,18 +174,6 @@ top:60px;
                 <textarea id="commentText" placeholder="Add a comment" required></textarea><br>
                 <button type="submit" class="btn comment-btn">Post Comment</button>
             </form>
-        </div>
-    </div>
-
-    <!-- Edit Post Modal -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
-            <h3>Edit Post</h3>
-            <input type="text" id="editName" placeholder="Name"><br>
-            <input type="text" id="editSurname" placeholder="Surname"><br>
-            <textarea id="editDescription" placeholder="Description"></textarea><br>
-            <button onclick="savePostChanges()" class="btn edit-btn">Save Changes</button>
         </div>
     </div>
 
@@ -216,37 +191,28 @@ top:60px;
         </div>
     </div>
 
-
-
-
-
-
-
-
-
     <p id="gyroscope"></p> <!-- Degrees Text -->
-<div class="bottom-touch">
-  <div id="penIcon">
-        <!-- Pen Image -->
-        <img src="compass.png" alt="Pen Icon">
-    </div> 
+    <div class="bottom-touch">
+        <div id="penIcon">
+            <!-- Pen Image -->
+            <img src="compass.png" alt="Pen Icon">
+        </div> 
+        <a href="https://1pulse-online-beta.netlify.app/" class="circle-button">
+            <i class="fas fa-stream"></i> <!-- Timeline icon -->
+        </a>
+        <div class="circle-button" onclick="openNewPostModal()">
+            <i class="fas fa-pen"></i> <!-- Pen icon -->
+        </div>
+        <a href="https://1pulse.online/dashboard/" class="circle-button">
+            <i class="fas fa-user"></i> <!-- User icon -->
+        </a>
+    </div>
 
-<a href="https://1pulse-online-beta.netlify.app/" class="circle-button">
-    <i class="fas fa-stream"></i> <!-- Timeline icon -->
-  </a>
- <div class="circle-button" onclick="openNewPostModal()">
-  <i class="fas fa-pen"></i> <!-- Pen icon -->
-</div>
-  <a href="https://1pulse.online/dashboard/" class="circle-button">
-    <i class="fas fa-user"></i> <!-- User icon -->
-  </a>
-
-</div>
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Initialize the map with a light-themed tile layer
-        const map = L.map('map').setView([0, 0], 13); // Default view, will be updated with user's location
+        // Initialize the map with a light-themed tile layer and disable zoom controls
+        const map = L.map('map', { zoomControl: false }).setView([0, 0], 13); // Disable zoom controls
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '© OpenStreetMap contributors, © CartoDB'
         }).addTo(map);
@@ -276,8 +242,6 @@ top:60px;
                     <b>${post.name || 'Anonymous'} ${post.surname || ''}</b><br>
                     <p>${post.description || 'No description provided'}</p>
                     <img src="${post.imageUrl}" alt="Post Image" onclick="openViewPostModal('${post._id}')"><br>
-                    <button class="btn edit-btn" onclick="openEditModal('${post._id}')">Edit</button>
-                    <button class="btn delete-btn" onclick="deletePost('${post._id}')">Delete</button>
                 `;
                 timeline.appendChild(postContainer);
             });
@@ -338,54 +302,6 @@ top:60px;
             }
         });
 
-        // Open Edit Post Modal
-        async function openEditModal(postId) {
-            currentPostId = postId;
-            try {
-                const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
-                const post = await response.json();
-
-                document.getElementById('editName').value = post.name || '';
-                document.getElementById('editSurname').value = post.surname || '';
-                document.getElementById('editDescription').value = post.description || '';
-
-                document.getElementById('editModal').style.display = 'flex';
-            } catch (error) {
-                console.error('Error fetching post:', error);
-            }
-        }
-
-        // Save Post Changes
-        async function savePostChanges() {
-            const updatedPost = {
-                name: document.getElementById('editName').value,
-                surname: document.getElementById('editSurname').value,
-                description: document.getElementById('editDescription').value
-            };
-
-            try {
-                await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedPost)
-                });
-                fetchPosts();
-                closeEditModal();
-            } catch (error) {
-                alert('Error saving changes!');
-            }
-        }
-
-        // Delete Post
-        async function deletePost(postId) {
-            try {
-                await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`, { method: 'DELETE' });
-                fetchPosts();
-            } catch (error) {
-                alert('Error deleting post!');
-            }
-        }
-
         // Open New Post Modal
         function openNewPostModal() {
             if (!currentLocation.street) {
@@ -400,10 +316,6 @@ top:60px;
         // Close Modals
         function closeModal() {
             document.getElementById('viewModal').style.display = 'none';
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').style.display = 'none';
         }
 
         function closeNewPostModal() {
