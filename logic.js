@@ -127,7 +127,7 @@ function setUserLocation() {
                         const wardNo = getWardNoFromAddress(address);
 
                         const councillor = getCouncilorByWard(wardNo);
-                        const councillorName = councillor ? councillor.councillorName : 'No councillor found';
+                        const councillorName = councillor ? councillor.councillorName : 'Not found';
 
                         // Update the popup message
                         userMarker.bindPopup(`
