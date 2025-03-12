@@ -129,6 +129,40 @@ const wardCouncillors = [
         adminCont: "0824679354",
         adminTel: "0119805464"
     },
+
+
+    
+    {
+        no: 11,
+        councillorName: "Cllr. Meisie Maluleke",
+        cllrCont: "0796858539",
+        cllrTel: "0119804947",
+        party: "ANC",
+        region: "D",
+        wardNo: 11,
+        wardSuburbs: "Tshiaweio Ext 1 & 2 Klipspruit West Heavenly Valley Informal Settlement",
+        wardAdministrator: "Joel Ndala",
+        adminCont: "0824679355",
+        adminTel: "0119862866"
+    },
+    {
+        no: 12,
+        councillorName: "Cllr. Jabulani Mnisi",
+        cllrCont: "0788163202",
+        cllrTel: "0119866189",
+        party: "ANC",
+        region: "D",
+        wardNo: 12,
+        wardSuburbs: "Chiaweio Ext 2,3,4 & 5 NB Ext 3 includes Chiaweio Flats & Police View",
+        wardAdministrator: "Joel Ndala",
+        adminCont: "0824679355",
+        adminTel: "0119862866"
+    }, 
+
+
+
+
+
     {
         no: 119,
         councillorName: "Cllr. Mangaliso Leonard Ngwerya",
