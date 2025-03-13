@@ -135,7 +135,7 @@ function setUserLocation() {
                             Your ward councillor is ${councillorName}.<br>
                             <button Class="call" onclick="openWardModal()">Contact Councilor</button>
                             <button Class="rate"  onclick="openRateModal()">Rate Councilor</button>
-                            <button Class="post"  onclick="openPostModal(userLat, userLng)">What's Happening?</button>
+                            <button Class="post"  onclick="openPostModal(${user Lat},${userLng})">What's Happening?</button>
                         `).openPopup();
                     })
                     .catch(error => {
