@@ -94,40 +94,48 @@ function setUserLocation() {
                 // Add marker for the user's location
                 let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
 
-                // Reverse geocode the coordinates to get the address
-                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const address = data.display_name;
-                        const streetName = data.address.road || 'Unknown Street';
-                        const suburbName = data.address.suburb || 'Unknown Suburb';
-                        const wardNo = getWardNoFromAddress(address);
-                        const councillor = getCouncillorByWard(wardNo);
-                        const councillorName = councillor ? councillor.councillorName : 'Not found';
+// Display location
+                    document.getElementById("location").textContent = `You are in ${street}, ${suburb}.`;
 
-                        userMarker.bindPopup(`
-                            <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
-                            Your ward councillor is ${councillorName}.<br>
-                            <button class="call" onclick="openWardModal()">Contact Councilor</button>
-                            <button class="rate" onclick="openRateModal()">Rate Councilor</button>
-                            <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
-                        `).openPopup();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching address:', error);
-                        userMarker.bindPopup('Your position').openPopup();
-                    });
-            },
-            (error) => {
-                console.error('Geolocation error:', error);
-                map.setView([-26.2041, 28.0473], 18);
-            }
-        );
-    } else {
-        alert('Geolocation is not supported by this browser.');
-    }
+                    // Extract ward number from suburb
+                    const wardMatch = suburb.match(/ward\s*(\d+)/i);
+                    const wardNo = wardMatch ? parseInt(wardMatch[1], 10) : null;
+
+                    // Lookup ward councillor if ward number is found
+                    if (wardNo !== null) {
+                        const councillor = getCouncillorByWard(wardNo);
+                        if (councillor) {
+                            document.getElementById("result").innerHTML = `
+                              Your ward councillor is ${councillor.councillorName}.
+                             
+                function setUserMarkerPopup(content) {
+    userMarker.bindPopup(content).openPopup();
 }
 
+fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
+    .then(response => response.json())
+    .then(data => {
+        const address = data.display_name;
+        const streetName = data.address.road || 'Unknown Street';
+        const suburbName = data.address.suburb || 'Unknown Suburb';
+        const wardNo = getWardNoFromAddress(address);
+        const councillor = getCouncillorByWard(wardNo);
+        const councillorName = councillor ? councillor.councillorName : 'Not found';
+
+        const popupContent = `
+            <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
+            Your ward councillor is ${councillorName}.<br>
+            <button class="call" onclick="openWardModal()">Contact Councilor</button>
+            <button class="rate" onclick="openRateModal()">Rate Councilor</button>
+            <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
+        `;
+
+        setUserMarkerPopup(popupContent);
+    })
+    .catch(error => {
+        console.error('Error fetching address:', error);
+        setUserMarkerPopup('Your position'); // Reuse the function for error case
+    });
 // Modal Functions
 function openWardModal() {
     const wardNo = getWardNoFromAddress(document.querySelector('.leaflet-popup-content strong').textContent);
