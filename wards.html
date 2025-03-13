@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,18 +111,25 @@
                     // Display location
                     document.getElementById("location").textContent = `You are in ${street}, ${suburb}.`;
 
-                    // Simulated ward lookup - replace with real logic
-                    const wardNo = 1; // Example: Replace with an actual lookup mechanism
-                    const councillor = getCouncillorByWard(wardNo);
+                    // Extract ward number from suburb
+                    const wardMatch = suburb.match(/ward\s*(\d+)/i);
+                    const wardNo = wardMatch ? parseInt(wardMatch[1], 10) : null;
 
-                    if (councillor) {
-                        document.getElementById("result").innerHTML = `
-                            You are in Ward ${wardNo}. Your ward councillor is ${councillor.councillorName}.
-                            <button onclick="showContactModal(${wardNo})">Contact Councillor</button>
-                        `;
+                    // Lookup ward councillor if ward number is found
+                    if (wardNo !== null) {
+                        const councillor = getCouncillorByWard(wardNo);
+                        if (councillor) {
+                            document.getElementById("result").innerHTML = `
+                                You are in Ward ${wardNo}. Your ward councillor is ${councillor.councillorName}.
+                                <button onclick="showContactModal(${wardNo})">Contact Councillor</button>
+                            `;
+                        } else {
+                            document.getElementById("result").textContent = `Ward ${wardNo} not found in records.`;
+                        }
                     } else {
-                        document.getElementById("result").textContent = "No councillor found for your ward.";
+                        document.getElementById("result").textContent = "Ward number not found in suburb name.";
                     }
+
                 } catch (error) {
                     console.error("Error getting location:", error);
                     document.getElementById("location").textContent = "Unable to detect your location.";
