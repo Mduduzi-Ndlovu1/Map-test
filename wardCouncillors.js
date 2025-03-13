@@ -572,9 +572,7 @@ const wardCouncillors = [
         region: "C",
         wardNo: 44,
         wardSuburbs: "Braamfischerville Phase 1,2,9 & 10 Mmesi Park, Meadowlands Ext.11,12 & 13",
-        wardAdministrator:
-
-},
+        wardAdministrator:"N/A"},
     {
         no: 44,
         councillorName: "Cllr. George Lekgetho",
