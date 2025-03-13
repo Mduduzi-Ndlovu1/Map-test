@@ -131,11 +131,11 @@ function setUserLocation() {
 
                         // Update the popup message
                         userMarker.bindPopup(`
-                            <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
+                            <strong>You are in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
                             Your ward councillor is ${councillorName}.<br>
-                            <button onclick="openWardModal()">Contact Councilor</button>
-                            <button onclick="openRateModal()">Rate Councilor</button>
-                            <button onclick="openPostModal()">What's Up?</button>
+                            <button Class="call" onclick="openWardModal()">Contact Councilor</button>
+                            <button Class="rate"  onclick="openRateModal()">Rate Councilor</button>
+                            <button Class="post"  onclick="openPostModal()">What's Happening?</button>
                         `).openPopup();
                     })
                     .catch(error => {
