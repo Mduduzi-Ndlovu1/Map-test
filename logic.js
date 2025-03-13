@@ -135,7 +135,7 @@ function setUserLocation() {
                             Your ward councillor is ${councillorName}.<br>
                             <button Class="call" onclick="openWardModal()">Contact Councilor</button>
                             <button Class="rate"  onclick="openRateModal()">Rate Councilor</button>
-                            <button Class="post"  onclick="openPostModal(${user Lat},${userLng})">What's Happening?</button>
+                            <button Class="post"  onclick="openPostModal(userLat , userLng)">What's Happening?</button>
                         `).openPopup();
                     })
                     .catch(error => {
@@ -258,6 +258,16 @@ function openPostModal(lat, lng) {
     document.getElementById('modal-overlay').classList.add('active');
     document.getElementById('modal').classList.add('active');
 }
+
+// Open modal to create a post from location
+function openPostModal(userLat,userLng) {
+  selectedLatLng = { userLat, userLng };
+  console.log('Map clicked at:', userLat, userLng);  // Check if lat/lng are logged correctly
+
+  document.getElementById('modal-overlay').classList.add('active');
+  document.getElementById('modal').classList.add('active');
+}
+
 
 // Close modal
 // Close modal and clear the form
