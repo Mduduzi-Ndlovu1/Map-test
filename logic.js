@@ -31,7 +31,6 @@ if (postButton) {
 
 
 
-
 // Initialize the map with a light theme
 let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
 
@@ -65,6 +64,139 @@ const markerIcon = {
     'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/crime.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
     'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
     'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
+};
+
+// Function to get councillor by ward number
+function getCouncillorByWard(wardNo) {
+    // Placeholder function, replace with actual implementation
+    const councillors = {
+        1: { councillorName: 'John Doe', cllrCont: '1234567890' },
+        2: { councillorName: 'Jane Smith', cllrCont: '0987654321' }
+        // Add more councillors as needed
+    };
+    return councillors[wardNo] || null;
+}
+
+// Function to get ward number from address
+function getWardNoFromAddress(address) {
+    // Placeholder function, replace with actual implementation
+    const wardMatch = address.match(/ward\s*(\d+)/i);
+    return wardMatch ? parseInt(wardMatch[1], 10) : null;
+}
+
+// Call the function to set the user's location when the page loads
+setUserLocation();
+
+// Function to get user's location and set the map view
+function setUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLat = position.coords.latitude;
+                const userLng = position.coords.longitude;
+
+                // Center the map on the user's location
+                map.setView([userLat, userLng], 18);
+
+                // Add marker for the user's location
+                let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
+
+                // Reverse geocode the coordinates to get the address
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const address = data.display_name;
+                        const streetName = data.address.road || 'Unknown Street';
+                        const suburbName = data.address.suburb || 'Unknown Suburb';
+                        const wardNo = getWardNoFromAddress(address);
+
+                        const councillor = getCouncillorByWard(wardNo);
+                        const councillorName = councillor ? councillor.councillorName : 'Not found';
+
+                        // Update the popup message
+                        userMarker.bindPopup(`
+                            <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
+                            Your ward councillor is ${councillorName}.<br>
+                            <button class="call" onclick="openWardModal()">Contact Councilor</button>
+                            <button class="rate" onclick="openRateModal()">Rate Councilor</button>
+                            <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
+                        `).openPopup();
+
+                        // Attach event listener to handle clicks on the dynamically created button
+                        document.addEventListener("click", function(event) {
+                            if (event.target && event.target.id === "postButton") {
+                                const lat = parseFloat(event.target.getAttribute("data-lat"));
+                                const lng = parseFloat(event.target.getAttribute("data-lng"));
+
+                                // Ensure lat/lng are valid before opening the modal
+                                if (!isNaN(lat) && !isNaN(lng)) {
+                                    openPostModal(lat, lng);
+                                } else {
+                                    console.error("Invalid coordinates for post modal.");
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching address:', error);
+                        userMarker.bindPopup('Your position').openPopup();
+                    });
+            },
+            (error) => {
+                console.error('Geolocation error:', error);
+                map.setView([-26.2041, 28.0473], 18);
+            }
+        );
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
+}
+
+// Modal Functions
+function openWardModal() {
+    const wardNo = getWardNoFromAddress(document.querySelector('.leaflet-popup-content strong').textContent);
+    const councillor = getCouncillorByWard(wardNo);
+    if (!councillor) return;
+
+    const wardModal = document.getElementById("WardModal");
+    const whatsappButton = document.getElementById("whatsappButton");
+    const phoneButton = document.getElementById("phoneButton");
+
+    // Set WhatsApp and Phone links
+    whatsappButton.onclick = () => window.open(`https://wa.me/${councillor.cllrCont}`);
+    phoneButton.onclick = () => window.location.href = `tel:${councillor.cllrCont}`;
+
+    // Show the modal
+    wardModal.style.display = "block";
+}
+
+function openRateModal() {
+    const rateModal = document.getElementById("RateModal");
+    rateModal.style.display = "block";
+}
+
+function openPostModal(lat, lng) {
+    const postModal = document.getElementById("PostModal");
+    postModal.style.display = "block";
+}
+
+// Close modals when clicking outside or on close buttons
+document.querySelectorAll('.close, .btn-secondary').forEach(button => {
+    button.addEventListener('click', () => {
+        const modal = button.closest('.modal');
+        modal.style.display = 'none';
+    });
+});
+
+window.onclick = (event) => {
+    if (event.target.classList.contains('modal')) {
+        event.target.style.display = 'none';
+    }
 };
 
 
