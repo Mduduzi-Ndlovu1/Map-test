@@ -67,33 +67,21 @@ const markerIcon = {
     'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
 };
 
-// Define ward councillors data
-const wardCouncillors = [
-    { wardNo: '1', councillorName: 'John Doe', cllrCont: '+1234567890' },
-    { wardNo: '2', councillorName: 'Jane Smith', cllrCont: '+0987654321' },
-    // Add more councillors as needed
-];
 
-// Function to extract ward number from address
-function getWardNoFromAddress(address) {
-    const wardMatch = address.match(/Ward (\d+)/);
-    return wardMatch ? wardMatch[1] : 'Unknown';
-}
 
-// Function to get councillor by ward number
-function getCouncilorByWard(wardNo) {
-    if (!wardCouncillors || wardCouncillors.length === 0) {
-        console.error('Councillors data is not available.');
-        return null;
-    }
-    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
-    if (councillor) {
-        return councillor;
-    } else {
-        console.error('Councilor not found for ward:', wardNo);
-        return null;
-    }
-}
+
+
+
+
+
+
+
+// Function to 
+// Function to get councillor by ward number 
+
+
+
+
 
 // Call the function to set the user's location when the page loads
 setUserLocation();
