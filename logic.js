@@ -121,23 +121,38 @@ function setUserLocation() {
                         return response.json();
                     })
                     .then(data => {
-                        const address = data.display_name;
-                        const streetName = data.address.road || 'Unknown Street';
-                        const suburbName = data.address.suburb || 'Unknown Suburb';
-                        const wardNo = getWardNoFromAddress(address);
+    const address = data.display_name;
+    const streetName = data.address.road || 'Unknown Street';
+    const suburbName = data.address.suburb || 'Unknown Suburb';
+    const wardNo = getWardNoFromAddress(address);
 
-                        const councillor = getCouncilorByWard(wardNo);
-                        const councillorName = councillor ? councillor.councillorName : 'Not found';
+    const councillor = getCouncilorByWard(wardNo);
+    const councillorName = councillor ? councillor.councillorName : 'Not found';
 
-                        // Update the popup message
-                        userMarker.bindPopup(`
-                            <strong>You are in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
-                            Your ward councillor is ${councillorName}.<br>
-                            <button Class="call" onclick="openWardModal()">Contact Councilor</button>
-                            <button Class="rate"  onclick="openRateModal()">Rate Councilor</button>
-                            <button Class="post"  onclick="openPostModal(userLat , userLng)">What's Happening?</button>
-                        `).openPopup();
-                    })
+    // Update the popup message
+    userMarker.bindPopup(`
+        <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
+        Your ward councillor is ${councillorName}.<br>
+        <button class="call" onclick="openWardModal()">Contact Councilor</button>
+        <button class="rate" onclick="openRateModal()">Rate Councilor</button>
+        <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
+    `).openPopup();
+
+    // Attach event listener to handle clicks on the dynamically created button
+    document.addEventListener("click", function(event) {
+        if (event.target && event.target.id === "postButton") {
+            const lat = parseFloat(event.target.getAttribute("data-lat"));
+            const lng = parseFloat(event.target.getAttribute("data-lng"));
+            
+            // Ensure lat/lng are valid before opening the modal
+            if (!isNaN(lat) && !isNaN(lng)) {
+                openPostModal(lat, lng);
+            } else {
+                console.error("Invalid coordinates for post modal.");
+            }
+        }
+    });
+})
                     .catch(error => {
                         console.error('Error fetching address:', error);
                         userMarker.bindPopup('Your position').openPopup();
