@@ -79,7 +79,21 @@ const markerIcon = {
 // Function to 
 // Function to get councillor by ward number 
 
+                    // Extract ward number from suburb
+                    const wardMatch = suburb.match(/ward\s*(\d+)/i);
+                    const wardNo = wardMatch ? parseInt(wardMatch[1], 10) : null;
 
+                    // Lookup ward councillor if ward number is found
+                    if (wardNo !== null) {
+                        const councillor = getCouncillorByWard(wardNo);
+                        if (councillor) {
+                            document.getElementById("result").innerHTML = `
+                              Your ward councillor is ${councillor.councillorName}.
+                                <button onclick="showContactModal(${wardNo})">Contact Councillor</button>
+                            `;
+                        } else {
+                            document.getElementById("result").textContent = `Ward ${wardNo} not found in records.`;
+                        }
 
 
 
