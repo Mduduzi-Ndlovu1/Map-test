@@ -28,8 +28,6 @@ if (postButton) {
 
 
 
-
-
 // Initialize the map with a light theme
 let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
 
@@ -65,20 +63,36 @@ const markerIcon = {
     'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
 };
 
-// Function to get councillor by ward number
-function getCouncillorByWard(wardNo) {
-    const councillors = {
-        1: { councillorName: 'John Doe', cllrCont: '1234567890' },
-        2: { councillorName: 'Jane Smith', cllrCont: '0987654321' }
-    };
-    return councillors[wardNo] || null;
+// Define ward councillors data
+const wardCouncillors = [
+    { wardNo: '1', councillorName: 'John Doe', cllrCont: '+1234567890' },
+    { wardNo: '2', councillorName: 'Jane Smith', cllrCont: '+0987654321' },
+    // Add more councillors as needed
+];
+
+// Function to extract ward number from address
+function getWardNoFromAddress(address) {
+    const wardMatch = address.match(/Ward (\d+)/);
+    return wardMatch ? wardMatch[1] : 'Unknown';
 }
 
-// Function to get ward number from address
-function getWardNoFromAddress(address) {
-    const wardMatch = address.match(/ward\s*(\d+)/i);
-    return wardMatch ? parseInt(wardMatch[1], 10) : null;
+// Function to get councillor by ward number
+function getCouncilorByWard(wardNo) {
+    if (!wardCouncillors || wardCouncillors.length === 0) {
+        console.error('Councillors data is not available.');
+        return null;
+    }
+    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
+    if (councillor) {
+        return councillor;
+    } else {
+        console.error('Councilor not found for ward:', wardNo);
+        return null;
+    }
 }
+
+// Call the function to set the user's location when the page loads
+setUserLocation();
 
 // Function to get user's location and set the map view
 function setUserLocation() {
@@ -94,65 +108,89 @@ function setUserLocation() {
                 // Add marker for the user's location
                 let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
 
-// Display location
-                    document.getElementById("location").textContent = `You are in ${street}, ${suburb}.`;
-
-                    // Extract ward number from suburb
-                    const wardMatch = suburb.match(/ward\s*(\d+)/i);
-                    const wardNo = wardMatch ? parseInt(wardMatch[1], 10) : null;
-
-                    // Lookup ward councillor if ward number is found
-                    if (wardNo !== null) {
-                        const councillor = getCouncillorByWard(wardNo);
-                        if (councillor) {
-                            document.getElementById("result").innerHTML = `
-                              Your ward councillor is ${councillor.councillorName}.
-                             
-                function setUserMarkerPopup(content) {
-    userMarker.bindPopup(content).openPopup();
+                // Reverse geocode the coordinates to get the address
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                      const address = data.display_name;
+                      const streetName = data.address.road || 'Unknown Street';
+                      const suburbName = data.address.suburb || 'Unknown Suburb';
+                      const wardNo = getWardNoFromAddress(address);
+                  
+                      const councillor = getCouncilorByWard(wardNo);
+                      const councillorName = councillor ? councillor.councillorName : 'Not found';
+                  
+                      // Update the popup message
+                      userMarker.bindPopup(`
+                          <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
+                          Your ward councillor is ${councillorName}.<br>
+                          <button class="call" onclick="openWardModal()">Contact Councilor</button>
+                          <button class="rate" onclick="openRateModal()">Rate Councilor</button>
+                          <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
+                      `).openPopup();
+                  
+                      // Attach event listener to handle clicks on the dynamically created button
+                      document.addEventListener("click", function(event) {
+                          if (event.target && event.target.id === "postButton") {
+                              const lat = parseFloat(event.target.getAttribute("data-lat"));
+                              const lng = parseFloat(event.target.getAttribute("data-lng"));
+                              
+                              // Ensure lat/lng are valid before opening the modal
+                              if (!isNaN(lat) && !isNaN(lng)) {
+                                  openPostModal(lat, lng);
+                              } else {
+                                  console.error("Invalid coordinates for post modal.");
+                              }
+                          }
+                      });
+                  })
+                  
+                    .catch(error => {
+                        console.error('Error fetching address:', error);
+                        userMarker.bindPopup('Your position').openPopup();
+                    });
+            },
+            (error) => {
+                console.error('Geolocation error:', error);
+                map.setView([-26.2041, 28.0473], 18);
+            }
+        );
+    } else {
+        alert('Geolocation is not supported by this browser.');
+    }
 }
 
-fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
-    .then(response => response.json())
-    .then(data => {
-        const address = data.display_name;
-        const streetName = data.address.road || 'Unknown Street';
-        const suburbName = data.address.suburb || 'Unknown Suburb';
-        const wardNo = getWardNoFromAddress(address);
-        const councillor = getCouncillorByWard(wardNo);
-        const councillorName = councillor ? councillor.councillorName : 'Not found';
-
-        const popupContent = `
-            <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
-            Your ward councillor is ${councillorName}.<br>
-            <button class="call" onclick="openWardModal()">Contact Councilor</button>
-            <button class="rate" onclick="openRateModal()">Rate Councilor</button>
-            <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
-        `;
-
-        setUserMarkerPopup(popupContent);
-    })
-    .catch(error => {
-        console.error('Error fetching address:', error);
-        setUserMarkerPopup('Your position'); // Reuse the function for error case
-    });
 // Modal Functions
 function openWardModal() {
     const wardNo = getWardNoFromAddress(document.querySelector('.leaflet-popup-content strong').textContent);
-    const councillor = getCouncillorByWard(wardNo);
+    const councillor = getCouncilorByWard(wardNo);
     if (!councillor) return;
 
-    document.getElementById("whatsappButton").onclick = () => window.open(`https://wa.me/${councillor.cllrCont}`);
-    document.getElementById("phoneButton").onclick = () => window.location.href = `tel:${councillor.cllrCont}`;
-    document.getElementById("WardModal").style.display = "block";
+    const wardModal = document.getElementById("WardModal");
+    const whatsappButton = document.getElementById("whatsappButton");
+    const phoneButton = document.getElementById("phoneButton");
+
+    // Set WhatsApp and Phone links
+    whatsappButton.onclick = () => window.open(`https://wa.me/${councillor.cllrCont}`);
+    phoneButton.onclick = () => window.location.href = `tel:${councillor.cllrCont}`;
+
+    // Show the modal
+    wardModal.style.display = "block";
 }
 
 function openRateModal() {
-    document.getElementById("RateModal").style.display = "block";
+    const rateModal = document.getElementById("RateModal");
+    rateModal.style.display = "block";
 }
 
-function openPostModal(lat, lng) {
-    document.getElementById("PostModal").style.display = "block";
+function openPostModal() {
+    const postModal = document.getElementById("PostModal");
+    postModal.style.display = "block";
 }
 
 // Close modals when clicking outside or on close buttons
@@ -168,22 +206,6 @@ window.onclick = (event) => {
         event.target.style.display = 'none';
     }
 };
-
-// Attach event listener to post button dynamically
-document.addEventListener("click", function(event) {
-    if (event.target && event.target.id === "postButton") {
-        const lat = parseFloat(event.target.getAttribute("data-lat"));
-        const lng = parseFloat(event.target.getAttribute("data-lng"));
-        if (!isNaN(lat) && !isNaN(lng)) {
-            openPostModal(lat, lng);
-        } else {
-            console.error("Invalid coordinates for post modal.");
-        }
-    }
-});
-
-// Call the function to set the user's location when the page loads
-setUserLocation();
 
 
 
