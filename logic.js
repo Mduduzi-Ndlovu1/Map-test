@@ -1,4 +1,5 @@
-Logic.js
+
+
 // Show loading animation on the "Save Post" button
 const postButton = document.querySelector('button[type="submit"]');
 if (postButton) {
@@ -27,8 +28,20 @@ if (postButton) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // Initialize the map with a light theme
-let map = L.map('map', { zoomControl: false }).setView([-26.2041, 28.0473], 18);
+let map = L.map('map',{zoomControl: false}).setView([-26.2041, 28.0473], 18);
 
 // Tile layer for light mode
 let lightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
@@ -45,54 +58,40 @@ let darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/
 lightLayer.addTo(map);
 
 // Custom "You Are Here" icon using a PNG
-const youAreHereIcon = L.icon({
+  const youAreHereIcon = L.icon({
     iconUrl: 'https://1pulse.online/images/user-here.png', // Replace with your PNG URL
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40]
-});
+  });
 
-// Define icons for each incident type
+  // Define icons for each incident type
 const markerIcon = {
-    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
-    'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
-    'Service Delivery': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
-    'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/crime.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
-    'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] }),
-    'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
-};
-
-// Define ward councillors data
-const wardCouncillors = [
-    { wardNo: '1', councillorName: 'John Doe', cllrCont: '+1234567890' },
-    { wardNo: '2', councillorName: 'Jane Smith', cllrCont: '+0987654321' },
-    // Add more councillors as needed
-];
-
-// Function to extract ward number from address
-function getWardNoFromAddress(address) {
-    const wardMatch = address.match(/Ward (\d+)/);
-    return wardMatch ? wardMatch[1] : 'Unknown';
-}
-
-// Function to get councillor by ward number
-function getCouncilorByWard(wardNo) {
-    if (!wardCouncillors || wardCouncillors.length === 0) {
-        console.error('Councillors data is not available.');
-        return null;
-    }
-    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
-    if (councillor) {
-        return councillor;
-    } else {
-        console.error('Councilor not found for ward:', wardNo);
-        return null;
-    }
-}
+    'Good Deeds': L.icon({ iconUrl: 'https://1pulse.online/images/good%20deed%20icon.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Health': L.icon({ iconUrl: 'https://1pulse.online/images/Health-location.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Property Damage': L.icon({ iconUrl: 'https://1pulse.online/images/property.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Violent Crime': L.icon({ iconUrl: 'https://1pulse.online/images/crime.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30],  iconAnchor: [15, 30],
+      popupAnchor: [0, -30]}),
+    'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
+      popupAnchor: [0, -30] })
+  };
 
 // Call the function to set the user's location when the page loads
 setUserLocation();
 
+let darkMode = false;
+
+ const logos = document.querySelectorAll(".logo"); // Get all the logo divs
+
+const logoWidth = logos[0].offsetWidth + 16; // Account for margin (8px on each side)
+let currentPosition = 0;
+
+// All fuctions from here onwards
 // Function to get user's location and set the map view
 function setUserLocation() {
     if (navigator.geolocation) {
@@ -105,57 +104,25 @@ function setUserLocation() {
                 map.setView([userLat, userLng], 18);
 
                 // Add marker for the user's location
-                let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
+                let userMarker = L.marker([userLat, userLng],{ icon: youAreHereIcon }).addTo(map);
 
                 // Reverse geocode the coordinates to get the address
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
+                    .then(response => response.json())
                     .then(data => {
-                      const address = data.display_name;
-                      const streetName = data.address.road || 'Unknown Street';
-                      const suburbName = data.address.suburb || 'Unknown Suburb';
-                      const wardNo = getWardNoFromAddress(address);
+                        // If the geocoding request returns a valid address
+                        const address = data.display_name;
+                        userMarker.bindPopup("Your current location is: " + address + ". <strong>Whats going on?</strong>").openPopup();
 
-                      const councillor = getCouncilorByWard(wardNo);
-                      const councillorName = councillor ? councillor.councillorName : 'Not found';
-
-                      // Update the popup message
-                      userMarker.bindPopup(`
-                          <strong>You are here in ${streetName}, Suburb: ${suburbName}, Ward ${wardNo}.</strong><br>
-                          Your ward councillor is ${councillorName}.<br>
-                          <button class="call" onclick="openWardModal()">Contact Councilor</button>
-                          <button class="rate" onclick="openRateModal()">Rate Councilor</button>
-                          <button class="post" id="postButton" data-lat="${userLat}" data-lng="${userLng}">What's Happening?</button>
-                      `).openPopup();
-
-                      // Attach event listener to handle clicks on the dynamically created button
-                      document.addEventListener("click", function(event) {
-                          if (event.target && event.target.id === "postButton") {
-                              const lat = parseFloat(event.target.getAttribute("data-lat"));
-                              const lng = parseFloat(event.target.getAttribute("data-lng"));
-
-                              // Ensure lat/lng are valid before opening the modal
-                              if (!isNaN(lat) && !isNaN(lng)) {
-                                  openPostModal(lat, lng);
-                              } else {
-                                  console.error("Invalid coordinates for post modal.");
-                              }
-                          }
-                      });
-                  })
-
+                    })
                     .catch(error => {
                         console.error('Error fetching address:', error);
                         userMarker.bindPopup('Your position').openPopup();
                     });
             },
             (error) => {
-                console.error('Geolocation error:', error);
+                console.log(error);
+                // Fallback to a default location if geolocation fails
                 map.setView([-26.2041, 28.0473], 18);
             }
         );
@@ -163,57 +130,6 @@ function setUserLocation() {
         alert('Geolocation is not supported by this browser.');
     }
 }
-
-// Modal Functions
-function openWardModal() {
-    const wardNo = getWardNoFromAddress(document.querySelector('.leaflet-popup-content strong').textContent);
-    const councillor = getCouncilorByWard(wardNo);
-    if (!councillor) return;
-
-    const wardModal = document.getElementById("WardModal");
-    const whatsappButton = document.getElementById("whatsappButton");
-    const phoneButton = document.getElementById("phoneButton");
-
-    // Set WhatsApp and Phone links
-    whatsappButton.onclick = () => window.open(`https://wa.me/${councillor.cllrCont}`);
-    phoneButton.onclick = () => window.location.href = `tel:${councillor.cllrCont}`;
-
-    // Show the modal
-    wardModal.style.display = "block";
-}
-
-function openRateModal() {
-    const rateModal = document.getElementById("RateModal");
-    rateModal.style.display = "block";
-}
-
-function openPostModal() {
-    const postModal = document.getElementById("PostModal");
-    postModal.style.display = "block";
-}
-
-// Close modals when clicking outside or on close buttons
-document.querySelectorAll('.close, .btn-secondary').forEach(button => {
-    button.addEventListener('click', () => {
-        const modal = button.closest('.modal');
-        modal.style.display = 'none';
-    });
-});
-
-window.onclick = (event) => {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = 'none';
-    }
-};
-
-
-
-
-
-
-
-
-
 
 // Function to toggle between light and dark mode
 function toggleDarkMode() {
@@ -269,16 +185,6 @@ function openPostModal(lat, lng) {
     document.getElementById('modal').classList.add('active');
 }
 
-// Open modal to create a post from location
-function openPostModal(userLat,userLng) {
-  selectedLatLng = { userLat, userLng };
-  console.log('Map clicked at:', userLat, userLng);  // Check if lat/lng are logged correctly
-
-  document.getElementById('modal-overlay').classList.add('active');
-  document.getElementById('modal').classList.add('active');
-}
-
-
 // Close modal
 // Close modal and clear the form
 function closeModal() {
@@ -329,28 +235,31 @@ async function fetchPosts() {
 
 // Display posts on the map
 function displayPosts(posts) {
-  posts.forEach((post) => {
-    const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
+    posts.forEach((post) => {
+      const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
 
-    if (typeof latitude === 'number' && typeof longitude === 'number') {
-      const icon = markerIcon[type] || markerIcon["Good Deeds"]; // Fallback to default icon if type is undefined
+      // Check if latitude and longitude are valid numbers
+      if (typeof latitude === 'number' && typeof longitude === 'number') {
+        // Check if a marker icon exists for the given type, fallback to a default icon if not
+        const icon = markerIcon[type] || defaultMarkerIcon; // Replace `defaultMarkerIcon` with your default icon object
 
-      try {
         const marker = L.marker([latitude, longitude], { icon }).addTo(map);
 
+        // Format the creation date for the updated timestamp
         const updated = createdAt
           ? new Date(createdAt).toLocaleString()
           : 'Unknown date';
 
-        marker.bindPopup(`
+        // Bind a popup with post details
+        marker.bindPopup(` 
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
           <div class="header">
-            <div>
-              <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
-              <div class="posted-on"> ${updated}</div>
-            </div>
+          <div>
+          <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
+          <div class="posted-on"> ${updated}</div>
+          </div>
           </div>
           <div class="card-content">
             <div class="description">${description ? `"${description}"` : 'No description available'}</div>
@@ -358,17 +267,14 @@ function displayPosts(posts) {
               <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
             </div>
           </div>
-          <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
+          <button class="ok-button"
+" onclick="openViewPostModal('${_id}')">View Post</button>
         `);
-      } catch (error) {
-        console.error(`Error creating marker for post ID: ${_id}`, error);
+      } else {
+        console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
       }
-    } else {
-      console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
-    }
-  });
-}
-
+    });
+  }
 
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {
@@ -427,84 +333,9 @@ document.getElementById('commentForm').addEventListener('submit', async (e) => {
     }
 });
 
-////
-// Display posts in timeline
-function displayTimeline(posts) {
-  const timelineContainer = document.getElementById("timeline-container");
-
-  if (!timelineContainer) {
-    console.error("Timeline container not found");
-    return;
-  }
-
-  posts.forEach((post) => {
-    const { name, surname, description, imageUrl, type, _id, createdAt } = post;
-
-    const updated = createdAt
-      ? new Date(createdAt).toLocaleString()
-      : 'Unknown date';
-
-    // Create a timeline card
-    const card = document.createElement("div");
-    card.classList.add("timeline-card");
-
-    card.innerHTML = `
-      <div class="card-header">
-        <span class="type">${type || 'Unknown Type'}</span>
-      </div>
-      <div class="card-content">
-        <div class="username">Posted by: ${name || 'Unknown'} ${surname || ''}</div>
-        <div class="posted-on">Date: ${updated}</div>
-        <div class="description">${description ? `"${description}"` : 'No description available'}</div>
-        ${
-          imageUrl
-            ? `<div class="image"><img src="${imageUrl}" alt="${type || 'Image'}"></div>`
-            : ''
-        }
-        <button class="view-post-btn" onclick="openViewPostModal('${_id}')">View Post</button>
-      </div>
-    `;
-
-    // Append to timeline container
-    timelineContainer.appendChild(card);
-  });
-}
-
-// Fetch and display posts in timeline
-async function fetchAndDisplayTimeline() {
-  try {
-    const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
-    const posts = await response.json();
-
-    // Filter posts with valid data
-    const validPosts = posts.filter(
-      (post) =>
-        typeof post.latitude === 'number' &&
-        typeof post.longitude === 'number' &&
-        post.type
-    );
-
-    displayTimeline(validPosts);
-    console.log('Fetched posts for timeline:', validPosts);
-  } catch (error) {
-    console.error('Error fetching posts for timeline:', error);
-  }
-}
-
-// Initialize timeline on page load
-if (document.title === "Timeline") {
-  fetchAndDisplayTimeline();
-}
-
-////
-
-
 // Handle form submission for creating a post
 document.getElementById('postForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const spinner = document.getElementById('spinner'); // Reference to the spinner
-    spinner.style.display = 'block'; // Show the spinner
 
     const formData = new FormData(e.target);
     const name = formData.get('name');
@@ -512,24 +343,17 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     const description = formData.get('description');
     const type = formData.get('type');
     const imageInput = document.querySelector('input[name="image"]');
-    const image = imageInput.files[0]; // Ensure this is the actual file
-
-    console.log("Submitting form..."); // Log when the form starts submitting
-    console.log("Selected Coordinates:", selectedLatLng); // Log selected coordinates
+    const image = imageInput.files[0];  // Ensure this is the actual file
 
     // Validation for required fields
     if (!name || !surname || !description || !image || !type) {
-        console.error("Validation Error: Missing required fields");
         alert('Please fill in all fields!');
-        spinner.style.display = 'none'; // Hide the spinner if validation fails
         return;
     }
 
     // Ensure valid coordinates are selected
     if (!selectedLatLng || typeof selectedLatLng.lat !== 'number' || typeof selectedLatLng.lng !== 'number') {
-        console.error("Validation Error: Invalid coordinates", selectedLatLng);
         alert('Please select a valid location on the map.');
-        spinner.style.display = 'none'; // Hide the spinner if validation fails
         return;
     }
 
@@ -543,18 +367,6 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     postData.append('longitude', selectedLatLng.lng);
     postData.append('type', type);
 
-    // Log the data being submitted
-    console.log("Submitting the following data:");
-    console.log({
-        name,
-        surname,
-        description,
-        type,
-        latitude: selectedLatLng.lat,
-        longitude: selectedLatLng.lng,
-        image: image ? image.name : "No image selected",
-    });
-
     try {
         const response = await fetch('https://map-test-xid1.onrender.com/api/posts', {
             method: 'POST',
@@ -562,10 +374,11 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
-            console.log('✅ Post created successfully!');
-            closeModal(); // Close the modal if successful
-            fetchPosts(); // Refresh posts
+            console.log('Post created successfully!');
+            closeModal();  // Close the modal if successful
+            fetchPosts();  // Refresh posts
         } else {
+            // Handle response errors
             let errorData;
             try {
                 errorData = await response.json();
@@ -579,10 +392,9 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
     } catch (error) {
         console.error('Fetch error:', error);
         alert('There was an error submitting the form. Please try again later.');
-    } finally {
-        spinner.style.display = 'none'; // Always hide the spinner, even if there's an error
     }
 });
+
 // Close modal when clicking anywhere outside of it (on the overlay)
 document.getElementById('modal-overlay').addEventListener('click', function () {
     closeModal();
@@ -596,139 +408,4 @@ document.getElementById('viewModal-overlay').addEventListener('click', function 
 // Prevent closing modal when clicking inside the modal (on the modal content)
 document.getElementById('modal').addEventListener('click', function (event) {
     event.stopPropagation(); // Prevent event from propagating to overlay
-});
-
-document.getElementById('viewModal').addEventListener('click', function (event) {
-    event.stopPropagation(); // Prevent event from propagating to overlay
-});
-
-// Initial fetch of posts
-fetchPosts();
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  // Modal and its content elements
-  var modal_brah = document.getElementById("myModal");
-  var modalTitle = document.querySelector(".modal-title-brah");
-  var modalDescription = document.querySelector(".modal-description-brah");
-  var modalImage = document.querySelector(".modal-image-brah");
-
-  // Ensure the close button exists
-  var closeButton = document.getElementsByClassName("close-brah")[0];
-
-  // Data for each logo's modal content
-  var modalData = {
-    1: {
-      title: "SAPS - South African Police Service",
-      description: "SAPS is responsible for maintaining law and order in South Africa, preventing crime, and ensuring the safety of citizens.",
-      image: "https://1pulse.online/images/errand%20camel%20logo.png"
-    },
-    2: {
-      title: "Bonizluu",
-      description: "BoniZulu is a fashion brand committed to uniting designers for fabric sourcing and promoting the elderly through crocheting programs.",
-      image: "https://1pulse.online/images/bonizluu-fav.png"
-    },
-    3: {
-      title: "Hillbrow",
-      description: "Hillbrow is a diverse and vibrant neighborhood in Johannesburg, known for its rich culture and mix of residential and commercial spaces.",
-      image: "https://1pulse.online/images/hillbrow.jpeg"
-    },
-    4: {
-      title: "CPF - Community Policing Forum",
-      description: "CPF works closely with SAPS to improve safety and security in communities, promoting cooperation between police and residents.",
-      image: "https://1pulse.online/images/Africa%20City.png"
-    },
-    5: {
-      title: "Pulse",
-      description: "Pulse is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
-      image: "https://1pulse.online/images/pulse.jpeg"
-    },
-    6: {
-      title: "Tae Trax",
-      description: "Tae-Trax by Siya Percy is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
-      image: "https://1pulse.online/images/Tae-Trax-Logo.png"
-    }
-  };
-
-  // Get all logo elements in the navbar
-  var logos = document.querySelectorAll(".logo");
-
-  // When a logo is clicked, open the modal and update content
-  logos.forEach(function(logo) {
-    logo.onclick = function() {
-      var modalId = logo.getAttribute("data-modal-id");
-      var data = modalData[modalId];
-
-      // Update modal content dynamically
-      if (modalTitle && modalDescription && modalImage) {
-        modalTitle.textContent = data.title;
-        modalDescription.textContent = data.description;
-        modalImage.src = data.image;
-      }
-
-      // Display the modal
-      modal_brah.style.display = "block";
-    };
-  });
-
-  // Close modal functionality
-  if (closeButton) {
-    closeButton.onclick = function() {
-      modal_brah.style.display = "none";
-    };
-  }
-
-  // Close modal if clicked outside of modal
-  window.onclick = function(event) {
-    if (event.target == modal_brah) {
-      modal_brah.style.display = "none";
-    }
-  };
-});
-
-
-
-// Function to open the modal
-function pulseopenModal() {
-    // Show the modal
-    document.getElementById('gjnoModal').style.display = 'block';
-
-    // Get the container to insert images
-    const modalImagesContainer = document.getElementById('modal-images-container');
-
-    // Logo data from the navigation section (should be inserted dynamically)
-    const logos = [
-      {src: 'https://1pulse.online/images/errand%20camel%20logo.png', alt: 'Logo 1'},
-      {src: 'https://1pulse.online/images/bonizluu-fav.png', alt: 'Logo 2'},
-      {src: 'https://1pulse.online/images/hillbrow.jpeg', alt: 'Logo 3'},
-      {src: 'https://1pulse.online/images/Africa%20City.png', alt: 'Logo 4'},
-      {src: 'https://1pulse.online/images/pulse.jpeg', alt: 'Logo 5'},
-      {src: 'https://1pulse.online/images/Tae-Trax-Logo.png', alt: 'Logo 6'}
-    ];
-
-    // Clear any existing images
-    modalImagesContainer.innerHTML = '';
-
-    // Loop through logos and add them to the modal dynamically
-    logos.forEach(logo => {
-        const imgElement = document.createElement('img');
-        imgElement.src = logo.src;
-        imgElement.alt = logo.alt;
-        modalImagesContainer.appendChild(imgElement);
-      });
-  }
-
-  // Close the modal when the "x" button is clicked
-  document.querySelector('.gjno-close').onclick = function() {
-    document.getElementById('gjnoModal').style.display = 'none';
-  };
-
-  // Close the modal when clicking outside of the modal
-  window.onclick = function(event) {
-    if (event.target === document.getElementById('gjnoModal')) {
-      document.getElementById('gjnoModal').style.display = 'none';
-    }
-  };
-
- 
+}); 
