@@ -2,99 +2,328 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HERO ADMIN - 1Pulse Online</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" href="img/favicon.ico">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Icon Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <title>1 Pulse, one heart beat for the people. |  Empowering Communities</title>
+    <meta name="description" content="1Pulse - Empowering Communities by Enhancing Safety, Reducing Pollution, and Fostering Inclusivity with GJNW, Errand Camel, and Africa City.">
+    <meta name="keywords" content="Puls by the Greater Johannesburg Neighborhood Oversight, crime prevention, pollution reduction, GJNO, Errand Camel, Africa City,  community programs, tech innovation, inclusivity" />
+    <meta name="author" content="Siya Percy" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="icon" href="images/ipulse-logo.png" type="image/x-icon"> <!-- Favicon -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  
+    <meta property="og:title" content="Pulse, GJNO, Errand Camel, and Africa City" />
+    <meta property="og:description" content="Empowering communities with crime prevention, pollution reduction, tech innovation, and inclusivity programs in Johannesburg." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://1pulse.online/" />
+    <meta property="og:image" content="https://1pulse.online/" />
+    </head>
 </head>
 <body>
-    <div class="container-xxl position-relative bg-white d-flex p-0">
-        <!-- Sidebar -->
-        <aside class="sidebar pe-4 pb-3 bg-light">
-            <nav class="navbar navbar-light">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>1Pulse Online</h3>
-                </a>
-                <div class="d-flex align-items-center ms-4 mb-4">
-                    <img class="rounded-circle" src="img/user.jpg" alt="User" width="40" height="40">
-                    <div class="ms-3">
-                        <h6 class="mb-0">Counselor Doe</h6>
-                        <span>Counselor</span>
-                    </div>
-                </div>
-                <ul class="navbar-nav w-100">
-                    <li><a href="index.html" class="nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a></li>
-                    <li><a href="NPOs.html" class="nav-link"><i class="fa fa-users me-2"></i>NPOs</a></li>
-                    <li><a href="News.html" class="nav-link"><i class="fa fa-newspaper me-2"></i>News</a></li>
-                    <li><a href="CSI.html" class="nav-link"><i class="fa fa-handshake me-2"></i>CSI Partners</a></li>
-                </ul>
-            </nav>
-        </aside>
-        <!-- Sidebar End -->
+<style>
+  /* Ensure the background image covers the full screen */
+#background-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;  /* Ensures the background stays behind the content */
+    overflow: hidden;
+}
 
-        <!-- Main Content -->
-        <main class="content">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand bg-light sticky-top px-4 py-0">
-                <form class="d-none d-md-flex ms-4">
-                    <input class="form-control border-0" type="search" placeholder="Search">
-                </form>
-                <div class="navbar-nav ms-auto">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="img/user.jpg" alt="User" width="40" height="40">
-                            <span class="d-none d-lg-inline-flex">Counselor Doe</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end">
-                            <a href="#" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Settings</a>
-                            <a href="#" class="dropdown-item">Log Out</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+#bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the entire screen without stretching */
+    background-color: #007BFF;
+}
 
-            <!-- Dashboard Stats -->
-            <section class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-md-3"><div class="card p-4"><i class="fa fa-chart-line text-primary"></i><p>Cases</p><h6 id="cases-count">Loading...</h6></div></div>
-                    <div class="col-md-3"><div class="card p-4"><i class="fa fa-chart-bar text-primary"></i><p>League Score</p><h6 id="league-score">Loading...</h6></div></div>
-                    <div class="col-md-3"><div class="card p-4"><i class="fa fa-chart-pie text-primary"></i><p>Bets</p><h6 id="bets-info">Loading...</h6></div></div>
-                </div>
-            </section>
 
-            <!-- Complaints & Promises -->
-            <section class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-md-6"><div class="card p-4"><h6>Complaints</h6><ul id="complaints-list"></ul></div></div>
-                    <div class="col-md-6"><div class="card p-4"><h6>Promises</h6><ul id="promises-list"></ul></div></div>
-                </div>
-            </section>
+/* Basic styles for landing div */
+.landing-pop {
+    background-color: #fefefe;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #c4c4c4;
+    width: 80%;
+    max-width: 900px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.171);
+    margin-top: 60px; /* Adjust the top margin for the content */
+    margin-bottom: 60px; /* Adjust the top margin for the content */
+    border-radius: 30px;
+}
 
-            <!-- Charts -->
-            <section class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-md-6"><canvas id="national-performance"></canvas></div>
-                    <div class="col-md-6"><canvas id="local-performance"></canvas></div>
+/* Container for the content */
+.content-container {
+    padding: 20px;
+    text-align: left;
+}
+.typing-text {
+    font-size: 15px;
+    font-weight: bold;
+    color: #007BFF;
+    display: inline-block;
+    border-right: 3px solid #007BFF; /* Cursor effect */
+    padding-right: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+/* Styling for Q&A Section */
+.faq {
+    margin-top: 20px;
+}
+
+.faq-question {
+    background-color: #cccccc;
+    color: rgb(71, 71, 71);
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #ffffff;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;    
+    box-shadow: 0px 8px 6px rgba(0, 0, 0, 0.144);
+}
+
+.faq-question:hover {
+    background-color: #e6f2ff;
+}
+
+.faq-answer {
+    display: none;
+    padding: 10px;
+    background-color: #f1f1f1;
+    margin: 5px 0;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Styling for CTA Button */
+.cta-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.cta-button {
+    background-color: #0e5aff;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: solid 1px #f0f0f0;
+    box-shadow: 0px 8px 13px rgba(0, 0, 0, 0.363);
+}
+
+.cta-button:hover {
+    background-color: #1077d8;
+}
+
+/* Adjustments to make the content more centered on the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+/**----Animaitons ---**/
+/* Adding animation for cursor blinking */
+@keyframes blink {
+    0% { border-color: transparent; }
+    50% { border-color: #007BFF; }
+    100% { border-color: transparent; }
+}
+
+.typing-text {
+    animation: blink 0.7s step-end infinite;
+}
+</style>
+
+
+
+<body>
+ <!-- Full-screen Background Image -->
+ <div id="background-image">
+  <img src="images/map-back.jpg" alt="Background Image" id="bg-image">
+</div>
+    <!-- Landing Page Content -->
+    <div id="Landing-pop" class="landing-pop">
+    
+        <div class="content-container">
+            <h3>Welcome to 1pulse Online!</h3>
+            <p><span id="typingText" class="typing-text"><strong>The heart beat of the community.</strong></span></p>
+            <!-- Interactive Q&A Section -->
+            <div class="faq">
+                <button class="faq-question" onclick="toggleAnswer('answer1')">What is 1pulse Online?</button>
+                <div class="faq-answer" id="answer1">
+                    <p>1pulse Online is a platform that shows an overview of how much work has been done in the community and how much work is yet to be done. The data is entered by community members and is used by community builders and businesses.</p>
                 </div>
-            </section>
-        </main>
+
+                <button class="faq-question" onclick="toggleAnswer('answer2')">How can I post an alert?</button>
+                <div class="faq-answer" id="answer2">
+                    <p>You can click on the specific spot on the map where you want to post your alert, fill in the details, and hit "Post". Your alert will show up for the community to see.</p>
+                </div>
+
+                <button class="faq-question" onclick="toggleAnswer('answer3')">How long will my post stay on the platform?</button>
+                <div class="faq-answer" id="answer3">
+                    <p>We keep posts until something is done about them or, in the case of events, until the event has ended.</p>
+ 
+</div>
+            </div>
+                <!-- Help Desk Section -->
+                <button class="faq-question" onclick="toggleAnswer('helpDeskAnswer')">Community Help Desk</button>
+                <div class="faq-answer" id="helpDeskAnswer">
+                    <img style="width: 100%; border-radius: 23px;" src="images/Back-to-School-Stationery-Drive-.jpg" alt="Back to School Drive" class="school-image">
+                    <p>The 1Pulse Community Help Desk serves as a vital resource for individuals and families in need, offering assistance in various areas to improve the quality of life within the community.</p>
+                    <p>Its mission is to foster inclusivity, create safer environments, and enhance the overall well-being of the community, making it a central hub for those looking to make a positive impact.</p>
+                <!-- Add these after the FAQ or before the Proceed to Map Button -->
+    <div class="cta-container">
+        <a href="helpdesk-progress.html" class="cta-button">Check Progress</a>
     </div>
+                </div>
 
-    <!-- Scripts -->
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/logic.js"></script>
+            <!-- Business Promotion Section -->
+            <button class="faq-question" onclick="toggleAnswer('promoAnswer')">Business Promotion (R250 for 2 weeks)</button>
+            <div class="faq-answer" id="promoAnswer">
+                <img style="width: 100%; border-radius: 23px;" src="https://i.ibb.co/rt7sYXv/easy-cars.jpg" alt="Business Promotion" class="promo-image">
+                <p>As event organisers and business add your event or business to the platform to inform the community. Simply fill in the required details and post it!</p>
+                <p>Businesses can post their advertisements for just <strong>R250</strong> and have them live for <strong>two weeks</strong> as part of our ongoing promotion!</p>
+                <p>This is a great opportunity for local businesses to showcase their products, services, or events to the community. To take advantage of this special offer, simply create a post and select the "Business Advertisement" option when filling in the details.</p>
+            
+<div class="cta-container">
+    <a href="https://1pulse-online-beta.netlify.app/" class="cta-button">Sign Up</a>
+    </div>
+            </div>
+     <!-- Help Desk Section -->
+     <button class="faq-question" onclick="toggleAnswer('ComHubAnswer')">Community Development Hub</button>
+     <div class="faq-answer" id="ComHubAnswer">
+         <img style="width: 100%; border-radius: 23px;" src="images/Back-to-School-Stationery-Drive-.jpg" alt="Back to School Drive" class="school-image">
+         <p>The 1Pulse Community Development Hub is a cornerstone of empowerment and growth within the community, dedicated to providing essential resources and support for local development.</p>
+         <p>The hub focuses on building and improving infrastructure by sourcing and providing vital materials such as building supplies, equipment, and furniture. Through collective efforts, it aims to create spaces that foster collaboration, learning, and development for all members. .</p>
+     <!-- Add these after the FAQ or before the Proceed to Map Button -->
+                     
+<div class="cta-container">
+    <a href="communityhub-progress.html" class="cta-button">Check Progress</a>
+</div>
+     </div>
+            <!-- Christmas Charity Drive Section -->
+            <button class="faq-question" onclick="toggleAnswer('charityAnswer')">Christmas Charity Drive</button>
+            <div class="faq-answer" id="charityAnswer">
+                <img style="width: 100%; border-radius: 23px;" src="images/Christmas Party For two.png" alt="Christmas Charity Drive" class="charity-image">
+                <p>We are hosting a charity drive to support a <strong>Christmas party for the community</strong>. Join us in making this a memorable event by contributing!</p>
+                <p>Your contributions can help provide gifts, food, and entertainment for those in need. Together, we can make this Christmas special for everyone!</p>
+                <p>If you would like to donate or participate in the charity drive, please get in touch with us through the platform.</p>
+            
+<div class="cta-container">
+    <a href="christmas-progress.html" class="cta-button">Check Progress</a>
+</div>
+            </div>
+
+            <!-- Back to School Drive Section -->
+            <button class="faq-question" onclick="toggleAnswer('schoolAnswer')">Back to School Uniform & Stationery Drive</button>
+            <div class="faq-answer" id="schoolAnswer">
+                <img style="width: 100%; border-radius: 23px;" src="images/Back-to-School-Stationery-Drive-.jpg" alt="Back to School Drive" class="school-image">
+                <p>We are organizing a drive to collect uniforms and stationery for children going back to school. Your donations can help children in need get the supplies they need to start the school year!</p>
+                <p>Help make sure every child has the tools they need to succeed. If you'd like to contribute to the back-to-school drive, please get in touch with us through the platform.</p>
+            <!-- Add these after the FAQ or before the Proceed to Map Button -->
+
+<div class="cta-container">
+    <a href="school-progress.html" class="cta-button">View Progress</a>
+</div>
+            </div>
+
+
+            <!-- Proceed to App Button -->
+            <div class="cta-container">
+                <a href="https://1pulse-online-beta.netlify.app/" class="cta-button">Proceed to Map</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+</html>
+
+ <script>
+  // Function to toggle the visibility of FAQ answers
+function toggleAnswer(answerId) {
+    var answer = document.getElementById(answerId);
+    if (answer.style.display === "none" || answer.style.display === "") {
+        answer.style.display = "block";
+    } else {
+        answer.style.display = "none";
+    }
+}
+
+
+
+// JavaScript for the typing effect
+
+
+// Start the typing effect when the page loads
+window.onload = function() {
+    typeWriter();
+};
+
+
+
+// JavaScript for the typing effect
+let typingText = document.getElementById('typingText');
+let textArray = ['The heart beat of the community.'];
+let currentText = '';
+let textIndex = 0;
+let isErasing = false;
+let eraseSpeed = 100;  // Speed of erasing
+let typeSpeed = 150;   // Speed of typing
+
+function typeWriter() {
+    // Check if we are currently erasing or typing
+    if (isErasing) {
+        currentText = currentText.slice(0, -1);  // Remove the last character
+        typingText.textContent = currentText;
+
+        // If the text has been fully erased, start typing again
+        if (currentText === '') {
+            isErasing = false;
+            textIndex = 0;  // Reset the text index to start typing again
+            setTimeout(typeWriter, typeSpeed); // Delay before starting to type
+        } else {
+            setTimeout(typeWriter, eraseSpeed);
+        }
+    } else {
+        // Add the next character from the text array
+        currentText += textArray[0][textIndex];  
+        typingText.textContent = currentText;
+
+        // If the entire text is typed, start erasing
+        if (currentText === textArray[0]) {
+            isErasing = true;
+            setTimeout(typeWriter, 1000);  // Wait a moment before erasing starts
+        } else {
+            textIndex++;  // Move to the next character
+            setTimeout(typeWriter, typeSpeed);
+        }
+    }
+}
+
+// Start the typing effect loop
+typeWriter();
+
+
+
+ </script>
+
+    <script src="script.js"></script>
 </body>
 </html>
+
