@@ -1,5 +1,3 @@
-
-
 // Show loading animation on the "Save Post" button
 const postButton = document.querySelector('button[type="submit"]');
 if (postButton) {
@@ -63,89 +61,34 @@ const markerIcon = {
     'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -30] })
 };
 
-        // Function to get ward councillor by ward number
-        function getCouncillorByWard(wardNo) {
-            return wardCouncillors.find(ward => ward.wardNo === wardNo);
-        }
+// Define ward councillors data
+const wardCouncillors = [
+    { wardNo: '1', councillorName: 'John Doe', cllrCont: '+1234567890' },
+    { wardNo: '2', councillorName: 'Jane Smith', cllrCont: '+0987654321' },
+    // Add more councillors as needed
+];
 
-        // Function to display the contact modal
-        function showContactModal(wardNo) {
-            const councillor = getCouncillorByWard(wardNo);
-            if (!councillor) return;
+// Function to extract ward number from address
+function getWardNoFromAddress(address) {
+    const wardMatch = address.match(/Ward (\d+)/);
+    return wardMatch ? wardMatch[1] : 'Unknown';
+}
 
-            const modal = document.getElementById("contact-modal");
-            const overlay = document.getElementById("overlay");
-            const whatsappBtn = document.getElementById("whatsapp-btn");
-            const phoneBtn = document.getElementById("phone-btn");
+// Function to get councillor by ward number
+function getCouncilorByWard(wardNo) {
+    if (!wardCouncillors || wardCouncillors.length === 0) {
+        console.error('Councillors data is not available.');
+        return null;
+    }
+    const councillor = wardCouncillors.find(councilor => councilor.wardNo === wardNo);
+    if (councillor) {
+        return councillor;
+    } else {
+        console.error('Councilor not found for ward:', wardNo);
+        return null;
+    }
+}
 
-            whatsappBtn.onclick = () => {
-                window.open(`https://wa.me/27${councillor.cllrCont}`, "_blank");
-            };
-
-            phoneBtn.onclick = () => {
-                window.open(`tel:${councillor.cllrTel}`);
-            };
-
-            modal.style.display = "block";
-            overlay.style.display = "block";
-        }
-
-        // Function to hide the contact modal
-        function hideContactModal() {
-            document.getElementById("contact-modal").style.display = "none";
-            document.getElementById("overlay").style.display = "none";
-        }
-
-        // Detect user location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-
-                try {
-                    // Reverse geocode to get location details
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                    const data = await response.json();
-                    const address = data.address;
-                    const street = address.road || "Unknown Street";
-                    const suburb = address.suburb || address.neighbourhood || "Unknown Suburb";
-
-                    // Display location
-                    document.getElementById("location").textContent = `You are in ${street}, ${suburb}.`;
-
-                    // Extract ward number from suburb
-                    const wardMatch = suburb.match(/ward\s*(\d+)/i);
-                    const wardNo = wardMatch ? parseInt(wardMatch[1], 10) : null;
-
-                    // Lookup ward councillor if ward number is found
-                    if (wardNo !== null) {
-                        const councillor = getCouncillorByWard(wardNo);
-                        if (councillor) {
-                            document.getElementById("result").innerHTML = `
-                              Your ward councillor is ${councillor.councillorName}.
-                                <button onclick="showContactModal(${wardNo})">Contact Councillor</button>
-                            `;
-                        } else {
-                            document.getElementById("result").textContent = `Ward ${wardNo} not found in records.`;
-                        }
-                    } else {
-                        document.getElementById("result").textContent = "Ward number not found in suburb name.";
-                    }
-
-                } catch (error) {
-                    console.error("Error getting location:", error);
-                    document.getElementById("location").textContent = "Unable to detect your location.";
-                }
-            }, (error) => {
-                console.error("Error getting location:", error);
-                document.getElementById("location").textContent = "Unable to detect your location.";
-            });
-        } else {
-            document.getElementById("location").textContent = "Geolocation is not supported by your browser.";
-        }
-
-        // Close modal when clicking outside
-        document.getElementById("overlay").onclick = hideContactModal;
 // Call the function to set the user's location when the page loads
 setUserLocation();
 
@@ -786,5 +729,3 @@ function pulseopenModal() {
       document.getElementById('gjnoModal').style.display = 'none';
     }
   };
-  
-  
