@@ -1,3 +1,4 @@
+
 // Show loading animation on the "Save Post" button
 const postButton = document.querySelector('button[type="submit"]');
 if (postButton) {
@@ -104,12 +105,38 @@ function setUserLocation() {
                 // Reverse geocode the coordinates to get the address
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
                     .then(response => response.json())
-                    .then(data => {
-                        // If the geocoding request returns a valid address
-                        const address = data.display_name;
-                        userMarker.bindPopup("Your current location is: " + address + "<strong>Whats going on?</strong>").openPopup();
+                
+                    
 
-                    })
+// Function to handle geocoding response and display popup with a button
+.then(data => {
+  // If the geocoding request returns a valid address
+  const address = data.display_name;
+
+  // Create a button inside the popup
+  const popupContent = `
+      <p>Your current location is: ${address}</p>
+      <button id="createPostBtn" style="background: blue; color: white; padding: 5px; border: none; cursor: pointer;">
+          What's going on?
+      </button>
+  `;
+
+  // Bind popup with button to the user's marker
+  userMarker.bindPopup(popupContent).openPopup();
+
+  // Wait for the popup to open, then add event listener to the button
+  setTimeout(() => {
+      document.getElementById('createPostBtn').addEventListener('click', function () {
+          const { lat, lng } = userMarker.getLatLng(); // Get user location
+          openPostModal(lat, lng); // Open post modal with coordinates
+      });
+  }, 100);
+})
+
+
+
+
+                    
                     .catch(error => {
                         console.error('Error fetching address:', error);
                         userMarker.bindPopup('Your position').openPopup();
@@ -178,6 +205,27 @@ function openPostModal(lat, lng) {
 
     document.getElementById('modal-overlay').classList.add('active');
     document.getElementById('modal').classList.add('active');
+}
+
+
+
+// Add event listener for button click to create a new post
+button.on('click', function (event) {
+  // Get the latitude and longitude of the user's location
+  const lat = (event).latlng.lat;
+  const lng = (event).latlng.lng;
+
+  // Call the openPostModal function and pass the coordinates
+  openCreateModal(lat, lng);
+});
+
+// Open modal to create a post
+function openCreateModal(lat, lng) {
+  selectedLatLng = { lat, lng };
+  console.log('User is at:', lat, lng);  // Check if lat/lng are logged correctly
+
+  document.getElementById('modal-overlay').classList.add('active');
+  document.getElementById('modal').classList.add('active');
 }
 
 // Close modal
