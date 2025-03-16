@@ -493,8 +493,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // Data for each logo's modal content
   var modalData = {
     1: {
-      title: "Errand camel - 1 Pulse's parent company.",
-      description: "Erranda Camel, If nomayini was an App. We build Apps and other solutions as tools in response to problems in society",
+      title: "SAPS - South African Police Service",
+      description: "SAPS is responsible for maintaining law and order in South Africa, preventing crime, and ensuring the safety of citizens.",
       image: "https://1pulse.online/images/errand%20camel%20logo.png"
     },
     2: {
@@ -508,22 +508,17 @@ document.addEventListener("DOMContentLoaded", function() {
       image: "https://1pulse.online/images/hillbrow.jpeg"
     },
     4: {
-      title: "Africa City - The home of African innovators",
-      description: "We forster environments conducive for international collaboration between innovators in Africa.",
+      title: "CPF - Community Policing Forum",
+      description: "CPF works closely with SAPS to improve safety and security in communities, promoting cooperation between police and residents.",
       image: "https://1pulse.online/images/Africa%20City.png"
     },
     5: {
-      title: "Jozi My Jozi ",
-      description: "Help create a city we can all proudly call Jozi My Jozi. Through your generosity, we can initiate and sustain projects that will address various issues within our city.",
+      title: "Pulse",
+      description: "Pulse is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
       image: "https://1pulse.online/images/pulse.jpeg"
     },
     6: {
       title: "Tae Trax",
-      description: "Tae-Trax by Siya Percy is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
-      image: "https://1pulse.online/images/Tae-Trax-Logo.png"
-    },
-    7: {
-      title: "G20",
       description: "Tae-Trax by Siya Percy is an initiative dedicated to monitoring street activities, overseeing public services, and tracking community-driven efforts for safer environments.",
       image: "https://1pulse.online/images/Tae-Trax-Logo.png"
     }
@@ -577,12 +572,12 @@ function pulseopenModal() {
   
     // Logo data from the navigation section (should be inserted dynamically)
     const logos = [
-      {src: 'https://1pulse.online/images/errand%20camel%20logo.png', alt: 'Errand camel'},
-      {src: 'https://1pulse.online/images/bonizluu-fav.png', alt: 'Bonizulu'},
-      {src: 'https://1pulse.online/images/Hillbrow.jpeg', alt: 'G20'},
-      {src: 'https://1pulse.online/images/Africa%20City.png', alt: 'Jozi My Jozi'},
-      {src: 'https://1pulse.online/images/pulse.jpeg', alt: 'Hillbrow'},
-      {src: 'https://1pulse.online/images/Tae-Trax-Logo.png', alt: 'Tae Trax'}
+      {src: 'https://1pulse.online/images/errand%20camel%20logo.png', alt: 'Logo 1'},
+      {src: 'https://1pulse.online/images/bonizluu-fav.png', alt: 'Logo 2'},
+      {src: 'https://1pulse.online/images/hillbrow.jpeg', alt: 'Logo 3'},
+      {src: 'https://1pulse.online/images/Africa%20City.png', alt: 'Logo 4'},
+      {src: 'https://1pulse.online/images/pulse.jpeg', alt: 'Logo 5'},
+      {src: 'https://1pulse.online/images/Tae-Trax-Logo.png', alt: 'Logo 6'}
     ];
   
     // Clear any existing images

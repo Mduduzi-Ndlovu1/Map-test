@@ -3,12 +3,12 @@
   "short_name": "1pulse",
   "icons": [
     {
-      "src": "https://i.ibb.co/Q35sd45k/1pulse-online-logo-CRc-L2.png",
+      "src": "https://1pulse.online/images/ipulse-logo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://i.ibb.co/Q35sd45k/1pulse-online-logo-CRc-L2.png",
+      "src": "https://1pulse.online/images/ipulse-logo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
