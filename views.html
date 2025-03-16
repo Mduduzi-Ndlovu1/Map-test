@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1Pulse.online</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+/* Map Fullscreen */
+#map {
+    height: 100vh;
+    width: 100vw;
+}
+
+/* UI Overlay */
+.overlay {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+/* Post Button */
+.post-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    z-index: 1000;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    z-index: 2000;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* User Card */
+.user-card {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 5px;
+    background: lightgray;
+}
+
+</style>
+    <!-- Leaflet Map (Background) -->
+    <div id="map"></div>
+
+    <!-- Top UI Overlay -->
+    <div class="overlay">
+        <input type="text" id="searchInput" placeholder="Search reports..." onkeyup="searchReports()">
+        <select id="filterType" onchange="filterReports()">
+            <option value="all">All</option>
+            <option value="crime">Crime</option>
+            <option value="service">Service Issue</option>
+        </select>
+        <button onclick="changeView()">Next View</button>
+    </div>
+
+    <!-- Post Button -->
+    <button class="post-btn" onclick="openPostModal()">Post</button>
+
+    <!-- UI Views (Switchable Tabs) -->
+    <div id="scrollView" class="view active">
+        <ul id="reportsList">
+            <li class="crime">Crime reported in Villa Liza</li>
+            <li class="service">Water issue reported in Braamfontein</li>
+        </ul>
+    </div>
+
+    <div id="dashView" class="view">
+        <h2>📊 Case Progress</h2>
+        <p>Active Cases: 23</p>
+        <p>Resolved Cases: 112</p>
+    </div>
+
+    <div id="performanceView" class="view">
+        <h2>🏆 Performance Scoreboard</h2>
+        <div class="scoreboard">
+            <div class="user-card">
+                <h3>John Doe</h3>
+                <p>Ward: 12</p>
+                <p>Line of Work: NPO</p>
+                <p>Years in Service: 5</p>
+                <p>Cases: 120 solved / 30 pending / 10 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>Jane Smith</h3>
+                <p>Ward: 8</p>
+                <p>Line of Work: Private Investigator</p>
+                <p>Years in Service: 7</p>
+                <p>Cases: 85 solved / 20 pending / 15 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>Mike Johnson</h3>
+                <p>Ward: 5</p>
+                <p>Line of Work: Government</p>
+                <p>Years in Service: 10</p>
+                <p>Cases: 200 solved / 15 pending / 25 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>Sarah Lee</h3>
+                <p>Ward: 3</p>
+                <p>Line of Work: Community Volunteer</p>
+                <p>Years in Service: 3</p>
+                <p>Cases: 50 solved / 10 pending / 5 reviewed</p>
+            </div>
+            <div class="user-card">
+                <h3>David Brown</h3>
+                <p>Ward: 6</p>
+                <p>Line of Work: Police Officer</p>
+                <p>Years in Service: 12</p>
+                <p>Cases: 180 solved / 40 pending / 30 reviewed</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Modal -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePostModal()">&times;</span>
+            <h2>Create a Post</h2>
+            <textarea id="postText" placeholder="Write your story..."></textarea>
+            <input type="file" id="postImages" accept="image/*" multiple>
+            <button onclick="submitPost()">Submit</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+<script>
+// Initialize Leaflet Map
+var map = L.map('map').setView([-26.2041, 28.0473], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Handle Views Switching
+let currentView = 0;
+const views = ["scrollView", "dashView", "performanceView"];
+
+function changeView() {
+    document.querySelectorAll(".view").forEach(view => view.classList.remove("active"));
+    currentView = (currentView + 1) % views.length;
+    document.getElementById(views[currentView]).classList.add("active");
+}
+
+// Handle Post Modal
+function openPostModal() {
+    document.getElementById("postModal").style.display = "block";
+}
+
+function closePostModal() {
+    document.getElementById("postModal").style.display = "none";
+}
+
+function submitPost() {
+    alert("Post submitted!");
+    closePostModal();
+}
+
+</script>
+
+</body>
+</html>
