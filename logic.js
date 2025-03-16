@@ -1,18 +1,3 @@
-// Show the loading screen when the page is loading
-window.addEventListener('load', function() {
-  // Show the loading screen initially
-  const loadingScreen = document.createElement('div');
-  loadingScreen.id = 'loading-screen';
-  loadingScreen.innerHTML = '<div class="spinner"></div>';
-  document.body.appendChild(loadingScreen);
-
-  // Simulate map loading time (you can replace this with actual map loading logic)
-  setTimeout(function() {
-    // Hide the loading screen after 3 seconds or when the map is ready
-    loadingScreen.style.display = 'none';
-  }, 30000); // Adjust time as needed
-});
-
 // Show loading animation on the "Save Post" button
 const postButton = document.querySelector('button[type="submit"]');
 if (postButton) {
@@ -119,12 +104,33 @@ function setUserLocation() {
                 // Reverse geocode the coordinates to get the address
                 fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
                     .then(response => response.json())
-                    .then(data => {
-                        // If the geocoding request returns a valid address
-                        const address = data.display_name;
-                        userMarker.bindPopup("Your current location is: " + address + "<strong>Whats going on?</strong>").openPopup();
+                    
+// Function to handle geocoding response and display popup with a button
+.then(data => {
+  // If the geocoding request returns a valid address
+  const address = data.display_name;
 
-                    })
+  // Create a button inside the popup
+  const popupContent = `
+      <p>Your current location is: ${address}</p>
+      <button id="createPostBtn" style="background: blue; color: white; padding: 5px; border: none; cursor: pointer;">
+          What's going on?
+      </button>
+  `;
+
+  // Bind popup with button to the user's marker
+  userMarker.bindPopup(popupContent).openPopup();
+
+  // Wait for the popup to open, then add event listener to the button
+  setTimeout(() => {
+      document.getElementById('createPostBtn').addEventListener('click', function () {
+          const { lat, lng } = userMarker.getLatLng(); // Get user location
+          openPostModal(lat, lng); // Open post modal with coordinates
+      });
+  }, 100);
+})
+
+
                     .catch(error => {
                         console.error('Error fetching address:', error);
                         userMarker.bindPopup('Your position').openPopup();
