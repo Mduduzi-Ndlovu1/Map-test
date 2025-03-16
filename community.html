@@ -76,8 +76,10 @@
             .savvy-item {
                 padding: 5px;
                 font-weight: bold;
+                text-decoration: none;
+                
             }
-            
+        
             .event-item {
                 border-top: 1px solid black;
                 padding: 10px 0;
@@ -222,14 +224,20 @@
                 <div class="savvys-container">
                     <h3>Savvys</h3>
                     <div class="savvy-list">
-                        <div class="savvy-item">Maboneng | Water Savvy</div>
-                        <div class="savvy-item">Mableton BH | Water Savvy</div>
+                       <div class="savvy-item"> <a href="ward.html" style="text-decoration: none; /* Removes underline */
+                        color: #007BFF; /* Modern blue */
+                        font-weight: bold;
+                        transition: color 0.3s ease, text-shadow 0.3s ease; /* Smooth hover effect */">Maboneng | Water Savvy</a></div>
+                        <a href="wards.html"><div class="savvy-item" style="text-decoration: none; /* Removes underline */
+                            color: #007BFF; /* Modern blue */
+                            font-weight: bold;
+                            transition: color 0.3s ease, text-shadow 0.3s ease; /* Smooth hover effect */">Mableton BH | Water Savvy</div></a>
                     </div>
                 </div>
                 
                 <div class="events-container">
-                    <h3>Events</h3>
-                    <div class="event-item">Talk to the councilor</div>
+                    <h3>Events</h3> 
+                     <div class="event-item">Talk to the councilor</div>
                     <div class="event-item">Talk to the Media</div>
                 </div>
                 <div style="    display: flex;
