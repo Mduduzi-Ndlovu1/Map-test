@@ -89,62 +89,100 @@ let currentPosition = 0;
 // All fuctions from here onwards
 // Function to get user's location and set the map view
 function setUserLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+          async (position) => {
+              const userLat = position.coords.latitude;
+              const userLng = position.coords.longitude;
 
-                // Center the map on the user's location
-                map.setView([userLat, userLng], 18);
+              // Center the map on the user's location
+              map.setView([userLat, userLng], 18);
 
-                // Add marker for the user's location
-                let userMarker = L.marker([userLat, userLng],{ icon: youAreHereIcon }).addTo(map);
+              // Add marker for the user's location
+              let userMarker = L.marker([userLat, userLng], { icon: youAreHereIcon }).addTo(map);
 
-                // Reverse geocode the coordinates to get the address
-                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`)
-                    .then(response => response.json())
-                    
-// Function to handle geocoding response and display popup with a button
-.then(data => {
-  // If the geocoding request returns a valid address
-  const address = data.display_name;
+              // Fetch and show popup with councilor details
+              await showPopup(userMarker, userLat, userLng);
+          },
+          (error) => {
+              console.log(error);
+              // Fallback to a default location if geolocation fails
+              map.setView([-26.2041, 28.0473], 18);
+          }
+      );
+  } else {
+      alert('Geolocation is not supported by this browser.');
+  }
+}
 
-  // Create a button inside the popup
-  const popupContent = `
-      <p>Your current location is: ${address}</p>
-      <button id="createPostBtn" style="background: blue; color: white; padding: 5px; border: none; cursor: pointer;">
-          What's going on?
-      </button>
-  `;
+// Function to get address from coordinates
+async function getAddress(userLat, userLng) {
+  try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLng}&format=json`);
+      const data = await response.json();
 
-  // Bind popup with button to the user's marker
+      // Extract address details
+      const address = data.display_name;
+      const streetName = data.address.road || 'Unknown Street';
+      const suburbName = data.address.suburb || 'Unknown Suburb';
+
+      return { address, streetName, suburbName };
+  } catch (error) {
+      console.error('Error fetching address:', error);
+      return { address: 'Unknown Address', streetName: 'Unknown Street', suburbName: 'Unknown Suburb' };
+  }
+}
+
+// Function to get councilor data
+async function getCouncilorData(streetName, suburbName) {
+  try {
+      const response = await fetch('wardCouncillors.js'); // Ensure wardCouncillors.js is properly structured
+      const councilors = await response.json();
+
+      // Search for a match based on suburb or street
+      const matchingCouncilors = councilors.filter(councilor =>
+          councilor.wardSuburbs.includes(suburbName) || councilor.wardSuburbs.includes(streetName)
+      );
+
+      return matchingCouncilors.length > 0 ? matchingCouncilors[0] : null;
+  } catch (error) {
+      console.error('Error fetching councilor data:', error);
+      return null;
+  }
+}
+
+// Function to show popup with councillor details
+async function showPopup(userMarker, userLat, userLng) {
+  const { address, streetName, suburbName } = await getAddress(userLat, userLng);
+  const councilor = await getCouncilorData(streetName, suburbName);
+
+  let popupContent = `<p>You are currently in ${streetName}, ${suburbName}.You can rate or contact your councilor here.</p>
+ <button class="call" onclick="window.location.href='https://1pulse.online/dashboard'">Contact Councillor</button>
+            <button class="rate" onclick="window.location.href='https://1pulse.online/dashboard'">Rate Councillor</button>
+          <button class="post" id="createPostBtn">What's Happening?</button>`;
+
+  if (councilor) {
+      popupContent += `
+          <p><strong>Councillor:</strong> ${councilor.councillorName}</p>
+          <p><strong>Contact:</strong> <a href="tel:${councilor.cllrCont}">${councilor.cllrCont}</a></p>
+     
+      `;
+  } else {
+      popupContent += `<p></p>`;
+  }
+
+  // Bind popup to the marker and open it
   userMarker.bindPopup(popupContent).openPopup();
 
   // Wait for the popup to open, then add event listener to the button
   setTimeout(() => {
-      document.getElementById('createPostBtn').addEventListener('click', function () {
-          const { lat, lng } = userMarker.getLatLng(); // Get user location
-          openPostModal(lat, lng); // Open post modal with coordinates
-      });
+      const postButton = document.getElementById('createPostBtn');
+      if (postButton) {
+          postButton.addEventListener('click', function () {
+              openPostModal(userLat, userLng);
+          });
+      }
   }, 100);
-})
-
-
-                    .catch(error => {
-                        console.error('Error fetching address:', error);
-                        userMarker.bindPopup('Your position').openPopup();
-                    });
-            },
-            (error) => {
-                console.log(error);
-                // Fallback to a default location if geolocation fails
-                map.setView([-26.2041, 28.0473], 18);
-            }
-        );
-    } else {
-        alert('Geolocation is not supported by this browser.');
-    }
 }
 
 // Function to toggle between light and dark mode
@@ -189,7 +227,7 @@ map.on('click', function (event) {
     const lng = event.latlng.lng;
 
     // Call the openPostModal function and pass the coordinates
-    openPostModal(lat, lng); //openPostModal
+    openPostModal(lat, lng);
 });
 
 // Open modal to create a post
