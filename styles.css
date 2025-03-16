@@ -1,4 +1,53 @@
+/* posting buttons */
+.call {
+  
+  background-color: #eea23f; /* WhatsApp green */
+  border: 1px solid white; /* 1px white border */
+  border-radius: 16px;
+  padding: 12px 10px; /* Padding for better spacing */
+  color: white; /* Text color */
+  font-size: 12px; /* Font size */
+  font-weight: bold; /* Bold text */
+  width: 49%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+ /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  Small shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
 
+}
+.rate {
+  
+  background-color: #35da0c; /* WhatsApp green */
+  border: 1px solid white; /* 1px white border */
+  border-radius: 16px;
+  padding: 10px 10px; /* Padding for better spacing */
+  color: white; /* Text color */
+  font-size: 12px; /* Font size */
+  font-weight: bold; /* Bold text */
+  width: 49%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+ /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  Small shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+
+}
+
+.post {
+  background-color: #19a2fd; /* WhatsApp green */
+  border: 1px solid white; /* 1px white border */
+  border-radius: 16px;
+  margin-top: 10px;
+  padding: 15px 10px; /* Padding for better spacing */
+  color: white; /* Text color */
+  font-size: 12px; /* Font size */
+  font-weight: bold; /* Bold text */
+  width: 100%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+ /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  Small shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+
+}
     /* General styles */
     body, html {
         margin: 0;
@@ -19,7 +68,56 @@
 #loading-screen {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 0;/* posting buttons */
+.call {
+  
+  background-color: #eea23f; /* WhatsApp green */
+  border: 1px solid white; /* 1px white border */
+  border-radius: 16px;
+  padding: 12px 10px; /* Padding for better spacing */
+  color: white; /* Text color */
+  font-size: 12px; /* Font size */
+  font-weight: bold; /* Bold text */
+  width: 49%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+ /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  Small shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+
+}
+.rate {
+  
+  background-color: #35da0c; /* WhatsApp green */
+  border: 1px solid white; /* 1px white border */
+  border-radius: 16px;
+  padding: 10px 10px; /* Padding for better spacing */
+  color: white; /* Text color */
+  font-size: 12px; /* Font size */
+  font-weight: bold; /* Bold text */
+  width: 49%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+ /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  Small shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+
+}
+
+.post {
+  background-color: #19a2fd; /* WhatsApp green */
+  border: 1px solid white; /* 1px white border */
+  border-radius: 16px;
+  margin-top: 10px;
+  padding: 15px 10px; /* Padding for better spacing */
+  color: white; /* Text color */
+  font-size: 12px; /* Font size */
+  font-weight: bold; /* Bold text */
+  width: 100%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+ /* box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);  Small shadow */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+
+}
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
@@ -677,19 +775,57 @@ button[type="submit"]:hover {
 #gyroscope {
   font-size: 24px;
   margin-bottom: 20px;
+
 }
 
 #penIcon {
-  position: absolute;
-  top: 90%;
-  left: 50%;
-  transform-origin: center center;
+  position: absolut;
+  to: 90%;
+  lef: 50%;
+  transform-origi: center center;
   width: 50px;
   height: 50px;
   transition: transform 0.2s ease-in-out;
   z-index: 99999;
+display:flex;
 }
 
+.bottom-touch {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the div */
+  transform-origin: center center;
+  width: 200px;
+  height: 55px;
+  z-index: 99999;
+  border-radius: 50px;
+  display: flex; /* Use flexbox to align buttons horizontally */
+  justify-content: space-around; /* Space buttons evenly */
+  align-items: center; /* Vertically center buttons */
+background: rgba(255, 255, 255, 0.5); /* White with 50% opacity */
+border: 2px solid white; /* Solid white border */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.circle-button {
+  width: 30px; /* Diameter of the circle */
+  height: 30px; /* Diameter of the circle */
+  border-radius: 50%; /* Make it circular */
+  background: #fff ; /* Default background color */
+  border: solid 1px #0096FF; /* Optional: Add a border */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  display: flex; /* Use flexbox to center the icon */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  text-decoration: none; /* Remove underline from link */
+  color: #000; /* Icon color */
+}
+
+/* Optional: Add hover effect */
+.circle-button:hover {
+  background: #aaa;
+} 
 /* Styling for the pen icon */
 #penIcon img {
   width: 100%;
@@ -1028,8 +1164,8 @@ border-radius: 10px;
   font-size: 28px;
   font-weight: bold;
   position: absolute;
-  top: 10px;
-  right: 25px;
+  float: right ;
+  righ: 25px;
 }
 
 .close-brah:hover,
@@ -1106,13 +1242,13 @@ border-radius: 10px;
 
 .gjno-close {
   position: absolute;
-  top: 10px;
-  right: 20px;
+  top: 5px;
+  right: 10px;
   color: #fff;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
-  padding: 20px;
+  padding: 10px;
 }
 
 .gjno-close:hover {

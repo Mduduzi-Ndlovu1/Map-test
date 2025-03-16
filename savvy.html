@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Savvy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .savvy-container { max-width: 800px; margin: auto; padding: 20px; }
+        .scroll-box {
+            background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            border: 2px solid #c4a484;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Georgia', serif;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        .highlight { color: #d9534f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container savvy-container">
+        <h1 class="text-center my-4">Community Savvy</h1>
+        <p class="text-center">We are taking this mandate to the municipality. Show your support by signing up below.</p>
+        
+        <div class="scroll-box mb-4">
+            <h3 class="text-center">Mandate Overview</h3>
+            <p>We would like you to be a part of a constitutional community structure that is responsible for holding the minicipality accountable. <span class="highlight">A community Trust.</span></p>
+            <p>The <span class="highlight">Community Trust</span> will act as a governing body ensuring fair allocation of municipal funds. Our mission is to bring <span class="highlight">transparency</span>, <span class="highlight">accountability</span>, and <span class="highlight">community-driven decision-making</span> to budget spending.</p>
+            <P>"Being part of the Trust means giving a little time each week to make big changes in how our city works."
+
+            </p><p>
+                ✅ Commitment
+                
+                Members are asked to set aside one hour per week for discussions, budget reviews, and decision-making.
+                
+            </p><p>
+                📊 Reviewing Finances
+                
+                The Financial Oversight Team will present budget details every week.
+                Members will discuss where funds should go and flag any suspicious spending.
+                
+            </p><p>🗳️ Voting on Community Needs
+                
+                Each member votes on which projects need urgent funding.
+                Votes are counted and submitted to the municipality.
+            </p><p>
+                📢 Making Your Voice Heard
+                
+                Community representatives gather input from their neighborhoods.
+                They present concerns and priorities at weekly meetings.
+                👀 Tracking Progress
+                
+                The Project Monitoring Team tracks projects from start to finish.
+                Updates are shared online and at meetings so everyone knows what’s happening.
+                </P>
+        </div>
+        
+        <h4>📜 Sign the Mandate</h4>
+        <form id="registrationForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="phone" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Sign & Support</button>
+        </form>
+        
+        <div class="mt-4">
+            <h5>💡 Life Cycle of the Trust</h5>
+            <p>The decision-making process follows a structured cycle:</p>
+            <ul>
+                <li>📢 Community submits concerns & budget suggestions</li>
+                <li>🗳️ Weekly review & voting on financial needs</li>
+                <li>✅ Trust finalizes allocations & submits decisions</li>
+                <li>📊 Transparency reports shared with the community</li>
+            </ul>
+        </div>
+        
+        <div class="mt-4">
+            <h5>📊 Community Engagement</h5>
+            <p><strong>Number of supporters so far:</strong> <span id="response-count">0</span></p>
+        </div>
+    </div>
+    
+    <script>
+        let responseCount = 0;
+        document.querySelector('#registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            responseCount++;
+            document.getElementById('response-count').innerText = responseCount;
+            alert('Thank you for signing the mandate!');
+        });
+    </script>
+</body>
+</html>
