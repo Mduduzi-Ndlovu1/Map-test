@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1Pulse Online - Create Post</title>
+  <link rel="icon" href="https://i.ibb.co/Q35sd45k/1pulse-online-logo-CRc-L2.png" type="image/x-icon">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Basic styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .form-field {
+      margin-bottom: 15px;
+    }
+
+    .form-field label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    button[type="submit"] {
+      background-color: #0e5aff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #1077d8;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 1.2em;
+      color: #777;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: block;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    .modal h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Create a Post</h1>
+    <button id="create-post-button">Create Post</button>
+  </div>
+
+  <!-- Modal for creating a new post -->
+  <div class="modal-overlay" id="modal-overlay"></div>
+  <div class="modal" id="modal">
+    <h3>Create a Post</h3>
+    <form id="postForm" enctype="multipart/form-data">
+      <div class="form-field">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-field">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required />
+      </div>
+      <div class="form-field">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea>
+      </div>
+      <div class="form-field">
+        <label for="type">Type of Post:</label>
+        <select id="type" name="type" required>
+          <option value="" disabled selected>Select a type...</option>
+          <option value="Good Deeds">Good Deeds</option>
+          <option value="Health">Health</option>
+          <option value="Service Delivery">Service Delivery</option>
+          <option value="Violent Crime">Violent Crime</option>
+          <option value="Looting">Looting</option>
+          <option value="Non-compliance">Non-compliance</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" required />
+      </div>
+      <button type="submit">Save Post</button>
+      <div id="spinner" style="display: none;">Submitting...</div>
+    </form>
+  </div>
+
+  <script>
+    let selectedLatLng = null;
+
+    // Function to open the modal
+    function openPostModal(lat, lng) {
+      document.getElementById('modal-overlay').classList.add('active');
+      document.getElementById('modal').classList.add('active');
+      selectedLatLng = { lat, lng };
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+      document.getElementById('modal').classList.remove('active');
+      document.getElementById('postForm').reset();
+    }
+
+    // Handle "Create Post" button click
+    document.getElementById('create-post-button').addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            openPostModal(lat, lng); // Open the modal with the user's location
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            alert('Unable to retrieve your location. Please enable location services and try again.');
+          }
+        );
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
+    });
+
+    // Handle form submission
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const spinner = document.getElementById('spinner');
+      spinner.style.display = 'block'; // Show the spinner
+
+      const formData = new FormData(e.target);
+      formData.append('latitude', selectedLatLng.lat);
+      formData.append('longitude', selectedLatLng.lng);
+
+      try {
+        const response = await fetch('/api/posts', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log('Post created successfully!');
+          closeModal(); // Close the modal
+          alert('Post created successfully!');
+        } else {
+          const errorData = await response.json();
+          console.error('Response error:', errorData);
+          alert(`Error: ${errorData.message || 'An error occurred while creating the post.'}`);
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        alert('There was an error submitting the form. Please try again later.');
+      } finally {
+        spinner.style.display = 'none'; // Hide the spinner
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('modal-overlay').addEventListener('click', closeModal);
+  </script>
+</body>
+</html>
