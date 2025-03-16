@@ -189,7 +189,7 @@ map.on('click', function (event) {
     const lng = event.latlng.lng;
 
     // Call the openPostModal function and pass the coordinates
-    openPostModal(lat, lng);
+    openPostModal(lat, lng); //openPostModal
 });
 
 // Open modal to create a post
