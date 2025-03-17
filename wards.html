@@ -121,7 +121,21 @@
                         if (councillor) {
                             document.getElementById("result").innerHTML = `
                               Your ward councillor is ${councillor.councillorName}.
-                                <button onclick="showContactModal(${wardNo})">Contact Councillor</button>
+                                <button style="cursor: pointer;
+                border: none;
+text-decoration:none;
+    background-color: #25D366; /* WhatsApp green */
+    border: 1px solid white; /* 1px white border */
+    border-radius: 22px; /* 22px radius */
+    padding: 20px 30px; /* Padding for better spacing */
+    color: white; /* Text color */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Small shadow */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+ "
+onclick="showContactModal(${wardNo})">Contact Councillor</button>
                             `;
                         } else {
                             document.getElementById("result").textContent = `Ward ${wardNo} not found in records.`;
