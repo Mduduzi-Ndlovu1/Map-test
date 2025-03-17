@@ -120,7 +120,7 @@
                         const councillor = getCouncillorByWard(wardNo);
                         if (councillor) {
                             document.getElementById("result").innerHTML = `
-                              Your ward councillor is ${councillor.councillorName}.
+                              Your ward councillor is ${councillor.councillorName}.<div>
                                 <button style="cursor: pointer;
                 border: none;
 text-decoration:none;
@@ -135,7 +135,7 @@ text-decoration:none;
     cursor: pointer; /* Pointer cursor on hover */
     transition: background-color 0.3s ease; /* Smooth hover effect */
  "
-onclick="showContactModal(${wardNo})">Contact Councillor</button>
+onclick="showContactModal(${wardNo})">Contact Councillor</button></div>
                             `;
                         } else {
                             document.getElementById("result").textContent = `Ward ${wardNo} not found in records.`;
