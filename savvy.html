@@ -10,8 +10,9 @@
         .savvy-container { max-width: 800px; margin: auto; padding: 20px; }
         .scroll-box {
             background: url('https://www.transparenttextures.com/patterns/aged-paper.png');
-            border: 2px solid #c4a484;
+            border: 2px solid grey;
             padding: 15px;
+border-radius: 18px;
             max-height: 300px;
             overflow-y: auto;
             font-family: 'Georgia', serif;
@@ -57,24 +58,7 @@
                 Updates are shared online and at meetings so everyone knows what’s happening.
                 </P>
         </div>
-        
-        <h4>📜 Sign the Mandate</h4>
-        <form id="registrationForm">
-            <div class="mb-3">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="text" class="form-control" id="phone" required>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Sign & Support</button>
-        </form>
-        
+         
         <div class="mt-4">
             <h5>💡 Life Cycle of the Trust</h5>
             <p>The decision-making process follows a structured cycle:</p>
@@ -91,6 +75,23 @@
             <p><strong>Number of supporters so far:</strong> <span id="response-count">0</span></p>
         </div>
     </div>
+        <h4>📜 Sign the Mandate</h4>
+        <form id="registrationForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="phone" required>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Sign & Support</button>
+        </form>
+       
     
     <script>
         let responseCount = 0;
