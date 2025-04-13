@@ -72,7 +72,7 @@ const markerIcon = {
       popupAnchor: [0, -30]}),
     'Looting': L.icon({ iconUrl: 'https://1pulse.online/images/looting.png', iconSize: [30, 30],  iconAnchor: [15, 30],
       popupAnchor: [0, -30]}),
-    'Non-compliance': L.icon({ iconUrl: 'https://1pulse.online/images/xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
+    'Non-compliance': L.icon({ iconUrl: 'xenophobia.png', iconSize: [30, 30], iconAnchor: [15, 30],
       popupAnchor: [0, -30] })
   };
 
