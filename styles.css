@@ -172,7 +172,7 @@ button.loading.loading .spinner {
 
 #logo-container {
       display: flex;
-      width: 85%;
+      width: 65%;
 transition: transform 0.3s ease;
 flex-wrap: nowrap;
 margin: 3px;
@@ -272,7 +272,7 @@ imgs {
 
 
   #logo-container {
-    width: 50%;
+    max-width: 50%;
   }
 }
 
@@ -387,6 +387,7 @@ imgs {
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       border: solid 2px rgb(255, 255, 255);
       overflow-y: hidden;  /* Hides vertical scrollbar */
+      max-width: 550px;
     }
     #logo-container::-webkit-scrollbar {
   display: none; /* Hides the scrollbar in webkit browsers (Chrome, Safari) */
