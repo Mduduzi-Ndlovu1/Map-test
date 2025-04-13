@@ -387,7 +387,7 @@ imgs {
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       border: solid 2px rgb(255, 255, 255);
       overflow-y: hidden;  /* Hides vertical scrollbar */
-      max-width: 550px;
+      max-width: 650px;
     }
     #logo-container::-webkit-scrollbar {
   display: none; /* Hides the scrollbar in webkit browsers (Chrome, Safari) */
