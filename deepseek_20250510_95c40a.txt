@@ -1,0 +1,3 @@
+<Files "db_connect.php">
+    Require all denied
+</Files>
