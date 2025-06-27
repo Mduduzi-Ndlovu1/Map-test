@@ -37,10 +37,33 @@
       <!-- Section 1: Header, Search Bar, Hero Image -->
 <div class="section-1">
 <header>
+  <style>
+    .pulse-animation {
+  animation: pulse 1.5s infinite !important;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+  </style>
 <div class="side-logo">
-  <img src="https://i.ibb.co/S4jWXkFv/1pulse-online-logo-CRc-L3.png" alt="Logo">
- <span></span>
+    <img class="pulse-animation" src="https://i.ibb.co/S4jWXkFv/1pulse-online-logo-CRc-L3.png" alt="Logo">
+    <span></span>
 </div>
+
 <a href="https://wa.me/+27685090669?text=Hi%0AMy%20name%20is...%0AI'm%20reporting....%0ACategory%20(good%20deeds%2C%20crime%2C%20municipal%20issue%2C%20health%20issue%2C%20compliance%20issue)...%0AAt%20this%20location....%0AFor%20references%2C%20I%20will%20attach%20pictures%20and%20my%20location." target="_blank">
     <button style="
     background-color: #25D366; /* WhatsApp green */

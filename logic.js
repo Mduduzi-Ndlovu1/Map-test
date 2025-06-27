@@ -493,7 +493,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Data for each logo's modal content
   var modalData = {
     1: {
-      title: "SAPS - South African Police Service",
+      title: "Errand Camel - Mother to 1pulse and Whatsnext",
       description: "SAPS is responsible for maintaining law and order in South Africa, preventing crime, and ensuring the safety of citizens.",
       image: "https://1pulse.online/images/errand%20camel%20logo.png"
     },
