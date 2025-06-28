@@ -63,20 +63,23 @@ CREATE TABLE IF NOT EXISTS posts (
   createdAt TEXT
 );\n\n`;
 
-        const insertStatements = posts.map(post => {
-          const id = escapeSQL(post._id || '');
-          const name = escapeSQL(post.name || '');
-          const surname = escapeSQL(post.surname || '');
-          const type = escapeSQL(post.type || '');
-          const description = escapeSQL(post.description || '');
-          const imageUrl = escapeSQL(post.imageUrl || '');
-          const latitude = post.latitude || 0;
-          const longitude = post.longitude || 0;
-          const createdAt = new Date(post.createdAt).toISOString();
+      const insertStatements = posts.map(post => {
+  const id = escapeSQL(post._id);
+  const name = escapeSQL(post.name);
+  const surname = escapeSQL(post.surname);
+  const type = escapeSQL(post.type);
+  const description = escapeSQL(post.description);
+  const imageUrl = escapeSQL(post.imageUrl);
+  const latitude = post.latitude ?? 'NULL';
+  const longitude = post.longitude ?? 'NULL';
+  const createdAt = post.createdAt
+    ? `'${new Date(post.createdAt).toISOString().slice(0, 19).replace('T', ' ')}'`
+    : 'NULL';
 
-          return `INSERT INTO posts (id, name, surname, type, description, imageUrl, latitude, longitude, createdAt)
-VALUES ('${id}', '${name}', '${surname}', '${type}', '${description}', '${imageUrl}', ${latitude}, ${longitude}, '${createdAt}');`;
-        });
+  return `INSERT INTO posts (id, name, surname, type, description, imageUrl, latitude, longitude, createdAt)
+VALUES (${id}, ${name}, ${surname}, ${type}, ${description}, ${imageUrl}, ${latitude}, ${longitude}, ${createdAt});`;
+});
+
 
         const fullSQL = createTableSQL + insertStatements.join('\n');
 
