@@ -303,7 +303,6 @@ function displayPosts(posts) {
           : 'Unknown date';
 
         marker.bindPopup(`
-  <div class="post-card">
 
     <div class="tag-header">
       ${type || 'Unknown Type'}
@@ -335,10 +334,6 @@ function displayPosts(posts) {
     </div>
 
    
-
-  </div>
-
-
 
 
        
