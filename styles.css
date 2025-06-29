@@ -830,7 +830,7 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       padding: 15px 20px;
       border-radius: 10px 10px 0 0;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      width: 360px;
+      width: 330px;
       position: relative;
     }
 
@@ -974,9 +974,10 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .image-container img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
+    border-radius:10px;
+  width: 300px !important;
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Zooms in on the image, cropping excess */
     }
 
     .button-container {

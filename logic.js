@@ -326,7 +326,7 @@ function displayPosts(posts) {
       <div class="timestamp">${updated}</div>
       <div class="quote">${description ? `"${description}"` : 'No description available'}</div>
       <div class="image-container">
-        <img src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image">
+        <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image">
       </div>
     </div>
            <div class="button-container">

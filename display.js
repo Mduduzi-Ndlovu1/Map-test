@@ -259,43 +259,22 @@ function displayPosts(posts) {
           : 'Unknown date';
 
         marker.bindPopup(`
-
-    <div class="tag-header">
-      ${type || 'Unknown Type'}
-    </div>
-
-    <div class="close-btn">&times;</div>
-
-    <div class="response-bar">
-      <h3>Response by: Jozi My Jozi and 3 others</h3>
-      <div class="responder-avatars">
-        <img src="https://i.imgur.com/1X5bBJn.jpg" alt="Responder 1">
-        <img src="https://i.imgur.com/x3omt6H.jpg" alt="Responder 2">
-        <div class="add-btn">+</div>
-      </div>
-    </div>
-
-    <div class="status">Resolution: Pending</div>
-
-       <div class="content">
-      <div class="author">by ${name || 'Unknown'} ${surname || ''}</div>
-      <div class="timestamp">${updated}</div>
-      <div class="quote">${description ? `"${description}"` : 'No description available'}</div>
-      <div class="image-container">
-        <img src="${imageUrl || '#'}" alt="${type || 'Image'}" alt="Post Image">
-      </div>
-    </div>
-           <div class="button-container">
-      <button class="view-post-btn" onclick="openViewPostModal('${_id}')">View Post</button>
-    </div>
-
-   
-
-
-
-
-
-       
+          <div class="card-header">
+            <span class="type">${type || 'Unknown Type'}</span>
+          </div>
+          <div class="header">
+            <div>
+              <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
+              <div class="posted-on"> ${updated}</div>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="description">${description ? `"${description}"` : 'No description available'}</div>
+            <div class="image">
+              <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
+            </div>
+          </div>
+          <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
         `);
       } catch (error) {
         console.error(`Error creating marker for post ID: ${_id}`, error);
