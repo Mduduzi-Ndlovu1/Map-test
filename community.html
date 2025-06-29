@@ -16,7 +16,8 @@
 .atag {text-decoration: none; /* Removes underline */
                         color: #007BFF; /* Modern blue */
                         font-weight: bold;
-                        transition: color 0.3s ease, text-shadow 0.3s ease; /* Smooth hover effect */} 
+                        transition: color 0.3s ease, text-shadow 0.3s ease; /* Smooth hover effect */
+                    display: flex;} 
 
         body { 
 
@@ -224,23 +225,197 @@ text-decoration:none;
 
     <!-- Timeline Container -->
     <div class="timeline-container">
+        
         <div class="modal-content-tl">
             <div class="modal-content-tl">
                 <h2>Community Activities</h2>
                 
-                <div class="savvys-container">
-                    <h3>Savvys</h3>
-                    <div class="savvy-list">
-                       <div class="savvy-item"> <a href="savvy.html" class="atag" >Maboneng | Water Savvy</a></div>
-                        <div class="savvy-item"><a href="savvy.html" class="atag">Mableton BH | Water Savvy</a></div>
-                    </div>
-                </div>
+               
                 
-                <div class="events-container">
-                    <h3>Events</h3> 
-                     <div class="event-item"><a href="wards.html" class="atag">Talk to the councilor</a></div>
-                    <div class="event-item"><a href="media.html" class="atag" >Talk to the Media</a></div>
-                </div>
+            <div class="events-container">
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Good Deeds Post</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+  <style>.post-card {
+      width: 370px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin: auto;
+      position: relative;
+    }
+
+    /* GOOD DEEDS HEADER */
+    .tag-header {
+      background-color: #0077cc;
+      color: white;
+      padding: 8px 20px;
+      font-weight: bold;
+      font-size: 14px;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+
+    /* RESPONSE BY SECTION */
+    .response-bar {
+      padding: 12px 20px 12px 20px;
+      background-color: white;
+      position: relative;
+      border-bottom: 1px solid #eee;
+    }
+
+    .response-bar h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin: 0;
+      color: #444;
+    }
+
+    .responder-avatars {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .responder-avatars img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid white;
+      object-fit: cover;
+      margin-left: -10px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.3);
+    }
+
+    .add-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #0077cc;
+      color: white;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: -10px;
+      cursor: pointer;
+    }
+
+    /* RESOLUTION STATUS */
+    .status {
+      background-color: #888;
+      color: white;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* CONTENT SECTION */
+    .content {
+      padding: 20px;
+    }
+
+    .author {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    .timestamp {
+      font-size: 12px;
+      color: gray;
+      margin-bottom: 10px;
+    }
+
+    .quote {
+      font-style: italic;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+
+    .image-container img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .button-container {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .view-post-btn {
+      background-color: #00b374;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .view-post-btn:hover {
+      background-color: #009a60;
+    }
+
+    /* CLOSE BUTTON */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      color: #999;
+      cursor: pointer;
+    }</style>
+</head>
+<body>
+
+  <div class="post-card">
+
+    <div class="tag-header">
+      Good Deeds
+    </div>
+
+    <div class="close-btn">&times;</div>
+
+    <div class="response-bar">
+      <h3>Response by: Jozi My Jozi and 3</h3>
+      <div class="responder-avatars">
+        <img src="https://i.imgur.com/1X5bBJn.jpg" alt="Responder 1">
+        <img src="https://i.imgur.com/x3omt6H.jpg" alt="Responder 2">
+        <div class="add-btn">+</div>
+      </div>
+    </div>
+
+    <div class="status">Resolution: Pending</div>
+
+    <div class="content">
+      <div class="author">by Mrs Bah</div>
+      <div class="timestamp">12/11/2024, 5:55:53 PM</div>
+      <div class="quote">"1Pulse Meeting Spot, Maboneng. the that proved the concept."</div>
+      <div class="image-container">
+        <img src="https://i.imgur.com/O38g9vL.jpeg" alt="Post Image">
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button class="view-post-btn">View Post</button>
+    </div>
+
+  </div>
+
+
+</body>
+</html>
+
+</div>
                 <div style="    display: flex;
                 flex-direction: column;
                 align-items: center; /* Centers content horizontally */
