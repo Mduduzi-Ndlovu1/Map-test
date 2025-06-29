@@ -307,7 +307,7 @@ function displayPosts(posts) {
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
             <div class="response-bar">
-      <h3>Response by: Jozi My Jozi and 3 others</h3>
+      <h3>Solved by: Jozi My Jozi and 3 others</h3>
       <div class="responder-avatars">
         <img src="https://i.imgur.com/1X5bBJn.jpg" alt="Responder 1">
         <img src="https://i.imgur.com/x3omt6H.jpg" alt="Responder 2">
