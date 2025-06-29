@@ -844,14 +844,14 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     .responder-avatars {
       position: relative;
       top: 15px;
-      right: 40px;
+      right: 45px;
       display: flex;
       align-items: center;
     }
 
     .responder-avatars img {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       border: 2px solid white;
       object-fit: cover;
@@ -860,8 +860,8 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .responder-avatars .add-btn {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background-color: #0077cc;
       color: white;
