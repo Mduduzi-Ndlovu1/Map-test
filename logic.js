@@ -302,31 +302,39 @@ function displayPosts(posts) {
           ? new Date(createdAt).toLocaleString()
           : 'Unknown date';
 
-        marker.bindPopup(`
-          <div class="card-header">
-            <span class="type">${type || 'Unknown Type'}</span>
-          </div>
-   <iframe src="https://poweroffive.co.za/1pulse.online/users/response-bar.php" 
-        style="width: 100%; height: 90px; border: none; overflow: hidden;" 
-        scrolling="no">
+       marker.bindPopup(`
+  <div class="card-popup">
+    <div class="card-header">
+      <span class="type">${type || 'Unknown Type'}</span>
+    </div>
+
+    <iframe 
+      src="https://poweroffive.co.za/1pulse.online/users/response-bar.php" 
+      style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
+      scrolling="no" 
+      loading="lazy">
     </iframe>
-          <div class="header">
-            <div>
-              <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
-              <div class="posted-on"> ${updated}</div>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="description">${description ? `"${description}"` : 'No description available'}</div>
-            <div class="image">
-              <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}">
-            </div>
-          </div>
-          <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
 
+    <div class="header">
+      <div>
+        <div class="username">by ${name || 'Unknown'} ${surname || ''}</div>
+        <div class="posted-on">${updated}</div>
+      </div>
+    </div>
 
-       
-        `);
+    <div class="card-content">
+      <div class="description">
+        ${description ? `"${description}"` : 'No description available'}
+      </div>
+      <div class="image">
+        <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" />
+      </div>
+    </div>
+
+    <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
+  </div>
+`);
+
       } catch (error) {
         console.error(`Error creating marker for post ID: ${_id}`, error);
       }
