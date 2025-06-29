@@ -264,8 +264,6 @@ function displayPosts(posts) {
       ${type || 'Unknown Type'}
     </div>
 
-    <div class="close-btn">&times;</div>
-
     <div class="response-bar">
       <h3>Response by: Jozi My Jozi and 3 others</h3>
       <div class="responder-avatars">
