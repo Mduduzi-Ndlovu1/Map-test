@@ -844,7 +844,7 @@ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     .responder-avatars {
       position: relative;
       top: 15px;
-      right: 20px;
+      right: 40px;
       display: flex;
       align-items: center;
     }
