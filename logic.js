@@ -315,7 +315,7 @@ function displayPosts(posts) {
       </div>
     </div>
 
-    <div class="status">Status: Pending |Jozi My Jozi + 3 others</div>
+    <div class="status">Status: Pending | by Jozi My Jozi + 3 others</div>
           <div class="header">
             <div>
               <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
