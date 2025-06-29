@@ -306,7 +306,7 @@ function displayPosts(posts) {
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
-   <iframe src="response-bar.html" 
+   <iframe src="https://poweroffive.co.za/1pulse.online/users/response-bar.php" 
         style="width: 100%; height: 90px; border: none; overflow: hidden;" 
         scrolling="no">
     </iframe>
