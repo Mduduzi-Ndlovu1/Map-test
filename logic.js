@@ -307,7 +307,7 @@ function displayPosts(posts) {
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
    <iframe src="response-bar.html" 
-        style="width: 100%; height: 80px; border: none; overflow: hidden;" 
+        style="width: 100%; height: 90px; border: none; overflow: hidden;" 
         scrolling="no">
     </iframe>
           <div class="header">
