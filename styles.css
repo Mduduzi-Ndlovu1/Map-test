@@ -826,10 +826,9 @@ border: 2px solid white; /* Solid white border */
 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .response-bar {
-      background-color: white;
       padding: 20px 2px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      width: 300px;
+      width: 250px;
       position: relative;
     }
 
