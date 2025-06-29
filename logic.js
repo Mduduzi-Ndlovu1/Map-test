@@ -306,16 +306,10 @@ function displayPosts(posts) {
           <div class="card-header">
             <span class="type">${type || 'Unknown Type'}</span>
           </div>
-            <div class="response-bar">
-      <h3>Leader Board: TOP | JMJ</h3>
-      <div class="responder-avatars">
-        <img src="https://i.ibb.co/39Z55ry2/JmJ.png" alt="Responder 1">
-        <img src="https://i.ibb.co/1Yj76MQW/whatsnext.png" alt="Responder 2">
-        <div class="add-btn">+</div>
-      </div>
-    </div>
-
-    <div class="status">Status: Pending | by Jozi My Jozi + 3 others</div>
+   <iframe src="response-bar.html" 
+        style="width: 100%; height: 80px; border: none; overflow: hidden;" 
+        scrolling="no">
+    </iframe>
           <div class="header">
             <div>
               <div class="username"> by ${name || 'Unknown'} ${surname || ''}</div>
