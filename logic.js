@@ -302,7 +302,7 @@ function displayPosts(posts) {
           ? new Date(createdAt).toLocaleString()
           : 'Unknown date';
 
-       marker.bindPopup(`
+  marker.bindPopup(`
   <div class="card-popup">
     <div class="card-header">
       <span class="type">${type || 'Unknown Type'}</span>
@@ -335,6 +335,7 @@ function displayPosts(posts) {
   </div>
 `);
 
+
       } catch (error) {
         console.error(`Error creating marker for post ID: ${_id}`, error);
       }
@@ -344,7 +345,17 @@ function displayPosts(posts) {
   });
 }
 
-  
+  const iframe = document.querySelector('iframe');
+iframe.onload = () => {
+  iframe.contentWindow.postMessage({
+    type: "loadResponseBar",
+    responders: [
+      { name: "Bah", avatar: "https://..." },
+      { name: "Jozi", avatar: "https://..." }
+    ]
+  }, "https://poweroffive.co.za");
+};
+
 // Open modal to view post and add comments
 async function openViewPostModal(postId) {
     currentPostId = postId;

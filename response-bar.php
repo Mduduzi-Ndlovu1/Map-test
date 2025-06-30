@@ -154,5 +154,20 @@
         <div class="add-btn">+</div>
       </div>
     </div> <div class="status">Status: Pending | by Jozi My Jozi + 3 others</div>
+<script>
+ const allowedOrigins = [
+  "https://1pulse-online-beta.netlify.app/",
+  "https://1pulse.online/"
+];
+
+window.addEventListener('message', (event) => {
+  if (!allowedOrigins.includes(event.origin)) return;
+
+  const data = event.data;
+  console.log("Safe message received:", data);
+});
+
+</script>
+
 </body>
 </html>
