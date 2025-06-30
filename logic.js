@@ -309,7 +309,7 @@ marker.bindPopup(`
     </div>
 
     <iframe 
-      src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?postId=${_id}" 
+      src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?post_id=${encodeURIComponent(_id)}" 
       style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
       scrolling="no" 
       loading="lazy">
@@ -334,6 +334,7 @@ marker.bindPopup(`
     <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
   </div>
 `);
+
 
 
 
