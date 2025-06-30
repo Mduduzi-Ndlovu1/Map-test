@@ -302,14 +302,14 @@ function displayPosts(posts) {
           ? new Date(createdAt).toLocaleString()
           : 'Unknown date';
 
-  marker.bindPopup(`
+marker.bindPopup(`
   <div class="card-popup">
     <div class="card-header">
       <span class="type">${type || 'Unknown Type'}</span>
     </div>
 
     <iframe 
-      src="https://poweroffive.co.za/1pulse.online/users/response-bar.php" 
+      src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?postId=${_id}" 
       style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
       scrolling="no" 
       loading="lazy">
@@ -334,6 +334,7 @@ function displayPosts(posts) {
     <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
   </div>
 `);
+
 
 
       } catch (error) {
