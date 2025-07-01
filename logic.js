@@ -289,6 +289,8 @@ async function fetchPosts() {
 
 // Display posts on the map
 function displayPosts(posts) {
+const urlParams = new URLSearchParams(window.location.search);
+const highlightId = urlParams.get('highlight_post_id');
   posts.forEach((post) => {
     const {
       latitude,
@@ -347,7 +349,12 @@ function displayPosts(posts) {
         <button class="ok-button" onclick="openViewPostModal('${postId}')">View Post</button>
       </div>
     `);
-    
+    marker.bindPopup(popupHtml);
+
+    // ✅ Automatically open popup if post matches URL param
+    if (postId === highlightId) {
+      marker.openPopup();
+    }
   });
 }
 
