@@ -308,6 +308,9 @@ marker.bindPopup(`
       <span class="type">${type || 'Unknown Type'}</span>
     </div>
 
+    <!-- ✅ This is your debug line rendered from JS -->
+    <small style="color: red; font-size: 10px;">DEBUG: post_id=${_id}</small>
+
     <iframe 
       src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?post_id=${encodeURIComponent(_id)}" 
       style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
@@ -334,6 +337,7 @@ marker.bindPopup(`
     <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
   </div>
 `);
+
 
 
 
