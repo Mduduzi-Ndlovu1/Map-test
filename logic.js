@@ -349,12 +349,7 @@ const highlightId = urlParams.get('highlight_post_id');
         <button class="ok-button" onclick="openViewPostModal('${postId}')">View Post</button>
       </div>
     `);
-    marker.bindPopup(popupHtml);
-
-    // ✅ Automatically open popup if post matches URL param
-    if (postId === highlightId) {
-      marker.openPopup();
-    }
+    
   });
 }
 
@@ -410,7 +405,7 @@ function showLoginDialog(postId) {
     <div class="overlay" id="loginOverlay">
       <div class="login-dialog">
         <p>You need to log in to join this case.</p>
-        <button class="login-btn" onclick="window.location.href='https://poweroffive.co.za/1pulse.online/users/login.php?post_id=${encodeURIComponent(postId)}'">Login</button>
+        <button class="login-btn" onclick="window.location.href='login.php?post_id=${encodeURIComponent(postId)}'">Login</button>
         <button class="cancel-btn" onclick="document.getElementById('loginOverlay').remove()">Okay</button>
       </div>
     </div>
