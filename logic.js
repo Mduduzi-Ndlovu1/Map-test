@@ -290,64 +290,65 @@ async function fetchPosts() {
 // Display posts on the map
 function displayPosts(posts) {
   posts.forEach((post) => {
-    const { latitude, longitude, name, surname, description, imageUrl, type, _id, createdAt } = post;
+    const {
+      latitude,
+      longitude,
+      name,
+      surname,
+      description,
+      imageUrl,
+      type,
+      createdAt
+    } = post;
 
-    if (typeof latitude === 'number' && typeof longitude === 'number') {
-      const icon = markerIcon[type] || markerIcon["Good Deeds"]; // Fallback to default icon if type is undefined
-
-      try {
-        const marker = L.marker([latitude, longitude], { icon }).addTo(map);
-
-        const updated = createdAt
-          ? new Date(createdAt).toLocaleString()
-          : 'Unknown date';
-
-marker.bindPopup(`
-  <div class="card-popup">
-    <div class="card-header">
-      <span class="type">${type || 'Unknown Type'}</span>
-    </div>
-
-    <!-- ✅ This is your debug line rendered from JS -->
-    <small style="color: red; font-size: 10px;">DEBUG: post_id=${_id}</small>
-
-    <iframe 
-      src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?post_id=677460c86c63d35f86fedf36" 
-      style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
-      scrolling="no" 
-      loading="lazy">
-    </iframe>
-
-    <div class="header">
-      <div>
-        <div class="username">by ${name || 'Unknown'} ${surname || ''}</div>
-        <div class="posted-on">${updated}</div>
-      </div>
-    </div>
-
-    <div class="card-content">
-      <div class="description">
-        ${description ? `"${description}"` : 'No description available'}
-      </div>
-      <div class="image">
-        <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" />
-      </div>
-    </div>
-
-    <button class="ok-button" onclick="openViewPostModal('${_id}')">View Post</button>
-  </div>
-`);
-
-
-
-
-
-      } catch (error) {
-        console.error(`Error creating marker for post ID: ${_id}`, error);
-      }
-    } else {
-      console.error(`Invalid coordinates for post with ID: ${_id}. Received: latitude=${latitude}, longitude=${longitude}`);
+    const postId = post._id || post.id;
+    if (!postId) {
+      console.warn("Missing postId for:", post);
+      return;
     }
+
+    const updated = createdAt
+      ? new Date(createdAt).toLocaleString()
+      : 'Unknown date';
+
+    const icon = markerIcon[type] || markerIcon["Good Deeds"];
+
+    const marker = L.marker([latitude, longitude], { icon }).addTo(map);
+
+    marker.bindPopup(`
+      <div class="card-popup">
+        <div class="card-header">
+          <span class="type">${type || 'Unknown Type'}</span>
+        </div>
+
+        <small style="color: red; font-size: 10px;">DEBUG: post_id=${postId}</small>
+
+        <iframe 
+          src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?post_id=${encodeURIComponent(postId)}" 
+          style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
+          scrolling="no" 
+          loading="lazy">
+        </iframe>
+
+        <div class="header">
+          <div>
+            <div class="username">by ${name || 'Unknown'} ${surname || ''}</div>
+            <div class="posted-on">${updated}</div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="description">
+            ${description ? `"${description}"` : 'No description available'}
+          </div>
+          <div class="image">
+            <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" />
+          </div>
+        </div>
+
+        <button class="ok-button" onclick="openViewPostModal('${postId}')">View Post</button>
+      </div>
+    `);
   });
 }
 
