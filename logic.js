@@ -289,6 +289,8 @@ async function fetchPosts() {
 
 // Display posts on the map
 function displayPosts(posts) {
+const urlParams = new URLSearchParams(window.location.search);
+  const highlightId = urlParams.get('highlight_post_id');
   posts.forEach((post) => {
     const {
       latitude,
