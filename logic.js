@@ -321,8 +321,6 @@ function displayPosts(posts) {
           <span class="type">${type || 'Unknown Type'}</span>
         </div>
 
-        <small style="color: red; font-size: 10px;">DEBUG: post_id=${postId}</small>
-
         <iframe 
           src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?post_id=${encodeURIComponent(postId)}" 
           style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
