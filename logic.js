@@ -347,9 +347,69 @@ function displayPosts(posts) {
         <button class="ok-button" onclick="openViewPostModal('${postId}')">View Post</button>
       </div>
     `);
+    
   });
 }
 
+// ✅ Listen for login request from iframe
+window.addEventListener('message', function(event) {
+  const msg = event.data;
+  if (msg?.type === 'login_required' && msg.postId) {
+    showLoginDialog(msg.postId);
+  }
+});
+
+// ✅ Show login overlay
+function showLoginDialog(postId) {
+  const existing = document.getElementById('loginOverlay');
+  if (existing) existing.remove(); // avoid stacking multiple overlays
+
+  const dialog = document.createElement("div");
+  dialog.innerHTML = `
+    <style>
+      .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      .login-dialog {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        font-family: sans-serif;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+      .login-dialog button {
+        margin: 8px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .login-btn {
+        background: #007bff;
+        color: white;
+      }
+      .cancel-btn {
+        background: #ccc;
+      }
+    </style>
+    <div class="overlay" id="loginOverlay">
+      <div class="login-dialog">
+        <p>You need to log in to join this case.</p>
+        <button class="login-btn" onclick="window.location.href='login.php?post_id=${encodeURIComponent(postId)}'">Login</button>
+        <button class="cancel-btn" onclick="document.getElementById('loginOverlay').remove()">Okay</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dialog);
+}
   const iframe = document.querySelector('iframe');
 iframe.onload = () => {
   iframe.contentWindow.postMessage({
