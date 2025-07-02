@@ -466,21 +466,39 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // When a logo is clicked, open the modal and update content
   logos.forEach(function(logo) {
-    logo.onclick = function() {
-      var modalId = logo.getAttribute("data-modal-id");
-      var data = modalData[modalId];
+  logo.onclick = function () {
+    var modalId = logo.getAttribute("data-modal-id");
+    var data = modalData[modalId];
 
-      // Update modal content dynamically
-      if (modalTitle && modalDescription && modalImage) {
-        modalTitle.textContent = data.title;
-        modalDescription.textContent = data.description;
-        modalImage.src = data.image;
-      }
+    if (data) {
+      var modalContent = `
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="${data.image}" alt="${data.title} Logo" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #eee;">
+        </div>
 
-      // Display the modal
-      modal_brah.style.display = "block";
-    };
-  });
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="margin: 10px 0; font-size: 1.5em;">${data.title}</h2>
+          <p style="color: #666;">${data.description}</p>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 20px;">
+          <p><strong>Email:</strong> ${data.email || "hello@example.com"}</p>
+          <p><strong>Phone:</strong> ${data.phone || "+27 11 000 0000"}</p>
+          <p><strong>Location:</strong> ${data.location || "Johannesburg, South Africa"}</p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+          <button style="flex: 1; padding: 10px; background: #007bff; color: white; border: none; border-radius: 8px; font-weight: bold;">Contact</button>
+          <button style="flex: 1; padding: 10px; background: #ffc107; color: black; border: none; border-radius: 8px; font-weight: bold;">Rate</button>
+        </div>
+      `;
+
+      document.getElementById("modalContent").innerHTML = modalContent;
+      document.getElementById("modal_brah").style.display = "block";
+    }
+  };
+});
+
 
   // Close modal functionality
   if (closeButton) {
