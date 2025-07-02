@@ -587,7 +587,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var modalData = {
     1: {
    title: "Errand Camel - Mother to 1pulse and Whatsnext",
-    description: "SAPS is responsible for maintaining law and order...",
+    description: "Sustainable energy solutions provider.",
     image: "https://1pulse.online/images/errand%20camel%20logo.png",
     email: "contact@errandcamel.co.za",
     phone: "+27 11 345 1234",
