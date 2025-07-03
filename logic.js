@@ -406,7 +406,7 @@ function showLoginDialog(postId) {
       <div class="login-dialog">
         <p>You need to log in to join this case.</p>
         <button class="login-btn" onclick="window.location.href='https://poweroffive.co.za/1pulse.online/users/login.php?post_id=${encodeURIComponent(postId)}'">Login</button>
-        <button class="cancel-btn" onclick="document.getElementById('loginOverlay').remove()">Okay</button>
+<button class="cancel-btn" onclick="document.getElementById('loginOverlay').remove()">Okay</button>
       </div>
     </div>
   `;
@@ -586,9 +586,12 @@ document.addEventListener("DOMContentLoaded", function() {
   // Data for each logo's modal content
   var modalData = {
     1: {
-      title: "Errand Camel - Mother to 1pulse and Whatsnext",
-      description: "SAPS is responsible for maintaining law and order in South Africa, preventing crime, and ensuring the safety of citizens.",
-      image: "https://1pulse.online/images/errand%20camel%20logo.png"
+   title: "Errand Camel - Mother to 1pulse and Whatsnext",
+    description: "Sustainable energy solutions provider.",
+    image: "https://1pulse.online/images/errand%20camel%20logo.png",
+    email: "contact@errandcamel.co.za",
+    phone: "+27 11 345 1234",
+    location: "Johannesburg"
     },
     2: {
       title: "Bonizluu",
