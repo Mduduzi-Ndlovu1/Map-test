@@ -324,7 +324,7 @@ const highlightId = urlParams.get('highlight_post_id');
         </div>
 
         <iframe 
-          src="https://poweroffive.co.za/1pulse.online/users/response-bar.php?post_id=${encodeURIComponent(postId)}" 
+          src="https://errandcamel.co.za/Dashboard/response-bar.php?post_id=${encodeURIComponent(postId)}" 
           style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
           scrolling="no" 
           loading="lazy">
@@ -351,14 +351,14 @@ const highlightId = urlParams.get('highlight_post_id');
     `);
     marker.bindPopup(popupHtml);
 
-    // ✅ Automatically open popup if post matches URL param
+    // âœ… Automatically open popup if post matches URL param
     if (postId === highlightId) {
       marker.openPopup();
     }
   });
 }
 
-// ✅ Listen for login request from iframe
+// âœ… Listen for login request from iframe
 window.addEventListener('message', function(event) {
   const msg = event.data;
   if (msg?.type === 'login_required' && msg.postId) {
@@ -366,7 +366,7 @@ window.addEventListener('message', function(event) {
   }
 });
 
-// ✅ Show login overlay
+// âœ… Show login overlay
 function showLoginDialog(postId) {
   const existing = document.getElementById('loginOverlay');
   if (existing) existing.remove(); // avoid stacking multiple overlays
