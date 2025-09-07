@@ -324,7 +324,7 @@ const urlParams = new URLSearchParams(window.location.search);
         </div>
 
         <iframe 
-          src="https://errandcamel.co.za/Dashboard/response-bar.php?post_id=${encodeURIComponent(postId)}" 
+          src="http://errandcamel.co.za/Dashboard/response-bar.php?post_id=${encodeURIComponent(postId)}" 
           style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
           scrolling="no" 
           loading="lazy">
