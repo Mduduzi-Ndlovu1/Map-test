@@ -1,28 +1,14 @@
--- phpMyAdmin MySQL Dump
--- Table structure for table `user_avatars`
+<img id="user-icon" src="" alt="User Icon" width="50" height="50" />
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+<script>
+const userId = 12; // replace with logged-in user’s id
 
-CREATE TABLE `user_avatars` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `avatar_id` int(11) NOT NULL,
-  `role` varchar(50) DEFAULT NULL,       -- optional, e.g., 'admin', 'editor'
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `user_idx` (`user_id`),
-  KEY `avatar_idx` (`avatar_id`),
-  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_avatar` FOREIGN KEY (`avatar_id`) REFERENCES `avatars`(`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Sample data
-INSERT INTO `user_avatars` (`user_id`, `avatar_id`, `role`) VALUES
-(1, 1, 'owner'),
-(1, 2, 'editor'),
-(2, 3, 'owner'),
-(3, 4, 'owner');
-
-COMMIT;
+fetch(`https://phpserver.com/sessionData.php?user_id=${userId}`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.session && data.session.icon) {
+      document.getElementById('user-icon').src = data.session.icon;
+    }
+  })
+  .catch(err => console.error('Error loading session data:', err));
+</script>
