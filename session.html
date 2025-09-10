@@ -3,7 +3,7 @@
 <script>
 const userId = 12; // replace with logged-in user’s id
 
-fetch(`https://errandcamel.co.za/sessionData.php?user_id=${userId}`)
+fetch(`https://errandcamel.co.za/Dashboard/sessionData.php?user_id=${userId}`)
   .then(res => res.json())
   .then(data => {
     if (data.session && data.session.icon) {
