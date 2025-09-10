@@ -96,26 +96,24 @@
   </div>
 
   <script>
-    // Fetch session data (session-based, cookie included)
-    fetch("errandcamel.co.za/Dashboard/sessionData.php", {
-      credentials: "include" // important: send session cookie
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.error){
+    fetch("https://errandcamel.co.za/Dashboard/sessionData.php", {
+    credentials: "include"
+})
+.then(res => res.json())
+.then(data => {
+    if(data.error){
         console.error(data.error);
         document.getElementById("avatar-name").textContent = "Not logged in";
         return;
-      }
+    }
 
-      const avatar = data.avatar;
-      const user = data.user;
-      const session = data.session;
+    const avatar = data.avatar;
+    const user = data.user;
+    const session = data.session;
 
-      // Update profile icon
-      document.getElementById("avatar-logo").src = session.icon;
+    document.getElementById("avatar-logo").src = session.icon;
 
-      if(avatar){
+    if(avatar){
         document.getElementById("avatar-name").textContent = avatar.name;
         document.getElementById("avatar-description").textContent = avatar.description;
         document.getElementById("avatar-type").textContent = avatar.type || "N/A";
@@ -125,17 +123,16 @@
         document.getElementById("avatar-phone").textContent = avatar.phone;
         document.getElementById("avatar-address").textContent = avatar.address;
         document.getElementById("avatar-created").textContent = avatar.created_at;
-      } else {
-        // fallback: show user info if no avatar
+    } else {
         document.getElementById("avatar-name").textContent = user.fullName;
         document.getElementById("avatar-email").textContent = user.userEmail;
-        document.getElementById("avatar-logo").src = user.userImage;
-      }
-    })
-    .catch(err => {
-      console.error("Error fetching session data:", err);
-      document.getElementById("avatar-name").textContent = "Error loading profile";
-    });
+    }
+})
+.catch(err => {
+    console.error("Error fetching session data:", err);
+    document.getElementById("avatar-name").textContent = "Error loading profile";
+});
+
   </script>
 
 </body>
