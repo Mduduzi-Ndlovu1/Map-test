@@ -1,14 +1,142 @@
-<img id="user-icon" src="" alt="User Icon" width="50" height="50" />
-
-<script>
-const userId = 12; // replace with logged-in user’s id
-
-fetch(`https://errandcamel.co.za/Dashboard/sessionData.php?user_id=${userId}`)
-  .then(res => res.json())
-  .then(data => {
-    if (data.session && data.session.icon) {
-      document.getElementById('user-icon').src = data.session.icon;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Avatar Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
     }
-  })
-  .catch(err => console.error('Error loading session data:', err));
-</script>
+    .profile-card {
+      width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    .cover-photo {
+      width: 100%;
+      height: 200px;
+      background: url("https://via.placeholder.com/600x200?text=Cover+Photo") no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+    .avatar-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      position: absolute;
+      bottom: -60px;
+      left: 20px;
+      background: #fff;
+      object-fit: cover;
+    }
+    .profile-body {
+      padding: 80px 20px 20px 20px;
+    }
+    .profile-body h2 {
+      margin: 0;
+      font-size: 24px;
+      color: #333;
+    }
+    .profile-body p.description {
+      color: #555;
+      margin: 5px 0 15px;
+      font-size: 14px;
+    }
+    .profile-details {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .profile-details strong {
+      display: inline-block;
+      width: 120px;
+      color: #555;
+    }
+    .cta-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #1877f2;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .cta-btn:hover {
+      background: #145dbf;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-card">
+    <div class="cover-photo">
+      <img id="avatar-logo" src="https://via.placeholder.com/200x200?text=Logo" alt="Logo" class="avatar-logo">
+    </div>
+    <div class="profile-body">
+      <h2 id="avatar-name">Loading...</h2>
+      <p class="description" id="avatar-description"></p>
+      <div class="profile-details">
+        <p><strong>Type:</strong> <span id="avatar-type"></span></p>
+        <p><strong>Website:</strong> <a id="avatar-website" href="#" target="_blank"></a></p>
+        <p><strong>Email:</strong> <span id="avatar-email"></span></p>
+        <p><strong>Phone:</strong> <span id="avatar-phone"></span></p>
+        <p><strong>Address:</strong> <span id="avatar-address"></span></p>
+        <p><strong>Created:</strong> <span id="avatar-created"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fetch session data (session-based, cookie included)
+    fetch("errandcamel.co.za/Dashboard/sessionData.php", {
+      credentials: "include" // important: send session cookie
+    })
+    .then(res => res.json())
+    .then(data => {
+      if(data.error){
+        console.error(data.error);
+        document.getElementById("avatar-name").textContent = "Not logged in";
+        return;
+      }
+
+      const avatar = data.avatar;
+      const user = data.user;
+      const session = data.session;
+
+      // Update profile icon
+      document.getElementById("avatar-logo").src = session.icon;
+
+      if(avatar){
+        document.getElementById("avatar-name").textContent = avatar.name;
+        document.getElementById("avatar-description").textContent = avatar.description;
+        document.getElementById("avatar-type").textContent = avatar.type || "N/A";
+        document.getElementById("avatar-website").textContent = avatar.website;
+        document.getElementById("avatar-website").href = avatar.website;
+        document.getElementById("avatar-email").textContent = avatar.email;
+        document.getElementById("avatar-phone").textContent = avatar.phone;
+        document.getElementById("avatar-address").textContent = avatar.address;
+        document.getElementById("avatar-created").textContent = avatar.created_at;
+      } else {
+        // fallback: show user info if no avatar
+        document.getElementById("avatar-name").textContent = user.fullName;
+        document.getElementById("avatar-email").textContent = user.userEmail;
+        document.getElementById("avatar-logo").src = user.userImage;
+      }
+    })
+    .catch(err => {
+      console.error("Error fetching session data:", err);
+      document.getElementById("avatar-name").textContent = "Error loading profile";
+    });
+  </script>
+
+</body>
+</html>
