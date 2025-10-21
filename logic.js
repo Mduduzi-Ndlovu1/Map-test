@@ -318,7 +318,8 @@ const urlParams = new URLSearchParams(window.location.search);
     const marker = L.marker([latitude, longitude], { icon }).addTo(map);
 
     marker.bindPopup(`
-      <div class="card-popup" onclick="redirectToPost('${postId}')">
+      <div class="card-popup" onclick="redirectToPost('')">
+      <a href="https://www.1pulse.online/Dashboard/post.php?id=${postId}">
   <div class="card-header">
     <span class="type">${type || 'Unknown Type'}</span>
   </div>
@@ -337,7 +338,7 @@ const urlParams = new URLSearchParams(window.location.search);
       <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" />
     </div>
   </div>
-
+</a>
   <button class="ok-button">View Post</button>
 </div>
 
