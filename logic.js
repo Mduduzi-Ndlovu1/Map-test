@@ -318,36 +318,29 @@ const urlParams = new URLSearchParams(window.location.search);
     const marker = L.marker([latitude, longitude], { icon }).addTo(map);
 
     marker.bindPopup(`
-      <div class="card-popup">
-        <div class="card-header">
-          <span class="type">${type || 'Unknown Type'}</span>
-        </div>
+      <div class="card-popup" onclick="redirectToPost('${postId}')">
+  <div class="card-header">
+    <span class="type">${type || 'Unknown Type'}</span>
+  </div>
+  <div class="header">
+    <div>
+      <div class="username">by ${name || 'Unknown'} ${surname || ''}</div>
+      <div class="posted-on">${updated}</div>
+    </div>
+  </div>
 
-        <iframe 
-          src="http://errandcamel.co.za/Dashboard/response-bar.php?id=${encodeURIComponent(postId)}" 
-          style="width: 100%; height: 90px; border: none; overflow: hidden; border-radius: 8px;" 
-          scrolling="no" 
-          loading="lazy">
-        </iframe>
+  <div class="card-content">
+    <div class="description">
+      ${description ? `"${description}"` : 'No description available'}
+    </div>
+    <div class="image">
+      <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" />
+    </div>
+  </div>
 
-        <div class="header">
-          <div>
-            <div class="username">by ${name || 'Unknown'} ${surname || ''}</div>
-            <div class="posted-on">${updated}</div>
-          </div>
-        </div>
+  <button class="ok-button">View Post</button>
+</div>
 
-        <div class="card-content">
-          <div class="description">
-            ${description ? `"${description}"` : 'No description available'}
-          </div>
-          <div class="image">
-            <img class="image" src="${imageUrl || '#'}" alt="${type || 'Image'}" />
-          </div>
-        </div>
-
-        <button class="ok-button" onclick="openViewPostModal('${postId}')">View Post</button>
-      </div>
     `);
     
   });
