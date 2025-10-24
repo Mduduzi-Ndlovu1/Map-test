@@ -10,15 +10,20 @@ const app = express();
 
 const cloudinary = require('cloudinary').v2;
 
-// Set up middleware
+// Set up middleware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: 'https://1pulse-online-beta.netlify.app', 
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type, Authorization',
-})); 
+  origin: [
+    'https://1pulse-online-beta.netlify.app',
+    'https://1pulse.online'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // only if you're using tokens/cookies
+}));
+
 
 // Set up Cloudinary configuration
 cloudinary.config({
