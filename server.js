@@ -23,7 +23,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // only if you're using tokens/cookies
 }));
-
+// 🧩 STEP 3: Test route — place it here
+app.get("/api/test", (req, res) => {
+  res.json({ message: "CORS is working! Data received from Node backend." });
+});
 
 // Set up Cloudinary configuration
 cloudinary.config({
