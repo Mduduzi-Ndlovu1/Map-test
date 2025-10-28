@@ -727,7 +727,7 @@ button[type="submit"]:hover {
 /* Responsive Design for Larger Screens (Laptops and Desktops) */
 @media (min-width: 1024px) {
   .modal {
-    width: 50%;
+    width: 40%;
     padding: 40px;
   }
 
