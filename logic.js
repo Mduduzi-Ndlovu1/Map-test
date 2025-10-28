@@ -319,7 +319,7 @@ const urlParams = new URLSearchParams(window.location.search);
 
     marker.bindPopup(`
       <div class="card-popup" onclick="redirectToPost('')">
-      <a href="https://www.1pulse.online/Dashboard/post.php?id=${postId}" target="_blank">
+      <a href="https://www.1pulse.online/Dashboard/post.php?id=${postId}" style="text-decoration:none;" target="_blank">
   <div class="card-header">
     <span class="type">${type || 'Unknown Type'}</span>
   </div>
