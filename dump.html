@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline with Light-Themed Leaflet Map</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="icon" href="https://i.ibb.co/Q35sd45k/1pulse-online-logo-CRc-L2.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="all-styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+        #map { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1; 
+        }
+        .timeline-container { 
+            top: 5px;
+            position: auto; 
+            z-index: 2; 
+            width: 90%; 
+            max-width: 600px; 
+            margin: 20px auto; 
+            background: rgba(255, 255, 255, 0.0); 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shado: 0px 0px 10px rgba(0, 0, 0, 0.2); 
+            max-height: 80vh; 
+            overflow-y: auto; 
+        }
+        .post { 
+            background: white; 
+            padding: 15px; 
+            border-radius: 8px; 
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); 
+            margin-bottom: 15px; 
+            text-align: left; 
+        }
+        .post img { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+        .btn { 
+            padding: 5px 10px; 
+            margin-top: 5px; 
+            cursor: pointer; 
+        }
+        .comment-btn { background: #007bff; color: white; }
+        .location-banner { 
+            background: #4CAF50; 
+            color: white; 
+            padding: 10px; 
+            font-size: 18px; 
+            text-align: center; 
+            position: relative; 
+            z-index: 2;
+            visibility: hidden;
+        }
+        .new-post-btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px; 
+            cursor: pointer; 
+            margin: 15px auto; 
+            display: block; 
+            width: 90%; 
+            max-width: 600px; 
+            border: none; 
+            border-radius: 5px; 
+            position: relative; 
+            z-index: 2; 
+        }
+        /* Modal styles */
+        .modal-tl { 
+            display: none; 
+            position: fixed; 
+            z-index: 9999999; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            justify-content: center; 
+            align-items: center; 
+        }
+       .modal-content-tl { 
+    background: white; 
+    padding: 20px; 
+    border-radius: 5px; 
+    text-align: left; 
+    width: 90%; 
+    max-height: 70vh; /* Use vh for better responsiveness */
+    max-width: 400px; 
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+        .close { float: right; font-size: 20px; cursor: pointer; }
+        .comments { margin-top: 10px; }
+        .comment { background: #f1f1f1; padding: 8px; margin: 5px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <!-- Logo Navigation -->
+    <div id="logo-nav">
+      <div id="logo-container">
+          <div class="logo" data-modal-id="1"> 
+              <img src="https://1pulse.online/images/errand%20camel%20logo.png" alt="Logo 1">
+          </div>
+          <div class="logo" data-modal-id="5">
+              <img src="https://i.ibb.co/39Z55ry2/JmJ.png" alt="Logo 2">
+          </div>
+          <div class="logo" data-modal-id="5">
+              <img src="https://i.ibb.co/YwWPCP8/G20-logo.png" alt="Logo 3">
+          </div>
+          <div class="logo" data-modal-id="4">
+              <img src="https://1pulse.online/images/bonizluu-fav.png" alt="Logo 2">
+          </div>
+          <div class="logo" data-modal-id="5">
+            <img src="https://1pulse.online/images/hillbrow.jpeg" alt="Logo 3">
+        </div>
+          <div class="logo" data-modal-id="4">
+              <img src="https://1pulse.online/images/Africa%20City.png" alt="Logo 5">
+          </div>
+          <div class="logo" data-modal-id="6">
+              <img src="https://1pulse.online/images/Tae-Trax-Logo.png" alt="Logo 6">
+          </div>
+      </div>
+    </div>
+
+      <style>
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+    }
+    .modal-content {
+      position: relative;
+      margin: 10% auto;
+      padding: 20px;
+      width: 90%;
+      max-width: 600px;
+      background-color: #fff;
+      border-radius: 8px;
+    }
+    .close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .fb-post {
+      width: 100%;
+    }
+    .fallback {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .fallback a {
+      color: blue;
+      text-decoration: underline;
+    }
+  </style>
+<!-- Trigger -->
+<button onclick="openModal()">View Facebook Post</button>
+<!-- Modal -->
+<div id="fbModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+
+    <!-- Facebook Embed -->
+    <div class="fb-post"
+         data-href="https://www.facebook.com/watch/?v=1194372205000517"
+         data-width="500"
+         data-show-text="true">
+    </div>
+
+    <!-- Fallback link -->
+    <div class="fallback">
+      <p>If the post doesn't load, <a href="https://www.facebook.com/watch/?v=1194372205000517" target="_blank">click here to view it on Facebook</a>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Facebook SDK -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" 
+  src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0">
+</script>
+
+<script>
+  function openModal() {
+    document.getElementById("fbModal").style.display = "block";
+  }
+  function closeModal() {
+    document.getElementById("fbModal").style.display = "none";
+  }
+
+  // Optional: Close modal on outside click
+  window.onclick = function(event) {
+    const modal = document.getElementById("fbModal");
+    if (event.target === modal) {
+      closeModal();
+    }
+  };
+</script>
+
+    <!-- Modal for logos -->
+    <div id="myModal" class="modal-brah">
+        <div class="modal-content-brah">
+            <span class="close-brah">&times;</span>
+            <h2 class="modal-title-brah"></h2>
+            <p class="modal-description-brah"></p>
+            <div class="image-container">
+                <img class="modal-image-brah" src="" alt="Modal Image">
+            </div>
+        </div>
+    </div>
+    <!-- Leaflet Map -->
+    <div id="map"></div>
+
+    <!-- Location Banner -->
+    <div id="locationBanner" class="location-banner">Loading your location...</div>
+
+    <!-- Timeline Container -->
+    <div class="timeline-container" id="timeline"></div>
+
+    <!-- View Post Modal -->
+    <div id="viewModal" class="modal-tl">
+        <div class="modal-content-tl">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="postDetails"></div>
+            <h3>Comments</h3>
+            <div id="commentsList"></div>
+            <form id="commentForm">
+                <input type="text" id="commentName" placeholder="Your name" required><br>
+                <textarea id="commentText" placeholder="Add a comment" required></textarea><br>
+                <button type="submit" class="btn comment-btn">Post Comment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Post Modal -->
+    <div id="newPostModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeNewPostModal()">&times;</span>
+            <h3 id="newPostTitle">What's happening?</h3>
+            <form id="newPostForm">
+                <input type="text" id="newPostName" placeholder="Name" required><br>
+                <input type="text" id="newPostSurname" placeholder="Surname" required><br>
+                <textarea id="newPostDescription" placeholder="Describe your post" required></textarea><br>
+                <button type="submit" class="btn">Post</button>
+            </form>
+        </div>
+    </div>
+
+    <p id="gyroscope"></p> <!-- Degrees Text -->
+    <div class="bottom-touch">
+        <div id="penIcon">
+            <!-- Pen Image -->
+            <img src="compass.png" alt="Pen Icon">
+        </div> 
+        <a href="https://1pulse-online-beta.netlify.app/" class="circle-button">
+            <i class="fas fa-stream"></i> <!-- Timeline icon -->
+        </a>
+        <div class="circle-button" onclick="openNewPostModal()">
+            <i class="fas fa-pen"></i> <!-- Pen icon -->
+        </div>
+        <a href="https://1pulse.online/dashboard/" class="circle-button">
+            <i class="fas fa-user"></i> <!-- User icon -->
+        </a>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map with a light-themed tile layer and disable zoom controls
+        const map = L.map('map', { zoomControl: false }).setView([0, 0], 13); // Disable zoom controls
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors, © CartoDB'
+        }).addTo(map);
+
+        let currentPostId = null;
+        let currentLocation = { latitude: null, longitude: null, street: '', town: '', ward: '' };
+
+        // Fetch posts and display them
+        async function fetchPosts() {
+            try {
+                const response = await fetch('https://map-test-xid1.onrender.com/api/posts');
+                const posts = await response.json();
+                displayPosts(posts);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            }
+        }
+
+        function displayPosts(posts) {
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+
+            posts.forEach(post => {
+                const postContainer = document.createElement('div');
+                postContainer.classList.add('post');
+                postContainer.innerHTML = `
+                    <b>${post.name || 'Anonymous'} ${post.surname || ''}</b><br>
+                    <p>${post.description || 'No description provided'}</p>
+                    <img src="${post.imageUrl}" alt="Post Image" onclick="openViewPostModal('${post._id}')"><br>
+                `;
+                timeline.appendChild(postContainer);
+            });
+        }
+
+        // Open View Post Modal
+        async function openViewPostModal(postId) {
+            currentPostId = postId;
+            try {
+                const response = await fetch(`https://map-test-xid1.onrender.com/api/posts/${postId}`);
+                const post = await response.json();
+
+                document.getElementById('postDetails').innerHTML = `
+                    <b>${post.name} ${post.surname}</b><br>
+                    <i>Type: ${post.type}</i><br>
+                    ${post.description}<br>
+                    <img src="${post.imageUrl}" width="100%"><br>
+                `;
+
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = '';
+                post.comments.forEach(comment => {
+                    commentsList.innerHTML += `
+                        <div class="comment">
+                            <b>${comment.author}</b><br>
+                            ${comment.text}
+                        </div>
+                    `;
+                });
+
+                document.getElementById('viewModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error fetching post:', error);
+            }
+        }
+
+        // Add Comment
+        document.getElementById('commentForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const commentName = document.getElementById('commentName').value;
+            const commentText = document.getElementById('commentText').value;
+
+            if (!commentName || !commentText) {
+                alert('Please fill in both fields!');
+                return;
+            }
+
+            try {
+                await fetch(`https://map-test-xid1.onrender.com/api/posts/${currentPostId}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ author: commentName, text: commentText })
+                });
+                fetchPosts();
+                closeModal();
+            } catch (error) {
+                alert('Error adding comment!');
+            }
+        });
+
+        // Open New Post Modal
+        function openNewPostModal() {
+            if (!currentLocation.street) {
+                alert('Please allow location access first!');
+                return;
+            }
+
+            document.getElementById('newPostTitle').textContent = `What's happening on ${currentLocation.street}?`;
+            document.getElementById('newPostModal').style.display = 'flex';
+        }
+
+        // Close Modals
+        function closeModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        function closeNewPostModal() {
+            document.getElementById('newPostModal').style.display = 'none';
+        }
+
+        // Fetch User Location
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    currentLocation.latitude = position.coords.latitude;
+                    currentLocation.longitude = position.coords.longitude;
+                    map.setView([currentLocation.latitude, currentLocation.longitude], 13); // Update map view
+                    fetchStreetData();
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        async function fetchStreetData() {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${currentLocation.latitude}&lon=${currentLocation.longitude}&format=json`);
+                const data = await response.json();
+                currentLocation.street = data.address.road || 'Unknown Street';
+                currentLocation.town = data.address.town || 'Unknown Town';
+                currentLocation.ward = data.address.ward || 'Unknown Ward';
+
+                // Update Location Banner
+                document.getElementById('locationBanner').textContent = `You are in ${currentLocation.street}, ${currentLocation.town}. Ward: ${currentLocation.ward}`;
+            } catch (error) {
+                console.error('Error fetching street data:', error);
+            }
+        }
+
+        // Initialize
+        getUserLocation();
+        fetchPosts();
+    </script>
+</body>
+</html>
