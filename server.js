@@ -206,6 +206,19 @@ app.post('/api/posts/:id/comments', async (req, res) => {
   await post.save();
   res.json(post);
 });
+// DELETE a post by ID
+app.delete('/api/posts/:id', async (req, res) => {
+  try {
+    const deletedPost = await Post.findByIdAndDelete(req.params.id);
+    if (!deletedPost) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    res.json({ message: 'Post deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(500).json({ message: 'Failed to delete post', error: err.message });
+  }
+});
 
 // Start server
 const port = process.env.PORT || 5000;
