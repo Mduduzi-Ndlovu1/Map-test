@@ -222,11 +222,12 @@ app.delete('/api/posts/:id', async (req, res) => {
 // UPDATE a post by ID
 app.put('/api/posts/:id', async (req, res) => {
   try {
-    const { title, description, image, author, contact, address, latitude, longitude } = req.body;
+    const { name, surname, description, imageUrl } = req.body;
 
+    // Update only the fields provided
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.id,
-      { title, description, image, author, contact, address, latitude, longitude },
+      { name, surname, description, imageUrl },
       { new: true, runValidators: true }
     );
 
