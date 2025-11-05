@@ -10,6 +10,15 @@ const app = express();
 
 const cloudinary = require('cloudinary').v2;
 
+const PostSchema = new mongoose.Schema({
+  name: String,
+  surname: String,
+  description: String,
+  imageUrl: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+module.exports = mongoose.model('Post', PostSchema);
 // Set up middleware 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
