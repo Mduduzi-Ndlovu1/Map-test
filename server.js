@@ -219,6 +219,27 @@ app.delete('/api/posts/:id', async (req, res) => {
     res.status(500).json({ message: 'Failed to delete post', error: err.message });
   }
 });
+// UPDATE a post by ID
+app.put('/api/posts/:id', async (req, res) => {
+  try {
+    const { title, description, image, author, contact, address, latitude, longitude } = req.body;
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      { title, description, image, author, contact, address, latitude, longitude },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    res.json(updatedPost);
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(500).json({ message: 'Failed to update post', error: err.message });
+  }
+});
 
 // Start server
 const port = process.env.PORT || 5000;
