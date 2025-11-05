@@ -228,6 +228,30 @@ app.delete('/api/posts/:id', async (req, res) => {
     res.status(500).json({ message: 'Failed to delete post', error: err.message });
   }
 });
+// CREATE a new post
+app.post('/api/posts', async (req, res) => {
+  try {
+    const { name, surname, description, imageUrl } = req.body;
+
+    if (!name || !description) {
+      return res.status(400).json({ message: 'Name and description are required.' });
+    }
+
+    const newPost = new Post({
+      name,
+      surname,
+      description,
+      imageUrl
+    });
+
+    await newPost.save();
+    res.status(201).json(newPost);
+  } catch (err) {
+    console.error('Error creating post:', err);
+    res.status(500).json({ message: 'Failed to create post', error: err.message });
+  }
+});
+
 // UPDATE a post by ID
 app.put('/api/posts/:id', async (req, res) => {
   try {
